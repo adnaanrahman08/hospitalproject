@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Fabric.js Example</title>
+  <link rel="stylesheet" href="styles.css">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+</head>
+
+<body>
+  <div>
+    <button id="addPolygonBtn">Add Polygon Points</button>
+    <button id="createPolygonBtn">Create Polygon</button>
+  </div>
+
+  <p id="areaDisplay"></p>
+
+  <div style="position:relative">
+    <canvas id="canvas" width="800px" height="800px" style="z-index:10;background-color:transparent;"></canvas>
+    <div id="backgroundCanvas" style="width:400px;height:400px"></div>
+  </div>
+  <script src="canvas.js"></script>
+</body>
+
+</html>

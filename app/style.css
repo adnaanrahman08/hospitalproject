@@ -1,0 +1,17 @@
+#backgroundCanvas {
+    background-image: url('nike.jpg');
+    background-position-x: center;
+    background-position-y: bottom;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    position: absolute;
+    width: 800px;
+    height: 800px;
+    left: 0px;
+    top: 0px;
+    -webkit-user-select: none;
+    cursor: default;
+  }
