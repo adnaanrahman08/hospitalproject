@@ -4,6 +4,7 @@ let startDrawingPolygon;
 let ArrayLength;
 let addTexture = false;
 let circleCount = 1;
+let circles = [];
 const fillColor = "rgba(46, 240, 56, 0.5)";
 
 function done() {
@@ -132,12 +133,28 @@ canvas.on('mouse:down', function (option) {
         originY: 'center'
       });
       canvas.add(circle);
+      circles.push(circle);
       canvas.bringToFront(circle);
       circleCount++;
       canvas.renderAll();
     }
   }
 });
+
+// prevents user from opening right click browser menu while undoing point
+canvas.upperCanvasEl.oncontextmenu = function (e) {
+  e.preventDefault();
+};
+
+canvas.on('mouse:up', function (option) {
+  if (option.e.button === 2 && startDrawingPolygon && circles.length > 0) { 
+    const circle = circles.pop();  
+    canvas.remove(circle); 
+    circleCount--; 
+    canvas.renderAll();
+  }
+});
+
 
 document.getElementById("addPolygonBtn").addEventListener("click", function () {
   Addpolygon();
@@ -165,5 +182,6 @@ function clearPolygons() {
   // Clear area display
   const areaDisplay = document.getElementById("areaDisplay");
   areaDisplay.textContent = "";
+  circles = [];
 }
 
