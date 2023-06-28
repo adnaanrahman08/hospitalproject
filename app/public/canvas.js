@@ -5,6 +5,7 @@ let ArrayLength;
 let addTexture = false;
 let circleCount = 1;
 let circles = [];
+let pointRadius = 7;
 const fillColor = "rgba(46, 240, 56, 0.5)";
 
 function done() {
@@ -121,7 +122,7 @@ canvas.on('mouse:down', function (option) {
       const circle = new fabric.Circle({
         left: canvas.getPointer(option.e).x,
         top: canvas.getPointer(option.e).y,
-        radius: 7,
+        radius: pointRadius,
         hasBorders: false,
         hasControls: false,
         polygonNo: polygonCount,
@@ -167,6 +168,25 @@ document.getElementById("createPolygonBtn").addEventListener("click", function (
 document.getElementById("clearPolygonBtn").addEventListener("click", function () {
   clearPolygons();
 });
+
+const pointSizeSlider = document.getElementById("pointSizeSlider");
+const pointSizeDisplay = document.getElementById("pointSizeDisplay");
+
+pointSizeSlider.addEventListener("input", function() {
+  pointRadius = pointSizeSlider.value;
+  pointSizeDisplay.textContent = pointSizeSlider.value;
+
+  let activeObject = canvas.getActiveObject();
+  if (activeObject && activeObject.name === 'draggableCircle') {
+    activeObject.set('radius', pointRadius);
+
+    activeObject.scaleToWidth(pointRadius * 2);
+    activeObject.scaleToHeight(pointRadius * 2);
+
+    canvas.renderAll();
+  }
+});
+
 
 // Function to remove all polygons from the canvas
 function clearPolygons() {
