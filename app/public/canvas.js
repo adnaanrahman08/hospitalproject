@@ -139,14 +139,31 @@ canvas.on('mouse:down', function (option) {
   }
 });
 
-// Event listener for "Add Polygon Points" button
 document.getElementById("addPolygonBtn").addEventListener("click", function () {
   Addpolygon();
 });
 
-// Event listener for "Create Polygon" button
 document.getElementById("createPolygonBtn").addEventListener("click", function () {
   done();
 });
 
+document.getElementById("clearPolygonBtn").addEventListener("click", function () {
+  clearPolygons();
+});
+
+// Function to remove all polygons from the canvas
+function clearPolygons() {
+  const objects = canvas.getObjects();
+  for (let i = objects.length - 1; i >= 0; i--) {
+    if (objects[i].name === "Polygon" || objects[i].name === "draggableCircle") {
+      canvas.remove(objects[i]);
+    }
+  }
+  polygonCount = 1;
+  circleCount = 1;
+
+  // Clear area display
+  const areaDisplay = document.getElementById("areaDisplay");
+  areaDisplay.textContent = "";
+}
 
