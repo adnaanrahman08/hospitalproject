@@ -124,7 +124,7 @@ function isPointInsideBody(x, y) {
   const blue = pixelData[2];
   const alpha = pixelData[3];
 
-  if (red === 238 && green === 238 && blue === 238 && alpha === 255) { // grey
+  if (!(red === 0 && green === 0 && blue === 0 && alpha === 0)) { // grey
     return true;
   } else {
     console.log(`Background Color: rgba(${red}, ${green}, ${blue}, ${alpha})`);
