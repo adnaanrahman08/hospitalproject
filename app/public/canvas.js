@@ -4,6 +4,8 @@ let startDrawingPolygon;
 let ArrayLength;
 let addTexture = false;
 let circleCount = 1;
+let circles = [];
+let pointRadius = 7;
 const fillColor = "rgba(46, 240, 56, 0.5)";
 
 function done() {
@@ -120,7 +122,7 @@ canvas.on('mouse:down', function (option) {
       const circle = new fabric.Circle({
         left: canvas.getPointer(option.e).x,
         top: canvas.getPointer(option.e).y,
-        radius: 7,
+        radius: pointRadius,
         hasBorders: false,
         hasControls: false,
         polygonNo: polygonCount,
@@ -132,6 +134,7 @@ canvas.on('mouse:down', function (option) {
         originY: 'center'
       });
       canvas.add(circle);
+      circles.push(circle);
       canvas.bringToFront(circle);
       circleCount++;
       canvas.renderAll();
@@ -139,14 +142,66 @@ canvas.on('mouse:down', function (option) {
   }
 });
 
-// Event listener for "Add Polygon Points" button
+// prevents user from opening right click browser menu while undoing point
+canvas.upperCanvasEl.oncontextmenu = function (e) {
+  e.preventDefault();
+};
+
+canvas.on('mouse:up', function (option) {
+  if (option.e.button === 2 && startDrawingPolygon && circles.length > 0) { 
+    const circle = circles.pop();  
+    canvas.remove(circle); 
+    circleCount--; 
+    canvas.renderAll();
+  }
+});
+
+
 document.getElementById("addPolygonBtn").addEventListener("click", function () {
   Addpolygon();
 });
 
-// Event listener for "Create Polygon" button
 document.getElementById("createPolygonBtn").addEventListener("click", function () {
   done();
 });
 
+document.getElementById("clearPolygonBtn").addEventListener("click", function () {
+  clearPolygons();
+});
+
+const pointSizeSlider = document.getElementById("pointSizeSlider");
+const pointSizeDisplay = document.getElementById("pointSizeDisplay");
+
+pointSizeSlider.addEventListener("input", function() {
+  pointRadius = pointSizeSlider.value;
+  pointSizeDisplay.textContent = pointSizeSlider.value;
+
+  let activeObject = canvas.getActiveObject();
+  if (activeObject && activeObject.name === 'draggableCircle') {
+    activeObject.set('radius', pointRadius);
+
+    activeObject.scaleToWidth(pointRadius * 2);
+    activeObject.scaleToHeight(pointRadius * 2);
+
+    canvas.renderAll();
+  }
+});
+
+
+// Function to remove all polygons from the canvas
+function clearPolygons() {
+  const objects = canvas.getObjects();
+  for (let i = objects.length - 1; i >= 0; i--) {
+    if (objects[i].name === "Polygon" || objects[i].name === "draggableCircle") {
+      canvas.remove(objects[i]);
+    }
+  }
+  polygonCount = 1;
+  circleCount = 1;
+
+  // Clear area display
+  const areaDisplay = document.getElementById("areaDisplay");
+  areaDisplay.textContent = "";
+  circles = [];
+}
 
