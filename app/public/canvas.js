@@ -108,14 +108,48 @@ canvas.on('object:moving', function (option) {
   canvas.renderAll();
 });
 
+function isPointInsideBody(x, y) {
+  const img = document.getElementById("shapeImage");
+  const canvas = document.createElement("canvas");
+  const context = canvas.getContext("2d");
+
+  canvas.width = img.width;
+  canvas.height = img.height;
+
+  context.drawImage(img, 0, 0, img.width, img.height);
+
+  const pixelData = context.getImageData(x, y, 1, 1).data;
+  const red = pixelData[0];
+  const green = pixelData[1];
+  const blue = pixelData[2];
+  const alpha = pixelData[3];
+
+  if (red === 238 && green === 238 && blue === 238 && alpha === 255) { // grey
+    return true;
+  } else {
+    console.log(`Background Color: rgba(${red}, ${green}, ${blue}, ${alpha})`);
+    return false;
+  }
+}
 
 canvas.on('mouse:down', function (option) {
   if (typeof option.target !== "undefined") {
     return;
   } else {
+    const x = option.e.clientX;
+    const y = option.e.clientY;
+    
+    if (isPointInsideBody(x,y)) {
+      console.log("Inside the path");
+    } else {
+      console.log("Outside the path");
+      return;
+    }
+
     if (addTexture) {
       console.log(option);
     }
+
     if (startDrawingPolygon) {
       const circle = new fabric.Circle({
         left: canvas.getPointer(option.e).x,
@@ -139,6 +173,7 @@ canvas.on('mouse:down', function (option) {
   }
 });
 
+
 // Event listener for "Add Polygon Points" button
 document.getElementById("addPolygonBtn").addEventListener("click", function () {
   Addpolygon();
@@ -148,5 +183,3 @@ document.getElementById("addPolygonBtn").addEventListener("click", function () {
 document.getElementById("createPolygonBtn").addEventListener("click", function () {
   done();
 });
-
-
