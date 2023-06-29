@@ -8,6 +8,11 @@ let circles = [];
 let pointRadius = 7;
 const fillColor = "rgba(46, 240, 56, 0.5)";
 
+function calculateBSA(weight, height) {
+  // Du Bois Body Surface Area formula
+  return 0.007184 * Math.pow(weight, 0.425) * Math.pow(height, 0.725);
+}
+
 function done() {
   startDrawingPolygon = false;
   ArrayLength = circleCount;
@@ -51,6 +56,11 @@ function done() {
   polygonCount++;
   canvas.renderAll();
 
+  // Calculate BSA using Du Bois formula
+  const weight = parseFloat(weightInput.value);
+  const height = parseFloat(heightInput.value);
+  const bsa = calculateBSA(weight, height);
+
   // Calculate area using Shoelace formula
   const points = window["polygon" + (polygonCount - 1)].get("points");
   let area = 0;
@@ -63,12 +73,24 @@ function done() {
   }
   area = Math.abs(area / 2);
 
-  // Display the area on the screen
-  const areaDisplay = document.getElementById("areaDisplay");
-  areaDisplay.textContent = "Area: " + area.toFixed(2);
+  // Adjust area by BSA
+  const adjustedArea = area / bsa;
+
+  // Display the adjusted area on the screen
+  const adjustedAreaDisplay = document.getElementById("areaDisplay");
+  adjustedAreaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " m\u00B2";
+
 }
 
 function Addpolygon() {
+  const weight = document.getElementById("weightInput").value;
+  const height = document.getElementById("heightInput").value;
+
+  if (weight === "" || height === "") {
+    alert("Please enter weight and height first.");
+    return;
+  }
+
   startDrawingPolygon = true;
 }
 
@@ -86,6 +108,11 @@ canvas.on('object:moving', function (option) {
         });
         canvas.renderAll();
 
+        // Calculate BSA using Du Bois formula
+        const weight = parseFloat(weightInput.value);
+        const height = parseFloat(heightInput.value);
+        const bsa = calculateBSA(weight, height);
+
         // Calculate area using Shoelace formula
         let area = 0;
         const n = points.length;
@@ -97,9 +124,13 @@ canvas.on('object:moving', function (option) {
         }
         area = Math.abs(area / 2);
 
-        // Update the area display
-        const areaDisplay = document.getElementById("areaDisplay");
-        areaDisplay.textContent = "Area: " + area.toFixed(2);
+        // Adjust area by BSA
+        const adjustedArea = area / bsa;
+
+        // Display the adjusted area on the screen
+        const adjustedAreaDisplay = document.getElementById("areaDisplay");
+        adjustedAreaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " m\u00B2";
+
       }
     }
 
@@ -140,13 +171,23 @@ function isPointInsideBody(x, y) {
 }
 
 canvas.on('mouse:down', function (option) {
+
+  const weight = document.getElementById("weightInput").value;
+  const height = document.getElementById("heightInput").value;
+
+  if (weight === "" || height === "") {
+    alert("Please enter weight and height first.");
+    return;
+  }
+
+
   if (typeof option.target !== "undefined") {
     return;
   } else {
     const x = option.e.clientX;
     const y = option.e.clientY;
-    
-    if (isPointInsideBody(x,y)) {
+
+    if (isPointInsideBody(x, y)) {
       console.log("Inside the path");
     } else {
       console.log("Outside the path");
@@ -187,10 +228,10 @@ canvas.upperCanvasEl.oncontextmenu = function (e) {
 };
 
 canvas.on('mouse:up', function (option) {
-  if (option.e.button === 2 && startDrawingPolygon && circles.length > 0) { 
-    const circle = circles.pop();  
-    canvas.remove(circle); 
-    circleCount--; 
+  if (option.e.button === 2 && startDrawingPolygon && circles.length > 0) {
+    const circle = circles.pop();
+    canvas.remove(circle);
+    circleCount--;
     canvas.renderAll();
   }
 });
@@ -212,7 +253,8 @@ document.getElementById("clearPolygonBtn").addEventListener("click", function ()
 const pointSizeSlider = document.getElementById("pointSizeSlider");
 const pointSizeDisplay = document.getElementById("pointSizeDisplay");
 
-pointSizeSlider.addEventListener("input", function() {
+
+pointSizeSlider.addEventListener("input", function () {
   pointRadius = pointSizeSlider.value;
   pointSizeDisplay.textContent = pointSizeSlider.value;
 
@@ -244,3 +286,4 @@ function clearPolygons() {
   areaDisplay.textContent = "";
   circles = [];
 }
+
