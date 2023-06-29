@@ -110,6 +110,7 @@ canvas.on('object:moving', function (option) {
   canvas.renderAll();
 });
 
+// Function that checks if a point is inside the body shape
 function isPointInsideBody(x, y) {
   const img = document.getElementById("shapeImage");
   const canvas = document.createElement("canvas");
@@ -177,7 +178,6 @@ canvas.on('mouse:down', function (option) {
 });
 
 // Event listener for "Add Polygon Points" button
-=======
 // prevents user from opening right click browser menu while undoing point
 canvas.upperCanvasEl.oncontextmenu = function (e) {
   e.preventDefault();
@@ -200,8 +200,6 @@ document.getElementById("addPolygonBtn").addEventListener("click", function () {
 document.getElementById("createPolygonBtn").addEventListener("click", function () {
   done();
 
-});
-=======
 });
 
 document.getElementById("clearPolygonBtn").addEventListener("click", function () {
