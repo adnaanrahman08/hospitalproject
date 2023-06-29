@@ -121,7 +121,11 @@ function isPointInsideBody(x, y) {
 
   context.drawImage(img, 0, 0, img.width, img.height);
 
-  const pixelData = context.getImageData(x, y, 1, 1).data;
+  const imgPosition = img.getBoundingClientRect();
+  const xInsideImage = x - imgPosition.left;
+  const yInsideImage = y - imgPosition.top;
+
+  const pixelData = context.getImageData(xInsideImage, yInsideImage, 1, 1).data;
   const red = pixelData[0];
   const green = pixelData[1];
   const blue = pixelData[2];
