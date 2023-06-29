@@ -108,7 +108,7 @@ canvas.on('object:moving', function (option) {
   canvas.renderAll();
 });
 
-function isPointInsideBody(x, y) {
+function isPointInsideBodyShape(x, y) {
   const img = document.getElementById("shapeImage");
   const canvas = document.createElement("canvas");
   const context = canvas.getContext("2d");
@@ -139,7 +139,7 @@ canvas.on('mouse:down', function (option) {
     const x = option.e.clientX;
     const y = option.e.clientY;
     
-    if (isPointInsideBody(x,y)) {
+    if (isPointInsideBodyShape(x,y)) {
       console.log("Inside the path");
     } else {
       console.log("Outside the path");
