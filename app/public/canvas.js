@@ -177,7 +177,6 @@ canvas.on('mouse:down', function (option) {
   }
 });
 
-// Event listener for "Add Polygon Points" button
 // prevents user from opening right click browser menu while undoing point
 canvas.upperCanvasEl.oncontextmenu = function (e) {
   e.preventDefault();

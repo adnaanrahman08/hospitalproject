@@ -5,6 +5,9 @@ const port = 3000;
 // Serve static files from the "public" directory
 app.use(express.static('public'));
 
+// Serve static files from the "models" directory
+app.use('/models', express.static('models'));
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}/`);
