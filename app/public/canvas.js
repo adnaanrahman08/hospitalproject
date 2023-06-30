@@ -129,7 +129,7 @@ canvas.on('object:moving', function (option) {
 
         // Display the adjusted area on the screen
         const adjustedAreaDisplay = document.getElementById("areaDisplay");
-        adjustedAreaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " cm\u00B2";
+        adjustedAreaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " m\u00B2";
 
       }
     }
