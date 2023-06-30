@@ -1,4 +1,3 @@
-
 const canvas = new fabric.Canvas('canvas');
 let polygonCount = 1;
 let startDrawingPolygon;
@@ -8,6 +7,11 @@ let circleCount = 1;
 let circles = [];
 let pointRadius = 7;
 const fillColor = "rgba(46, 240, 56, 0.5)";
+const weightInput = document.getElementById("weightInput");
+const heightInput = document.getElementById("heightInput");
+const areaDisplay = document.getElementById("areaDisplay");
+const shapeTableBody = document.querySelector("#shapeTable tbody");
+const shapeTable = document.getElementById("shapeTable");
 
 function calculateBSA(weight, height) {
   // Du Bois Body Surface Area formula
@@ -15,7 +19,6 @@ function calculateBSA(weight, height) {
 }
 
 function done() {
-  const addPolygonBtn = $('#addPolygonBtn');
   startDrawingPolygon = false;
   ArrayLength = circleCount;
   circleCount = 1;
@@ -30,9 +33,10 @@ function done() {
     }
   );
   canvas.add(window["polygon" + polygonCount]);
+
+  const points = window["polygon" + polygonCount].get("points");
   for (const obj of canvas.getObjects()) {
     if (obj.polygonNo === polygonCount) {
-      const points = window["polygon" + polygonCount].get("points");
       if (obj.circleNo === 1) {
         points[0].x = obj.left - window["polygon" + polygonCount].get("left");
         points[0].y = obj.top - window["polygon" + polygonCount].get("top");
@@ -45,18 +49,12 @@ function done() {
           y: obj.top - window["polygon" + polygonCount].get("top"),
         });
       }
-      window["polygon" + polygonCount].set({ points: points });
-      canvas.renderAll();
     }
   }
-  for (const obj of canvas.getObjects()) {
-    if (obj.name === "draggableCircle") {
-      canvas.bringForward(obj);
-      canvas.renderAll();
-    }
-  }
-  polygonCount++;
+  window["polygon" + polygonCount].set({ points: points });
+
   canvas.renderAll();
+  polygonCount++;
 
   // Calculate BSA using Du Bois formula
   const weight = parseFloat(weightInput.value);
@@ -64,7 +62,6 @@ function done() {
   const bsa = calculateBSA(weight, height);
 
   // Calculate area using Shoelace formula
-  const points = window["polygon" + (polygonCount - 1)].get("points");
   let area = 0;
   const n = points.length;
   for (let i = 0; i < n; i++) {
@@ -79,34 +76,26 @@ function done() {
   const adjustedArea = area / bsa;
 
   // Display the adjusted area on the screen
-  const adjustedAreaDisplay = document.getElementById("areaDisplay");
-  adjustedAreaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " cm\u00B2";
-
+  areaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " m\u00B2";
 
   // Add the shape area to the table
-  const shapeTableBody = document.querySelector("#shapeTable tbody");
   const shapeNumber = polygonCount - 1;
-  const newRow = document.createElement("tr");
-  newRow.innerHTML = `
-  <td>${shapeNumber}</td>
-  <td>${adjustedArea.toFixed(2)}</td>
-  <td><i class="material-icons-outlined">close</i></td>
-`;
-
-  shapeTableBody.appendChild(newRow);
+  const newRow = `
+    <tr>
+      <td>${shapeNumber}</td>
+      <td>${adjustedArea.toFixed(2)}</td>
+      <td><i class="material-icons-outlined">close</i></td>
+    </tr>`;
+  shapeTableBody.innerHTML += newRow;
 
   // Show the table if there is data
-  const shapeTable = document.getElementById("shapeTable");
   shapeTable.style.display = "table";
 
-  // Remove highlighting from Add Polygon button
-  addPolygonBtn.removeClass('highlight');
 }
 
 function Addpolygon() {
-  const addPolygonBtn = $('#addPolygonBtn');
-  const weight = document.getElementById("weightInput").value;
-  const height = document.getElementById("heightInput").value;
+  const weight = weightInput.value;
+  const height = heightInput.value;
 
   if (weight === "" || height === "") {
     alert("Please enter weight and height first.");
@@ -114,61 +103,54 @@ function Addpolygon() {
   }
 
   startDrawingPolygon = true;
-  addPolygonBtn.addClass('highlight');
 }
 
 canvas.on('object:moving', function (option) {
   const startY = option.e.offsetY;
   const startX = option.e.offsetX;
+  const points = window["polygon" + option.target.polygonNo].get("points");
+
   for (const obj of canvas.getObjects()) {
-    if (obj.name === "Polygon") {
-      if (obj.PolygonNumber === option.target.polygonNo) {
-        const points = window["polygon" + option.target.polygonNo].get("points");
-        points[option.target.circleNo - 1].x = startX - obj.left;
-        points[option.target.circleNo - 1].y = startY - obj.top;
-        obj.set({
-          points: points
-        });
-        canvas.renderAll();
+    if (obj.name === "Polygon" && obj.PolygonNumber === option.target.polygonNo) {
+      points[option.target.circleNo - 1].x = startX - obj.left;
+      points[option.target.circleNo - 1].y = startY - obj.top;
+      obj.set({ points });
 
-        // Calculate BSA using Du Bois formula
-        const weight = parseFloat(weightInput.value);
-        const height = parseFloat(heightInput.value);
-        const bsa = calculateBSA(weight, height);
+      // Calculate BSA using Du Bois formula
+      const weight = parseFloat(weightInput.value);
+      const height = parseFloat(heightInput.value);
+      const bsa = calculateBSA(weight, height);
 
-        // Calculate area using Shoelace formula
-        let area = 0;
-        const n = points.length;
-        for (let i = 0; i < n; i++) {
-          const curr = points[i];
-          const next = points[(i + 1) % n];
-          area += curr.x * next.y;
-          area -= curr.y * next.x;
-        }
-        area = Math.abs(area / 2);
-
-        // Adjust area by BSA
-        const adjustedArea = area / bsa;
-
-        // Display the adjusted area on the screen
-        const adjustedAreaDisplay = document.getElementById("areaDisplay");
-        adjustedAreaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " m\u00B2";
-
-        // Update the shape area in the table
-        const shapeNumber = obj.PolygonNumber;
-        const shapeTableBody = document.querySelector("#shapeTable tbody");
-        const shapeRows = shapeTableBody.getElementsByTagName("tr");
-        const shapeRow = shapeRows[shapeNumber - 1];
-        const shapeAreaCell = shapeRow.getElementsByTagName("td")[1];
-        shapeAreaCell.textContent = adjustedArea.toFixed(2);
-
+      // Calculate area using Shoelace formula
+      let area = 0;
+      const n = points.length;
+      for (let i = 0; i < n; i++) {
+        const curr = points[i];
+        const next = points[(i + 1) % n];
+        area += curr.x * next.y;
+        area -= curr.y * next.x;
       }
+      area = Math.abs(area / 2);
+
+      // Adjust area by BSA
+      const adjustedArea = area / bsa;
+
+      // Display the adjusted area on the screen
+      areaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " m\u00B2";
+
+      // Update the shape area in the table
+      const shapeNumber = obj.PolygonNumber;
+      const shapeRows = shapeTableBody.getElementsByTagName("tr");
+      const shapeRow = shapeRows[shapeNumber - 1];
+      const shapeAreaCell = shapeRow.getElementsByTagName("td")[1];
+      shapeAreaCell.textContent = adjustedArea.toFixed(2);
     }
 
     if (obj.name === "draggableCircle") {
       canvas.bringForward(obj);
     }
   }
+
   canvas.renderAll();
 });
 
@@ -188,10 +170,7 @@ function isPointInsideBody(x, y) {
   const yInsideImage = y - imgPosition.top;
 
   const pixelData = context.getImageData(xInsideImage, yInsideImage, 1, 1).data;
-  const red = pixelData[0];
-  const green = pixelData[1];
-  const blue = pixelData[2];
-  const alpha = pixelData[3];
+  const [red, green, blue, alpha] = pixelData;
 
   if (!(red === 0 && green === 0 && blue === 0 && alpha === 0)) {
     return true;
@@ -202,15 +181,13 @@ function isPointInsideBody(x, y) {
 }
 
 canvas.on('mouse:down', function (option) {
-
-  const weight = document.getElementById("weightInput").value;
-  const height = document.getElementById("heightInput").value;
+  const weight = weightInput.value;
+  const height = heightInput.value;
 
   if (weight === "" || height === "") {
     alert("Please enter weight and height first.");
     return;
   }
-
 
   if (typeof option.target !== "undefined") {
     return;
@@ -284,7 +261,6 @@ document.getElementById("clearPolygonBtn").addEventListener("click", function ()
 const pointSizeSlider = document.getElementById("pointSizeSlider");
 const pointSizeDisplay = document.getElementById("pointSizeDisplay");
 
-
 pointSizeSlider.addEventListener("input", function () {
   pointRadius = pointSizeSlider.value;
   pointSizeDisplay.textContent = pointSizeSlider.value;
@@ -292,7 +268,6 @@ pointSizeSlider.addEventListener("input", function () {
   let activeObject = canvas.getActiveObject();
   if (activeObject && activeObject.name === 'draggableCircle') {
     activeObject.set('radius', pointRadius);
-
     activeObject.scaleToWidth(pointRadius * 2);
     activeObject.scaleToHeight(pointRadius * 2);
 
@@ -300,40 +275,54 @@ pointSizeSlider.addEventListener("input", function () {
   }
 });
 
-
 // Function to remove all polygons from the canvas
 function clearPolygons() {
-  const objects = canvas.getObjects();
-  for (let i = objects.length - 1; i >= 0; i--) {
-    if (objects[i].name === "Polygon" || objects[i].name === "draggableCircle") {
-      canvas.remove(objects[i]);
-    }
-  }
+  const objects = canvas.getObjects().filter(obj => obj.name === "Polygon" || obj.name === "draggableCircle");
+  canvas.remove(...objects);
   polygonCount = 1;
   circleCount = 1;
 
   // Clear area display
-  const areaDisplay = document.getElementById("areaDisplay");
   areaDisplay.textContent = "";
   circles = [];
 
   // Clear the shape table
-  const shapeTableBody = document.querySelector("#shapeTable tbody");
   shapeTableBody.innerHTML = "";
 
   // Hide the table if there is no data
-  const shapeTable = document.getElementById("shapeTable");
   shapeTable.style.display = "none";
 }
 
 // Add event listener to table body for remove icon click
-const shapeTableBody = document.querySelector("#shapeTable tbody");
 shapeTableBody.addEventListener("click", function (event) {
   const target = event.target;
   if (target.classList.contains("material-icons-outlined")) {
     // Remove the row from the table
     const row = target.parentNode.parentNode;
+    const shapeNumber = row.getElementsByTagName("td")[0].textContent;
+    const shapeToRemove = window["polygon" + shapeNumber];
+    if (shapeToRemove) {
+      // Remove the shape and its associated circle points
+      const shapeCircles = canvas.getObjects().filter(obj => obj.polygonNo === Number(shapeNumber) && obj.name === "draggableCircle");
+      canvas.remove(shapeToRemove, ...shapeCircles);
+    }
     shapeTableBody.removeChild(row);
+
+    // Update the shape numbers in the table
+    const remainingRows = shapeTableBody.getElementsByTagName("tr");
+    for (let i = 0; i < remainingRows.length; i++) {
+      const shapeNumberCell = remainingRows[i].getElementsByTagName("td")[0];
+      shapeNumberCell.textContent = i + 1;
+    }
+
+    // Check if the removed row was the last one
+    if (remainingRows.length === 0) {
+      // Reset the table
+      clearPolygons();
+    }
   }
 });
+
+
+
 
