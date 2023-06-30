@@ -20,9 +20,15 @@ function calculateBSA(weight, height) {
 }
 
 function done() {
-  startDrawingPolygon = false;
+  startDrawingPolygon = true;
   ArrayLength = circleCount;
   circleCount = 1;
+
+  if (!startDrawingPolygon || circles.length === 0) {
+    alert("Please add points to the body before calculating the BSA.");
+    return;
+  }
+
   window["polygon" + polygonCount] = new fabric.Polygon(
     [{ x: 0, y: 0 }, { x: 0.5, y: 0.5 }],
     {
