@@ -1,6 +1,10 @@
 /* Body styles */
 body {
   font-family: Arial, sans-serif;
+  background-size: cover;
+  background-repeat: no-repeat;
+  height: 100vh;
+  color: #fff;
 }
 
 .container {
@@ -35,6 +39,12 @@ button {
   border-radius: 4px;
   margin-right: 10px;
   cursor: pointer;
+  
+  transition: border 0.5s;
+}
+
+button:hover {
+  border: 2px solid white;
 }
 
 .clear-button {
