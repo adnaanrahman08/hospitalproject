@@ -6,10 +6,8 @@
   <title>Hospital Project</title>
   <link rel="stylesheet" type="text/css" href="./style.css">
 
-  <!-- Material-UI icons font -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
-  <!-- Material-UI icons library -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
 
 </head>
@@ -38,11 +36,12 @@
     <input id="weightInput" type="number" placeholder="Enter Weight In kg">
     <input id="heightInput" type="number" placeholder="Enter Height In cm">
 
-    <div>
-      <button id="addPolygonBtn">Add Points</button>
-      <button id="createPolygonBtn">Create Body Surface Area</button>
+    <div class="button-container">
+      <button id="addPolygonBtn"><i class="material-icons">add</i>Add Points</button>
+      <button id="createPolygonBtn">Calculate Body Surface Area</button>
       <button id="clearPolygonBtn" class="clear-button">Clear</button>
     </div>
+
 
     <div class="input-container">
       <label for="pointSizeSlider">Point Size:</label>
@@ -51,8 +50,9 @@
     </div>
   </div>
 
-  <!-- Material-UI icons script -->
-  <script src="https://cdn.jsdelivr.net/npm/@mui/icons-material@5.2.3/umd/material-icons-outlined.development.js"></script>
+  <!-- Scripts -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/@mui/icons-material@5.2.3/umd/material-icons-outlined.development.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
