@@ -78,7 +78,7 @@ function done() {
 
   // Display the adjusted area on the screen
   const adjustedAreaDisplay = document.getElementById("areaDisplay");
-  adjustedAreaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " m\u00B2";
+  adjustedAreaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " cm\u00B2";
 
 }
 
@@ -162,7 +162,7 @@ function isPointInsideBody(x, y) {
   const blue = pixelData[2];
   const alpha = pixelData[3];
 
-  if (!(red === 0 && green === 0 && blue === 0 && alpha === 0)) { // grey
+  if (!(red === 0 && green === 0 && blue === 0 && alpha === 0)) {
     return true;
   } else {
     console.log(`Background Color: rgba(${red}, ${green}, ${blue}, ${alpha})`);
@@ -286,4 +286,3 @@ function clearPolygons() {
   areaDisplay.textContent = "";
   circles = [];
 }
-
