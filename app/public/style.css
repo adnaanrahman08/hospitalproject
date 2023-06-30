@@ -86,3 +86,16 @@ input[type="range"] {
   cursor: pointer;
   border-radius: 50%;
 }
+
+table#shapeTable {
+  display: none;
+}
+
+table#shapeTable.display-table {
+  display: table;
+}
+
+.highlight {
+  background-color: #308a34;
+  color: black;
+}

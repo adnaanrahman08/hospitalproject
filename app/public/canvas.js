@@ -14,6 +14,7 @@ function calculateBSA(weight, height) {
 }
 
 function done() {
+  const addPolygonBtn = $('#addPolygonBtn');
   startDrawingPolygon = false;
   ArrayLength = circleCount;
   circleCount = 1;
@@ -80,9 +81,27 @@ function done() {
   const adjustedAreaDisplay = document.getElementById("areaDisplay");
   adjustedAreaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " m\u00B2";
 
+
+  // Add the shape area to the table
+  const shapeTableBody = document.querySelector("#shapeTable tbody");
+  const shapeNumber = polygonCount - 1;
+  const newRow = document.createElement("tr");
+  newRow.innerHTML = `
+    <td>${shapeNumber}</td>
+    <td>${adjustedArea.toFixed(2)}</td>
+  `;
+  shapeTableBody.appendChild(newRow);
+
+  // Show the table if there is data
+  const shapeTable = document.getElementById("shapeTable");
+  shapeTable.style.display = "table";
+
+  // Remove highlighting from Add Polygon button
+  addPolygonBtn.removeClass('highlight');
 }
 
 function Addpolygon() {
+  const addPolygonBtn = $('#addPolygonBtn');
   const weight = document.getElementById("weightInput").value;
   const height = document.getElementById("heightInput").value;
 
@@ -92,6 +111,7 @@ function Addpolygon() {
   }
 
   startDrawingPolygon = true;
+  addPolygonBtn.addClass('highlight');
 }
 
 canvas.on('object:moving', function (option) {
@@ -130,6 +150,14 @@ canvas.on('object:moving', function (option) {
         // Display the adjusted area on the screen
         const adjustedAreaDisplay = document.getElementById("areaDisplay");
         adjustedAreaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " m\u00B2";
+
+        // Update the shape area in the table
+        const shapeNumber = obj.PolygonNumber;
+        const shapeTableBody = document.querySelector("#shapeTable tbody");
+        const shapeRows = shapeTableBody.getElementsByTagName("tr");
+        const shapeRow = shapeRows[shapeNumber - 1];
+        const shapeAreaCell = shapeRow.getElementsByTagName("td")[1];
+        shapeAreaCell.textContent = adjustedArea.toFixed(2);
 
       }
     }
@@ -285,5 +313,13 @@ function clearPolygons() {
   const areaDisplay = document.getElementById("areaDisplay");
   areaDisplay.textContent = "";
   circles = [];
+
+  // Clear the shape table
+  const shapeTableBody = document.querySelector("#shapeTable tbody");
+  shapeTableBody.innerHTML = "";
+
+  // Hide the table if there is no data
+  const shapeTable = document.getElementById("shapeTable");
+  shapeTable.style.display = "none";
 }
 
