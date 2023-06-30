@@ -4,7 +4,6 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   height: 100vh;
-  color: #fff;
 }
 
 .container {
@@ -44,7 +43,7 @@ button {
 }
 
 button:hover {
-  border: 2px solid white;
+  border: 2px solid #000;
 }
 
 .clear-button {
@@ -67,7 +66,7 @@ input[type="range"] {
 #pointSizeSlider {
   -webkit-appearance: none;
   height: 5px;
-  background: #d3d3d3;
+  background: #fff;
   outline: none;
   opacity: 0.7;
   -webkit-transition: .2s;
