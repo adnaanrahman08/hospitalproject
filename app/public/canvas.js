@@ -330,10 +330,11 @@ colorPicker.addEventListener("change", updateFillColor, false);
 colorPicker.select();
 
 function updateFillColor(event) {
-  const polygons = canvas.getObjects().filter(obj => obj.name === "Polygon");
-  polygons.forEach(polygon => {
-    polygon.set({ fill: event.target.value });
-  });
-  canvas.renderAll();
+  const polygons = canvas.getObjects().filter(obj => obj.name === "Polygon" && obj.type === "normal");
+  if (polygons.length > 0) {
+    const lastShape = polygons[polygons.length - 1];
+    lastShape.set({ fill: event.target.value });
+    canvas.renderAll();
+  }
 }
 
