@@ -338,6 +338,21 @@ shapeTableBody.addEventListener("click", function (event) {
   }
 });
 
+let colorPicker;
+colorPicker = document.querySelector("#color-picker");
+colorPicker.addEventListener("input", updateFillColor, false);
+colorPicker.addEventListener("change", updateFillColor, false);
+colorPicker.select();
+
+function updateFillColor(event) {
+  const polygons = canvas.getObjects().filter(obj => obj.name === "Polygon" && obj.type === "normal");
+  if (polygons.length > 0) {
+    const lastShape = polygons[polygons.length - 1];
+    lastShape.set({ fill: event.target.value });
+    canvas.renderAll();
+  }
+}
+
 // Function to add annotation notes
 function addAnnotationNote(option) {
   if (annotationMode) {
