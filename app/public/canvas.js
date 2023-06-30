@@ -82,6 +82,11 @@ function done() {
   // Adjust area by BSA
   const adjustedArea = area / bsa;
 
+  // Check if the adjusted area is 0
+  if (adjustedArea === 0) {
+    return;
+  }
+
   // Display the adjusted area on the screen
   areaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " m\u00B2";
 
@@ -93,7 +98,10 @@ function done() {
       <td>${adjustedArea.toFixed(2)}</td>
       <td><i class="material-icons-outlined">close</i></td>
     </tr>`;
-  shapeTableBody.innerHTML += newRow;
+
+  if (adjustedArea !== 0) {
+    shapeTableBody.innerHTML += newRow;
+  }
 
   // Show the table if there is data
   shapeTable.style.display = "table";
