@@ -6,6 +6,7 @@ let addTexture = false;
 let circleCount = 1;
 let circles = [];
 let pointRadius = 7;
+let annotationMode = false;
 const fillColor = "rgba(46, 240, 56, 0.5)";
 const weightInput = document.getElementById("weightInput");
 const heightInput = document.getElementById("heightInput");
@@ -323,6 +324,97 @@ shapeTableBody.addEventListener("click", function (event) {
   }
 });
 
+// Function to add annotation notes
+function addAnnotationNote(option) {
+  if (annotationMode) {
+    const x = option.e.clientX;
+    const y = option.e.clientY;
 
+    // Create a note element
+    const note = document.createElement('div');
+    note.classList.add('annotation-note');
+    note.style.left = `${x}px`;
+    note.style.top = `${y}px`;
 
+    // Make the note draggable and resizable
+    makeNoteInteractable(note);
 
+    // Add the note to the document body
+    document.body.appendChild(note);
+  }
+}
+
+// Function to enter/exit annotation mode
+function toggleAnnotationMode() {
+  const addNoteBtn = document.getElementById("addNoteBtn");
+  annotationMode = !annotationMode;
+
+  if (annotationMode) {
+    // Enable annotation mode
+    addNoteBtn.classList.add('highlight');
+    canvas.on('mouse:up', addAnnotationNote);
+  } else {
+    // Disable annotation mode
+    addNoteBtn.classList.remove('highlight');
+    canvas.off('mouse:up', addAnnotationNote);
+  }
+}
+
+// Function to make the note draggable and resizable
+function makeNoteInteractable(note) {
+  const noteContent = document.createElement('div');
+  noteContent.classList.add('note-content');
+  noteContent.contentEditable = true;
+  note.appendChild(noteContent);
+
+  const removeIcon = document.createElement('i');
+  removeIcon.classList.add('material-icons', 'note-remove-icon');
+  removeIcon.textContent = 'close';
+  note.appendChild(removeIcon);
+
+  removeIcon.addEventListener('click', function () {
+    note.remove();
+  });
+
+  interact(note)
+    .draggable({
+      modifiers: [
+        interact.modifiers.restrictRect({
+          restriction: 'body'
+        })
+      ],
+      listeners: {
+        move(event) {
+          const target = event.target;
+          const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+          const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+          // Update the position of the note
+          target.style.transform = `translate(${x}px, ${y}px)`;
+          target.setAttribute('data-x', x);
+          target.setAttribute('data-y', y);
+        }
+      }
+    })
+    .resizable({
+      edges: { left: true, right: true, bottom: true, top: true },
+      modifiers: [
+        interact.modifiers.restrictSize({
+          min: { width: 100, height: 40 }
+        })
+      ],
+      listeners: {
+        move(event) {
+          const target = event.target;
+          const { width, height } = event.rect;
+
+          // Update the size of the note
+          target.style.width = width + 'px';
+          target.style.height = height + 'px';
+        }
+      }
+    });
+}
+
+// Event listener for the Add Note button
+document.getElementById("addNoteBtn").addEventListener("click", toggleAnnotationMode);
