@@ -323,6 +323,17 @@ shapeTableBody.addEventListener("click", function (event) {
   }
 });
 
+let colorPicker;
+colorPicker = document.querySelector("#color-picker");
+colorPicker.addEventListener("input", updateFillColor, false);
+colorPicker.addEventListener("change", updateFillColor, false);
+colorPicker.select();
 
-
+function updateFillColor(event) {
+  const polygon = canvas.getObjects().find(obj => obj.name === "Polygon");
+  if (polygon) {
+    polygon.set({ fill: event.target.value });
+    canvas.renderAll();
+  }
+}
 
