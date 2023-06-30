@@ -97,12 +97,44 @@ input[type="range"] {
   border-radius: 50%;
 }
 
-table#shapeTable {
-  display: none;
+/* Table styles */
+#shapeTable {
+  position: absolute;
+  left: 20px;
+  top: 20px;
 }
 
-table#shapeTable.display-table {
-  display: table;
+
+table {
+  border-collapse: collapse;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #4CAF50;
+}
+
+tbody tr:nth-child() {
+  background-color: #f9f9f9;
+}
+
+tbody tr:hover {
+  background-color: #e6e6e6;
+}
+
+tbody tr:hover .remove-row-icon {
+  display: inline-block;
+}
+
+.material-icons-outlined {
+  display: none;
+  cursor: pointer;
+  color: #FF0000;
 }
 
 .highlight {

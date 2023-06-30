@@ -5,22 +5,31 @@
   <meta charset="utf-8">
   <title>Hospital Project</title>
   <link rel="stylesheet" type="text/css" href="./style.css">
+
+  <!-- Material-UI icons font -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
+  <!-- Material-UI icons library -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
+
 </head>
 
 <body>
   <div class="container">
 
-
     <p id="areaDisplay"></p>
 
-    <table id="shapeTable" style="display: none;">
+    <table id="shapeTable" class="display-table" style="display: none;">
       <thead>
         <tr>
           <th>Shape Number</th>
           <th>Area (m<sup>2</sup>)</th>
         </tr>
       </thead>
-      <tbody></tbody>
+      <tbody>
+        <tr>
+        </tr>
+      </tbody>
     </table>
 
     <div style="position:relative">
@@ -45,6 +54,9 @@
       <span id="pointSizeDisplay">7</span>
     </div>
   </div>
+
+  <!-- Material-UI icons script -->
+  <script src="https://cdn.jsdelivr.net/npm/@mui/icons-material@5.2.3/umd/material-icons-outlined.development.js"></script>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>

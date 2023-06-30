@@ -1,3 +1,4 @@
+
 const canvas = new fabric.Canvas('canvas');
 let polygonCount = 1;
 let startDrawingPolygon;
@@ -79,7 +80,7 @@ function done() {
 
   // Display the adjusted area on the screen
   const adjustedAreaDisplay = document.getElementById("areaDisplay");
-  adjustedAreaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " cm\u00B2";
+  adjustedAreaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " m\u00B2";
 
 
   // Add the shape area to the table
@@ -87,9 +88,11 @@ function done() {
   const shapeNumber = polygonCount - 1;
   const newRow = document.createElement("tr");
   newRow.innerHTML = `
-    <td>${shapeNumber}</td>
-    <td>${adjustedArea.toFixed(2)}</td>
-  `;
+  <td>${shapeNumber}</td>
+  <td>${adjustedArea.toFixed(2)}</td>
+  <td><i class="material-icons-outlined">close</i></td>
+`;
+
   shapeTableBody.appendChild(newRow);
 
   // Show the table if there is data
@@ -322,3 +325,15 @@ function clearPolygons() {
   const shapeTable = document.getElementById("shapeTable");
   shapeTable.style.display = "none";
 }
+
+// Add event listener to table body for remove icon click
+const shapeTableBody = document.querySelector("#shapeTable tbody");
+shapeTableBody.addEventListener("click", function (event) {
+  const target = event.target;
+  if (target.classList.contains("material-icons-outlined")) {
+    // Remove the row from the table
+    const row = target.parentNode.parentNode;
+    shapeTableBody.removeChild(row);
+  }
+});
+
