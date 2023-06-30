@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <title>Hospital Project</title>
   <link rel="stylesheet" type="text/css" href="./style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/magnify/2.3.3/css/magnify.css" integrity="sha512-JxBFHHd+xyHl++SdVJYCCgxGPJKCTTaqndOl/n12qI73hgj7PuGuYDUcCgtdSHTeXSHCtW4us4Qmv+xwPqKVjQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
@@ -13,10 +14,10 @@
 
     <p id="areaDisplay"></p>
 
-    <div id="mainDiv" style="position:relative;width:205px">
+    <div style="position:relative;width:205px">
       <canvas id="canvas" width="400px" height="500px" style="z-index:10;background-color:transparent;"></canvas>
       <div id="backgroundCanvas" style="width:400px;height:500px">
-        <img id="shapeImage" src="./models/human-front.svg" alt="front human body" style="width:100%;height:100%;" />
+        <img id="shapeImage" src="./models/human-front.svg" class="zoom" data-magnify-src="./models/human-front.svg" alt="front human body" style="width:100%;height:100%;" />
       </div>
     </div>
 
@@ -39,8 +40,10 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/magnify/2.3.3/js/jquery.magnify.min.js" integrity="sha512-YKxHqn7D0M5knQJO2xKHZpCfZ+/Ta7qpEHgADN+AkY2U2Y4JJtlCEHzKWV5ZE87vZR3ipdzNJ4U/sfjIaoHMfw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="canvas.js"></script>
   <script src="background.js"></script>
+  <script src="magnify.js"></script>
 </body>
 
 </html>
