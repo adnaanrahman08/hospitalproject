@@ -1,6 +1,7 @@
 const canvas = new fabric.Canvas('canvas');
 let polygonCount = 1;
-let startDrawingPolygon;
+let startDrawingPolygon = false;
+let canAddPoints = true;
 let ArrayLength;
 let addTexture = false;
 let circleCount = 1;
@@ -96,7 +97,7 @@ function done() {
     <tr>
       <td>${shapeNumber}</td>
       <td>${adjustedArea.toFixed(2)}</td>
-      <td><i class="material-icons-outlined">close</i></td>
+      <td><i class="fa-solid fa-xmark"></i></td>
     </tr>`;
 
   if (adjustedArea !== 0) {
@@ -106,6 +107,7 @@ function done() {
   // Show the table if there is data
   shapeTable.style.display = "table";
 
+  canAddPoints = false;
 }
 
 function Addpolygon() {
@@ -118,6 +120,7 @@ function Addpolygon() {
   }
 
   startDrawingPolygon = true;
+  canAddPoints = true;
 }
 
 canvas.on('object:moving', function (option) {
@@ -201,6 +204,10 @@ canvas.on('mouse:down', function (option) {
 
   if (weight === "" || height === "") {
     alert("Please enter weight and height first.");
+    return;
+  }
+
+  if (!canAddPoints) {
     return;
   }
 
@@ -311,7 +318,7 @@ function clearPolygons() {
 // Add event listener to table body for remove icon click
 shapeTableBody.addEventListener("click", function (event) {
   const target = event.target;
-  if (target.classList.contains("material-icons-outlined")) {
+  if (target.classList.contains("fa-xmark")) {
     // Remove the row from the table
     const row = target.parentNode.parentNode;
     const shapeNumber = row.getElementsByTagName("td")[0].textContent;
@@ -397,8 +404,7 @@ function makeNoteInteractable(note) {
   note.appendChild(noteContent);
 
   const removeIcon = document.createElement('i');
-  removeIcon.classList.add('material-icons', 'note-remove-icon');
-  removeIcon.textContent = 'close';
+  removeIcon.classList.add('fa', 'fa-xmark', 'note-remove-icon');
   note.appendChild(removeIcon);
 
   removeIcon.addEventListener('click', function () {

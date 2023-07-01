@@ -2,7 +2,7 @@ html {
   min-height: 100%;
   padding: 20px;
 }
-/* Body styles */
+
 body {
   font-family: Arial, sans-serif;
   background-size: cover;
@@ -75,16 +75,12 @@ button:hover {
   display: inline-flex;
 }
 
-#addPolygonBtn:hover {
-  background-color: #45a049;
-}
-
 #addPolygonBtn i {
   margin-right: 5px;
 }
 
-#addNoteBtn {
-  margin-top: 10px;
+#exportBtn i {
+  margin-right: 5px;
 }
 
 .annotation-note {
@@ -218,10 +214,4 @@ tbody tr:hover {
 
 tbody tr:hover .remove-row-icon {
   display: inline-block;
-}
-
-.material-icons-outlined {
-  display: none;
-  cursor: pointer;
-  color: #FF0000;
 }
