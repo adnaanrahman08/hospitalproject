@@ -5,11 +5,6 @@
   <meta charset="utf-8">
   <title>Hospital Project</title>
   <link rel="stylesheet" type="text/css" href="./style.css">
-
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-
-  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined">
-
 </head>
 
 <body>
@@ -37,7 +32,7 @@
     <input id="heightInput" type="number" placeholder="Enter Height In cm">
 
     <div class="button-container">
-      <button id="addPolygonBtn"><i class="material-icons">add</i>Add Points</button>
+      <button id="addPolygonBtn"><i class="fa-solid fa-plus"></i>Add Points</button>
       <button id="createPolygonBtn">Calculate</button>
       <button id="clearPolygonBtn" class="clear-button">Clear</button>
     </div>
@@ -49,6 +44,7 @@
 
     <div>
       <button id="addNoteBtn">Add Note</button>
+      <button id="exportBtn" onclick="exportImage()"><i class="fa-solid fa-file-export"></i>Export</button>
     </div>
 
     <div class="input-container">
@@ -59,12 +55,11 @@
   </div>
 
   <!-- Scripts -->
-  <script
-    src="https://cdn.jsdelivr.net/npm/@mui/icons-material@5.2.3/umd/material-icons-outlined.development.js"></script>
-
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
+  <script src="https://kit.fontawesome.com/658e69eab6.js" crossorigin="anonymous"></script>
+
 
   <script src="canvas.js"></script>
   <script src="background.js"></script>

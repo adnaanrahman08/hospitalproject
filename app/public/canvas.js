@@ -1,6 +1,7 @@
 const canvas = new fabric.Canvas('canvas');
 let polygonCount = 1;
-let startDrawingPolygon;
+let startDrawingPolygon = false;
+let canAddPoints = true;
 let ArrayLength;
 let addTexture = false;
 let circleCount = 1;
@@ -96,7 +97,7 @@ function done() {
     <tr>
       <td>${shapeNumber}</td>
       <td>${adjustedArea.toFixed(2)}</td>
-      <td><i class="material-icons-outlined">close</i></td>
+      <td><i class="fa-solid fa-xmark"></i></td>
     </tr>`;
 
   if (adjustedArea !== 0) {
@@ -106,6 +107,7 @@ function done() {
   // Show the table if there is data
   shapeTable.style.display = "table";
 
+  canAddPoints = false;
 }
 
 function Addpolygon() {
@@ -118,6 +120,7 @@ function Addpolygon() {
   }
 
   startDrawingPolygon = true;
+  canAddPoints = true;
 }
 
 canvas.on('object:moving', function (option) {
@@ -201,6 +204,10 @@ canvas.on('mouse:down', function (option) {
 
   if (weight === "" || height === "") {
     alert("Please enter weight and height first.");
+    return;
+  }
+
+  if (!canAddPoints) {
     return;
   }
 
@@ -311,7 +318,7 @@ function clearPolygons() {
 // Add event listener to table body for remove icon click
 shapeTableBody.addEventListener("click", function (event) {
   const target = event.target;
-  if (target.classList.contains("material-icons-outlined")) {
+  if (target.classList.contains("fa-xmark")) {
     // Remove the row from the table
     const row = target.parentNode.parentNode;
     const shapeNumber = row.getElementsByTagName("td")[0].textContent;
@@ -353,6 +360,22 @@ function updateFillColor(event) {
   }
 }
 
+// Function to enter/exit annotation mode
+function toggleAnnotationMode() {
+  const addNoteBtn = document.getElementById("addNoteBtn");
+  annotationMode = !annotationMode;
+
+  if (annotationMode) {
+    // Enable annotation mode
+    addNoteBtn.classList.add('highlight');
+    canvas.on('mouse:up', addAnnotationNote);
+  } else {
+    // Disable annotation mode
+    addNoteBtn.classList.remove('highlight');
+    canvas.off('mouse:up', addAnnotationNote);
+  }
+}
+
 // Function to add annotation notes
 function addAnnotationNote(option) {
   if (annotationMode) {
@@ -371,22 +394,7 @@ function addAnnotationNote(option) {
     // Add the note to the document body
     document.body.appendChild(note);
   }
-}
-
-// Function to enter/exit annotation mode
-function toggleAnnotationMode() {
-  const addNoteBtn = document.getElementById("addNoteBtn");
-  annotationMode = !annotationMode;
-
-  if (annotationMode) {
-    // Enable annotation mode
-    addNoteBtn.classList.add('highlight');
-    canvas.on('mouse:up', addAnnotationNote);
-  } else {
-    // Disable annotation mode
-    addNoteBtn.classList.remove('highlight');
-    canvas.off('mouse:up', addAnnotationNote);
-  }
+  toggleAnnotationMode();
 }
 
 // Function to make the note draggable and resizable
@@ -397,8 +405,7 @@ function makeNoteInteractable(note) {
   note.appendChild(noteContent);
 
   const removeIcon = document.createElement('i');
-  removeIcon.classList.add('material-icons', 'note-remove-icon');
-  removeIcon.textContent = 'close';
+  removeIcon.classList.add('fa', 'fa-xmark', 'note-remove-icon');
   note.appendChild(removeIcon);
 
   removeIcon.addEventListener('click', function () {
@@ -447,3 +454,75 @@ function makeNoteInteractable(note) {
 
 // Event listener for the Add Note button
 document.getElementById("addNoteBtn").addEventListener("click", toggleAnnotationMode);
+
+// Function to export the canvas and body image to an image file
+function exportImage() {
+  const objects = canvas.getObjects().filter(obj => obj.name === "draggableCircle" || obj.name === "Polygon");
+  if (objects.length === 0) {
+    alert("Please add points or shapes before exporting.");
+    return;
+  }
+
+  // Get the canvas element
+  const canvasElement = document.getElementById('canvas');
+
+  // Create a new canvas with the same dimensions
+  const exportCanvas = document.createElement('canvas');
+  exportCanvas.width = canvasElement.width;
+  exportCanvas.height = canvasElement.height;
+
+  // Render all objects on the canvas
+  canvas.renderAll();
+
+  // Get the canvas context
+  const exportContext = exportCanvas.getContext('2d');
+
+  // Draw the canvas and body image onto the export canvas
+  exportContext.drawImage(canvasElement, 0, 0);
+  exportContext.drawImage(document.getElementById('shapeImage'), 0, 0);
+
+  // Draw each shape on the export canvas
+  objects.forEach(obj => {
+    if (obj.name === "draggableCircle") {
+      // Draw a circle
+      exportContext.beginPath();
+      exportContext.arc(obj.left, obj.top, obj.radius, 0, 2 * Math.PI);
+      exportContext.fillStyle = obj.fill;
+      exportContext.fill();
+      exportContext.lineWidth = obj.strokeWidth;
+      exportContext.strokeStyle = obj.stroke;
+      exportContext.stroke();
+    } else if (obj.name === "Polygon") {
+      // Draw a polygon
+      exportContext.beginPath();
+      const points = obj.points.map(point => ({
+        x: point.x + obj.left,
+        y: point.y + obj.top
+      }));
+      exportContext.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        exportContext.lineTo(points[i].x, points[i].y);
+      }
+      exportContext.closePath();
+      exportContext.fillStyle = obj.fill;
+      exportContext.fill();
+      exportContext.lineWidth = obj.strokeWidth;
+      exportContext.strokeStyle = obj.stroke;
+      exportContext.stroke();
+    }
+  });
+
+  // Convert the export canvas to a data URL
+  const dataURL = exportCanvas.toDataURL('image/png');
+
+  // Create a link element to download the image
+  const link = document.createElement('a');
+  link.href = dataURL;
+  link.download = 'canvas.png';
+
+  // Simulate a click event to download the image
+  link.dispatchEvent(new MouseEvent('click'));
+}
+
+// Add event listener to export button
+document.getElementById('exportBtn').addEventListener('click', exportImage);
