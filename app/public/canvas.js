@@ -447,3 +447,75 @@ function makeNoteInteractable(note) {
 
 // Event listener for the Add Note button
 document.getElementById("addNoteBtn").addEventListener("click", toggleAnnotationMode);
+
+// Function to export the canvas and body image to an image file
+function exportImage() {
+  const objects = canvas.getObjects().filter(obj => obj.name === "draggableCircle" || obj.name === "Polygon");
+  if (objects.length === 0) {
+    alert("Please add points or shapes before exporting.");
+    return;
+  }
+
+  // Get the canvas element
+  const canvasElement = document.getElementById('canvas');
+
+  // Create a new canvas with the same dimensions
+  const exportCanvas = document.createElement('canvas');
+  exportCanvas.width = canvasElement.width;
+  exportCanvas.height = canvasElement.height;
+
+  // Render all objects on the canvas
+  canvas.renderAll();
+
+  // Get the canvas context
+  const exportContext = exportCanvas.getContext('2d');
+
+  // Draw the canvas and body image onto the export canvas
+  exportContext.drawImage(canvasElement, 0, 0);
+  exportContext.drawImage(document.getElementById('shapeImage'), 0, 0);
+
+  // Draw each shape on the export canvas
+  objects.forEach(obj => {
+    if (obj.name === "draggableCircle") {
+      // Draw a circle
+      exportContext.beginPath();
+      exportContext.arc(obj.left, obj.top, obj.radius, 0, 2 * Math.PI);
+      exportContext.fillStyle = obj.fill;
+      exportContext.fill();
+      exportContext.lineWidth = obj.strokeWidth;
+      exportContext.strokeStyle = obj.stroke;
+      exportContext.stroke();
+    } else if (obj.name === "Polygon") {
+      // Draw a polygon
+      exportContext.beginPath();
+      const points = obj.points.map(point => ({
+        x: point.x + obj.left,
+        y: point.y + obj.top
+      }));
+      exportContext.moveTo(points[0].x, points[0].y);
+      for (let i = 1; i < points.length; i++) {
+        exportContext.lineTo(points[i].x, points[i].y);
+      }
+      exportContext.closePath();
+      exportContext.fillStyle = obj.fill;
+      exportContext.fill();
+      exportContext.lineWidth = obj.strokeWidth;
+      exportContext.strokeStyle = obj.stroke;
+      exportContext.stroke();
+    }
+  });
+
+  // Convert the export canvas to a data URL
+  const dataURL = exportCanvas.toDataURL('image/png');
+
+  // Create a link element to download the image
+  const link = document.createElement('a');
+  link.href = dataURL;
+  link.download = 'canvas.png';
+
+  // Simulate a click event to download the image
+  link.dispatchEvent(new MouseEvent('click'));
+}
+
+// Add event listener to export button
+document.getElementById('exportBtn').addEventListener('click', exportImage);
