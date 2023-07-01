@@ -360,6 +360,22 @@ function updateFillColor(event) {
   }
 }
 
+// Function to enter/exit annotation mode
+function toggleAnnotationMode() {
+  const addNoteBtn = document.getElementById("addNoteBtn");
+  annotationMode = !annotationMode;
+
+  if (annotationMode) {
+    // Enable annotation mode
+    addNoteBtn.classList.add('highlight');
+    canvas.on('mouse:up', addAnnotationNote);
+  } else {
+    // Disable annotation mode
+    addNoteBtn.classList.remove('highlight');
+    canvas.off('mouse:up', addAnnotationNote);
+  }
+}
+
 // Function to add annotation notes
 function addAnnotationNote(option) {
   if (annotationMode) {
@@ -378,22 +394,7 @@ function addAnnotationNote(option) {
     // Add the note to the document body
     document.body.appendChild(note);
   }
-}
-
-// Function to enter/exit annotation mode
-function toggleAnnotationMode() {
-  const addNoteBtn = document.getElementById("addNoteBtn");
-  annotationMode = !annotationMode;
-
-  if (annotationMode) {
-    // Enable annotation mode
-    addNoteBtn.classList.add('highlight');
-    canvas.on('mouse:up', addAnnotationNote);
-  } else {
-    // Disable annotation mode
-    addNoteBtn.classList.remove('highlight');
-    canvas.off('mouse:up', addAnnotationNote);
-  }
+  toggleAnnotationMode();
 }
 
 // Function to make the note draggable and resizable
