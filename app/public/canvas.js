@@ -4,6 +4,9 @@ let mask;
 let brushColor = "#FFC867";
 let brushSize = 50; 
 
+window.onload = function() {
+  document.getElementById("color-picker").value = brushColor;
+};
 function preload() {
   bodyImage = loadImage("./models/human-front.png");
 }
