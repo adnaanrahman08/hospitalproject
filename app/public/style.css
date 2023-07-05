@@ -1,10 +1,40 @@
 body {
   margin: 0;
-  overflow: hidden;
   background-color: #D1E1FF;
+}
+
+nav {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-size: 25px;
+  background-color: #fff;
+  height: 90px;
+  padding: 15px;
+  font-weight: 700;
+}
+header {
+  transition: all 0.5s ease;
+}
+
+.hidden {
+  transform: translateY(-100%);
+}
+
+nav img {
+  max-height: 350px;
+}
+
+nav div a {
+  margin-right: 40px;
+  text-decoration: none;
+  color: #000;
+  border-bottom: 3px solid #fff;
+  transition: border 0.3s;
+}
+
+a:hover {
+  border-bottom: 3px solid #6C63FF;
 }
 
 button {

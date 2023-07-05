@@ -1,3 +1,16 @@
+document.addEventListener('scroll', function() {
+  let pixelFromTop = window.scrollY;
+  
+  // *** hide the header ***
+
+  let header = document.querySelector('header');
+  if (pixelFromTop > 50) {
+    header.classList.add('hidden');
+  } else {
+    header.classList.remove('hidden');
+  }
+});
+
 let surfaceArea = 0;
 let bodyImage;
 let mask;
