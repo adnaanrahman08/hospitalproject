@@ -2,6 +2,7 @@ let surfaceArea = 0;
 let bodyImage;
 let mask;
 let brushColor = "#FFC867";
+let brushSize = 50; 
 
 function preload() {
   bodyImage = loadImage("./models/human-front.png");
@@ -31,10 +32,12 @@ function marker() {
   fill(brushColor);
   noStroke();
 
-  circle(mouseX, mouseY, 50);
+  let radius = brushSize / 2;
+
+  circle(mouseX, mouseY, radius);
 
   if (mouseX >= 0 && mouseX < width && mouseY >= 0 && mouseY < height) {
-    surfaceArea += PI * pow(25, 2);
+    surfaceArea += PI * pow(radius, 2);
   }
 }
 
@@ -60,3 +63,14 @@ function changeBrushColor() {
   let colorPicker = document.getElementById("color-picker");
   brushColor = colorPicker.value;
 }
+
+// Change brush size
+const brushSizeRange = document.getElementById("brushSizeRange");
+const brushSizeLabel = document.getElementById("brushSizeLabel");
+
+brushSizeLabel.textContent = brushSize;
+
+brushSizeRange.addEventListener("input", function() {
+  brushSize = parseInt(brushSizeRange.value);
+  brushSizeLabel.textContent = brushSize;
+});

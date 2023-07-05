@@ -15,8 +15,14 @@
     <h1>OPTIONS</h1>
     <button onclick="calculateSurfaceArea()">Calculate</button>
     <button onclick="clearCanvas()">Clear</button>
+
     <label for="color-picker">Colour Picker:</label>
     <input type="color" id="color-picker" onchange="changeBrushColor()">
+
+    <br>
+    <label for="brushSizeRange">Brush Size:</label>
+    <input type="range" id="brushSizeRange" min="20" max="150" value="50">
+    <span id="brushSizeLabel">7</span>  
   </section>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>

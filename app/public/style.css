@@ -3,6 +3,8 @@ body {
   overflow: hidden;
   background-color: #D1E1FF;
   display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 button {
@@ -19,7 +21,7 @@ button {
 
 .buttons-bg {
   background-color: #fff;
-  max-width: 425px;
+  max-width: 500px;
   max-height: 468px;
   border: none;
   border-radius: 40px;
@@ -43,4 +45,23 @@ button {
   width: 75px;
   height: 36px;
   border: none;
+  margin-bottom: 20px;
+}
+
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: #000;
+  cursor: pointer;
+  width: 10rem;
+  height: 3px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none; 
+  appearance: none;
+  background-color: #6C63FF;
+  height: 1.8rem;
+  width: 1.8rem;    
+  border-radius: 100%;
 }
