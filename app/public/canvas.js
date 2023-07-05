@@ -1,7 +1,5 @@
 document.addEventListener('scroll', function() {
   let pixelFromTop = window.scrollY;
-  
-  // *** hide the header ***
 
   let header = document.querySelector('header');
   if (pixelFromTop > 50) {
