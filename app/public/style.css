@@ -33,7 +33,7 @@ nav div a {
   transition: border 0.3s;
 }
 
-a:hover {
+nav div a:hover {
   border-bottom: 3px solid #6C63FF;
 }
 
