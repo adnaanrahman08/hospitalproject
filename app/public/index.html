@@ -14,7 +14,6 @@
       <div>
         <a href="#">Home</a>
         <a href="#">Patients</a>
-        <a href="#">Login</a>
       </div>
     </nav>
   </header>
@@ -22,7 +21,6 @@
   <!-- Canvas -->
   <p id="bsa">Body Surface Area: </p>
   <canvas id="canvas"></canvas>
-  <img src="./models/human-body.png" id="body-image" style="display: none;">
 
   <section class="buttons-bg">
     <h1>OPTIONS</h1>
@@ -35,7 +33,7 @@
     <br>
     <label for="brushSizeRange">Brush Size:</label>
     <input type="range" id="brushSizeRange" min="20" max="150" value="50">
-    <span id="brushSizeLabel">7</span>  
+    <span id="brushSizeLabel"></span>  
   </section>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
