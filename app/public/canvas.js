@@ -4,15 +4,15 @@ let mask;
 let brushColor = "#FFC867";
 
 function preload() {
-  bodyImage = loadImage("./models/human-front.svg");
+  bodyImage = loadImage("./models/human-front.png");
 }
 
 function setup() {
-  createCanvas(bodyImage.width, bodyImage.height);
+  createCanvas(windowWidth, windowHeight);
   background("#D1E1FF");
-  image(bodyImage, 0, 0);
+  image(bodyImage, 0, 0, 600, 700);
   mask = createGraphics(width, height);
-  mask.image(bodyImage, 0, 0);
+  mask.image(bodyImage, 0, 0, 600, 700);
 }
 
 function draw() {
@@ -28,7 +28,6 @@ function marker() {
     pixels[i + 3] = mask.pixels[i];
   }
   updatePixels();
-
   fill(brushColor);
   noStroke();
 
@@ -43,13 +42,13 @@ const bsa = document.getElementById("bsa");
 
 // Calculate BSA
 function calculateSurfaceArea() {
-  bsa.innerHTML= "Body Surface Area: " + surfaceArea.toFixed(2) + " m<sup>2</sup>";
+  bsa.innerHTML= "Body Surface Area: " + surfaceArea.toFixed(2);
 }
 
 // Clear the canvas
 function clearCanvas() {
   background("#D1E1FF");
-  image(bodyImage, 0, 0);
+  image(bodyImage, 0, 0, 600, 700);
 
   surfaceArea = 0;
 
