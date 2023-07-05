@@ -1,217 +1,49 @@
-html {
-  min-height: 100%;
-  padding: 20px;
-}
-
 body {
-  font-family: Arial, sans-serif;
-  background-size: cover;
-  background-repeat: no-repeat;
+  margin: 0;
+  overflow: hidden;
+  background-color: #D1E1FF;
 }
 
-.container {
+.centered {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-#backgroundCanvas {
-  background-position-x: center;
-  background-position-y: bottom;
-  background-repeat: no-repeat;
-  background-attachment: scroll;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  position: absolute;
-  width: 400px;
-  height: 500px;
-  left: 0px;
-  top: 0px;
-  -webkit-user-select: none;
-  cursor: default;
-}
-
-.button-container {
-  display: flex;
-  justify-content: center;
-  margin-top: 10px;
 }
 
 button {
-  padding: 10px 20px;
-  background-color: #4CAF50;
+  width: 160px;
+  height: 54px;
+  background-color: #6C63FF;
   color: #fff;
+  font-size: 20px;
+  border-radius: 40px;
   border: none;
-  border-radius: 20px;
-  margin-right: 10px;
-  cursor: pointer;
-  transition: border 0.5s;
-  align-items: center;
-  justify-content: center;
-  display: inline-block;
-  font-size: 16px;
+  font-weight: 700;
+  margin: 15px;
+}
+
+.buttons-bg {
+  background-color: #fff;
+  max-width: 425px;
+  max-height: 468px;
+  border: none;
+  border-radius: 40px;
+  padding: 15px;
+  display: block;
+  margin: auto;
+  text-align: center;
+}
+
+.buttons-bg h1 {
+  font-size: 45px;
+  margin: 0;
+}
+
+.buttons-bg label {
+  font-size: 25px;
+  margin-right: 20px;
 }
 
 #color-picker {
-  background-color: transparent;
-  width: 50px;
-  height: 35px;
+  width: 75px;
+  height: 36px;
   border: none;
-  cursor: pointer;
-  margin: 10px 0;
-}
-
-button:hover {
-  border: 2px solid #000;
-}
-
-#addPolygonBtn {
-  position: relative;
-  background-color: #4CAF50;
-  color: #fff;
-  align-items: center;
-  display: inline-flex;
-}
-
-#addPolygonBtn i {
-  margin-right: 5px;
-}
-
-#exportBtn i {
-  margin-right: 5px;
-}
-
-.annotation-note {
-  position: absolute;
-  background-color: rgba(128, 128, 128, 0.5);
-  border: 1px solid #ccc;
-  padding: 8px;
-  min-width: 100px;
-  min-height: 40px;
-  font-size: 12px;
-  z-index: 9999;
-}
-
-
-.note-content {
-  width: 100%;
-  height: 100%;
-  outline: none;
-  padding: 8px;
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
-  font-size: 12px;
-  line-height: 1.4;
-  overflow: hidden;
-  word-wrap: break-word;
-}
-
-
-.note-remove-icon {
-  position: absolute;
-  top: 5px;
-  right: 5px;
-  cursor: pointer;
-  color: #999;
-}
-
-
-.clear-button {
-  background-color: darkorange;
-}
-
-input[type="text"],
-input[type="number"] {
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  margin-top: 10px;
-  position: relative;
-}
-
-input[type="text"]::after,
-input[type="number"]::after {
-  content: "cm";
-  position: absolute;
-  top: 50%;
-  right: 10px;
-  transform: translateY(-50%);
-}
-
-#weightInput::after {
-  content: "kg";
-}
-
-#weightInput,
-#heightInput {
-  margin-bottom: 10px;
-}
-
-#pointSizeSlider {
-  -webkit-appearance: none;
-  height: 5px;
-  background: #fff;
-  outline: none;
-  opacity: 0.7;
-  -webkit-transition: .2s;
-  transition: opacity .2s;
-  margin-top: 20px;
-}
-
-#pointSizeSlider:hover {
-  opacity: 1;
-}
-
-#pointSizeSlider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 15px;
-  height: 15px;
-  background: #04AA6D;
-  cursor: pointer;
-  border-radius: 50%;
-}
-
-#pointSizeSlider::-moz-range-thumb {
-  width: 15px;
-  height: 15px;
-  background: #04AA6D;
-  cursor: pointer;
-  border-radius: 50%;
-}
-
-/* Table styles */
-#shapeTable {
-  position: absolute;
-  left: 20px;
-  top: 20px;
-}
-
-
-table {
-  border-collapse: collapse;
-}
-
-th, td {
-  padding: 10px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-
-th {
-  background-color: #4CAF50;
-}
-
-tbody tr:nth-child() {
-  background-color: #f9f9f9;
-}
-
-tbody tr:hover {
-  background-color: #e6e6e6;
-}
-
-tbody tr:hover .remove-row-icon {
-  display: inline-block;
 }
