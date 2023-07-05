@@ -104,3 +104,18 @@ input[type="range"]::-webkit-slider-thumb {
   text-align: center;
   margin-top: 20px;
 }
+
+.canvas-container {
+  position: relative;
+  display: inline-block;
+}
+
+.canvas-container img {
+  display: block;
+}
+
+.canvas-container canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+}

@@ -18,9 +18,13 @@
     </nav>
   </header>
 
-  <!-- Canvas -->
   <p id="bsa">Body Surface Area: </p>
-  <canvas id="canvas"></canvas>
+  
+  <!-- Canvas -->
+  <div class="canvas-container">
+    <canvas id="canvas"></canvas>
+    <img src="./models/human-head.png" alt="Human Head" >
+  </div>
 
   <section class="buttons-bg">
     <h1>OPTIONS</h1>
@@ -32,11 +36,11 @@
 
     <br>
     <label for="brushSizeRange">Brush Size:</label>
-    <input type="range" id="brushSizeRange" min="20" max="150" value="50">
+    <input type="range" id="brushSizeRange" min="5" max="20" value="15">
     <span id="brushSizeLabel"></span>  
   </section>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/konva/8.3.2/konva.min.js"></script>
   <script src="canvas.js"></script>
 </body>
 </html>
