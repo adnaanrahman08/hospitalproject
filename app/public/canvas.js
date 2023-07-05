@@ -45,7 +45,7 @@ imageObj.onload = function () {
 
   stage.batchDraw();
 };
-imageObj.src = './models/human-head.png';
+imageObj.src = './models/human-body.png';
 
 
 // Get the canvas element and set its size
