@@ -16,9 +16,9 @@ window.addEventListener("scroll", function() {
   let windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight || 0;
 
   if (scrollPosition >= scrollHeight - windowHeight - 50) {
-    footer.style.display = "block";
+    footer.classList.remove('hidden2');
   } else {
-    footer.style.display = "none";
+    footer.classList.add('hidden2');
   }
 });
 

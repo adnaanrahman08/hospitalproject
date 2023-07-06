@@ -22,6 +22,10 @@ header {
   transform: translateY(-100%);
 }
 
+.hidden2 {
+  transform: translateY(100%);
+}
+
 nav img {
   max-height: 350px;
 }
@@ -109,10 +113,10 @@ footer {
   background-color: #f2f2f2;
   padding: 20px;
   text-align: center;
-  display: none;
   position: fixed;
   bottom: 0;
   width: 100%;
+  transition: all 0.5s ease;
 }
 
 footer p {
