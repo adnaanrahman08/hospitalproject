@@ -109,7 +109,7 @@ function marker() {
 function calculateColoredPercentage() {
   let percentage = (coloredPixels / totalPixels) * 100;
   percentage = Math.min(percentage, 100);
-  return percentage.toFixed(2);
+  return percentage.toFixed(1);
 }
 
 const bsa = document.getElementById("bsa");
