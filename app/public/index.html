@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hospital Project</title>
   <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
   <!-- Navigation Bar -->
   <header>
@@ -21,11 +19,11 @@
   </header>
 
   <p id="bsa">Body Surface Area: </p>
-
+  
   <!-- Canvas -->
   <div class="canvas-container">
     <canvas id="canvas"></canvas>
-    <img src="./models/human-body.png" alt="Human Head">
+    <img src="./models/human-body.png" alt="Human Body" >
   </div>
 
   <section class="buttons-bg">
@@ -39,18 +37,10 @@
     <br>
     <label for="brushSizeRange">Brush Size:</label>
     <input type="range" id="brushSizeRange" min="5" max="20" value="15">
-    <span id="brushSizeLabel"></span>
-
+    <span id="brushSizeLabel"></span>  
   </section>
-
-  <div class="toolbar">
-    <button id="drawOnArmsButton" onclick="toggleDrawingOnArms()">Draw on Arms</button>
-    <button id="drawOnHandsButton" onclick="toggleDrawingOnHands()">Draw on Hands</button>
-    <button id="togglePolygonPointsButton" onclick="togglePolygonPoints()">Add Polygon Points</button>
-  </div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/konva/8.3.2/konva.min.js"></script>
   <script src="canvas.js"></script>
 </body>
-
 </html>
