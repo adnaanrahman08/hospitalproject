@@ -70,6 +70,7 @@ function setup() {
 function draw() {
   if (mouseIsPressed) {
     marker();
+    calculateSurfaceArea();
   }
 }
 
