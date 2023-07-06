@@ -1,12 +1,3 @@
-let surfaceArea = 0;
-let bodyImage;
-let mask;
-let brushColor = "#FFC867";
-let brushSize = 50; 
-let totalPixelCount = 0;
-let lastMouseX, lastMouseY;
-let paintCanvas;
-
 document.addEventListener('scroll', function() {
   let pixelFromTop = window.scrollY;
 
@@ -31,11 +22,16 @@ window.addEventListener("scroll", function() {
   }
 });
 
+let bodyImage;
+let mask;
+let brushColor = "#FFC867";
+let brushSize = 50; 
+let coloredPixels = 0;
+let totalPixels = 0;
 
 window.onload = function() {
   document.getElementById("color-picker").value = brushColor;
 };
-
 function preload() {
   bodyImage = loadImage("./models/human-front.png");
 }
@@ -47,15 +43,29 @@ function setup() {
   mask = createGraphics(width, height);
   mask.image(bodyImage, 0, 0, 600, 700);
 
-  bodyImage.loadPixels();
-  for (let i = 0; i < bodyImage.pixels.length; i += 4) {
-    if (bodyImage.pixels[i+3] !== 0) { 
-      totalPixelCount++;
+  totalPixels = 0;
+  loadPixels();
+  totalPixels = 0;
+  const tolerance = 10;
+
+  for (let i = 0; i < pixels.length; i += 4) {
+    let pixelR = pixels[i];
+    let pixelG = pixels[i + 1];
+    let pixelB = pixels[i + 2];
+    let pixelA = pixels[i + 3];
+
+    if (
+      Math.abs(pixelR - 238) <= tolerance &&
+      Math.abs(pixelG - 238) <= tolerance &&
+      Math.abs(pixelB - 238) <= tolerance &&
+      pixelA === 255
+    ) {
+      totalPixels++;
     }
   }
-  paintCanvas = createGraphics(width, height);
-  paintCanvas.background(0, 0, 0);
+  updatePixels();
 }
+
 
 function draw() {
   if (mouseIsPressed) {
@@ -77,57 +87,37 @@ function marker() {
 
   circle(mouseX, mouseY, radius);
 
-  let totalArea = PI * pow(radius, 2);
   
-  let xStart = max(0, mouseX - radius);
-  let yStart = max(0, mouseY - radius);
-  
-  let xEnd = min(width, mouseX + radius);
-  let yEnd = min(height, mouseY + radius);
+  let brushR = red(color(brushColor));
+  let brushG = green(color(brushColor));
+  let brushB = blue(color(brushColor));
 
+  loadPixels();
+  for (let i = 0; i < pixels.length; i += 4) {
+    let pixelR = pixels[i];
+    let pixelG = pixels[i + 1];
+    let pixelB = pixels[i + 2];
 
-  if (mouseX !== lastMouseX || mouseY !== lastMouseY) {
-    // Load all the pixels in the paintCanvas into the paintCanvas's pixels[] array
-    paintCanvas.loadPixels();
-
-    // Loop over the area determined above
-    for (let y = yStart; y < yEnd; y++) {
-      for (let x = xStart; x < xEnd; x++) {
-
-        // Calculate the index in the pixels[] array that corresponds to the current (x, y) location
-        let idx = 4 * (y * width + x);
-
-        // If the current location is within the radius of the brush marker and is a part of the mask
-        if (dist(x, y, mouseX, mouseY) <= radius) {
-          if (mask.pixels[idx] > 0) {
-            // check all channels (RGBA) of the pixel
-            if (paintCanvas.pixels[idx] == 0 && paintCanvas.pixels[idx+1] == 0 && paintCanvas.pixels[idx+2] == 0) {
-              surfaceArea += totalArea / (PI * pow(radius, 2));
-              // set all channels (RGBA) of the pixel to 255
-              paintCanvas.pixels[idx] = 255;
-              paintCanvas.pixels[idx+1] = 255;
-              paintCanvas.pixels[idx+2] = 255;
-              paintCanvas.pixels[idx+3] = 255;
-            }
-          }
-        }
-      }
+    // Check if the pixel matches the brush color
+    if (pixelR === brushR && pixelG === brushG && pixelB === brushB) {
+      coloredPixels++;
     }
-    paintCanvas.updatePixels();
   }
-  
-  lastMouseX = mouseX;
-  lastMouseY = mouseY;
+  updatePixels();
+}
 
-  calculateSurfaceArea();
+function calculateColoredPercentage() {
+  let percentage = (coloredPixels / totalPixels) * 100;
+  percentage = Math.min(percentage, 100);
+  return percentage.toFixed(2);
 }
 
 const bsa = document.getElementById("bsa");
-
-// Calculate BSA
 function calculateSurfaceArea() {
-  let surfaceAreaPercentage = (surfaceArea / totalPixelCount) * 100;
-  bsa.innerHTML= "Body Surface Area: " + surfaceAreaPercentage.toFixed(2) + "%" + ", " + surfaceArea.toFixed(2) + " cm<sup>2</sup>";
+  coloredPixels = 0;
+  marker(); 
+  let coloredPercentage = calculateColoredPercentage();
+  bsa.innerHTML = "Area Percentage: " + coloredPercentage + "%";
 }
 
 // Clear the canvas
@@ -135,9 +125,29 @@ function clearCanvas() {
   background("#D1E1FF");
   image(bodyImage, 0, 0, 600, 700);
 
-  surfaceArea = 0;
+  coloredPixels = 0;
+  totalPixels = 0;
+  loadPixels();
+  const tolerance = 10;
 
-  bsa.innerHTML = "Body Surface Area: ";
+  for (let i = 0; i < pixels.length; i += 4) {
+    let pixelR = pixels[i];
+    let pixelG = pixels[i + 1];
+    let pixelB = pixels[i + 2];
+    let pixelA = pixels[i + 3];
+
+    if (
+      Math.abs(pixelR - 238) <= tolerance &&
+      Math.abs(pixelG - 238) <= tolerance &&
+      Math.abs(pixelB - 238) <= tolerance &&
+      pixelA === 255
+    ) {
+      totalPixels++;
+    }
+  }
+  updatePixels();
+
+  bsa.innerHTML = "Area Percentage: ";
 }
 
 // Change colour
