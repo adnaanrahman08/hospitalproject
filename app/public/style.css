@@ -104,3 +104,21 @@ input[type="range"]::-webkit-slider-thumb {
   text-align: center;
   margin-top: 20px;
 }
+
+footer {
+  background-color: #f2f2f2;
+  padding: 20px;
+  text-align: center;
+  display: none;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+}
+
+footer p {
+  margin: 0;
+  font-size: 18px;
+  color: #666666;
+}
+
+

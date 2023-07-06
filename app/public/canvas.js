@@ -18,6 +18,20 @@ document.addEventListener('scroll', function() {
   }
 });
 
+window.addEventListener("scroll", function() {
+  let footer = document.getElementById("footer");
+  let scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+  let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight || 0;
+  let windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight || 0;
+
+  if (scrollPosition >= scrollHeight - windowHeight - 50) {
+    footer.style.display = "block";
+  } else {
+    footer.style.display = "none";
+  }
+});
+
+
 window.onload = function() {
   document.getElementById("color-picker").value = brushColor;
 };
