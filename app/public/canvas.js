@@ -70,7 +70,6 @@ function setup() {
 function draw() {
   if (mouseIsPressed) {
     marker();
-    calculateSurfaceArea();
   }
 }
 
@@ -89,6 +88,8 @@ function marker() {
   circle(mouseX, mouseY, radius);
 
 
+  let tolerance = 10;
+
   let brushR = red(color(brushColor));
   let brushG = green(color(brushColor));
   let brushB = blue(color(brushColor));
@@ -99,12 +100,16 @@ function marker() {
     let pixelG = pixels[i + 1];
     let pixelB = pixels[i + 2];
 
-    // Check if the pixel matches the brush color
-    if (pixelR === brushR && pixelG === brushG && pixelB === brushB) {
+    if (
+      Math.abs(pixelR - brushR) <= tolerance &&
+      Math.abs(pixelG - brushG) <= tolerance &&
+      Math.abs(pixelB - brushB) <= tolerance
+    ) {
       coloredPixels++;
     }
   }
   updatePixels();
+
 }
 
 function calculateColoredPercentage() {
