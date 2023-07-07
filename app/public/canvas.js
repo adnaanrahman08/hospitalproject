@@ -191,12 +191,61 @@ brushSizeRange.addEventListener("input", function () {
 });
 
 function fillPolygon(points, color = brushColor) {
-  fill(color);
   noStroke();
+
+  // Extract the RGB values from the fill color
+  let fillR = red(color);
+  let fillG = green(color);
+  let fillB = blue(color);
+  
+  // Set the desired transparency level (alpha value)
+  let transparency = 100; // Adjust this value to the desired transparency (0 - 255)
+
+  // Make the fill transparent within the polygon
+  fill(fillR, fillG, fillB, transparency);
+  
   beginShape();
   for (const point of points) {
     vertex(point.x, point.y);
   }
   endShape(CLOSE);
+  
+  // Reset the fill to the original color with transparency
+  fill(color);
 }
+
+
+
+// Define sample data
+const tableData = [
+  { bodyPart: 'Left Arm', percentage: '0%', ftu: '0', tcs: '0' },
+];
+
+// Function to populate the table
+function populateTable() {
+  const tableBody = document.querySelector('#data-table tbody');
+
+  tableData.forEach((row) => {
+    const newRow = document.createElement('tr');
+    const bodyPartCell = document.createElement('td');
+    const percentageCell = document.createElement('td');
+    const ftuCell = document.createElement('td');
+    const tcsCell = document.createElement('td');
+
+    bodyPartCell.textContent = row.bodyPart;
+    percentageCell.textContent = row.percentage;
+    ftuCell.textContent = row.ftu;
+    tcsCell.textContent = row.tcs;
+
+    newRow.appendChild(bodyPartCell);
+    newRow.appendChild(percentageCell);
+    newRow.appendChild(ftuCell);
+    newRow.appendChild(tcsCell);
+
+    tableBody.appendChild(newRow);
+  });
+}
+
+// Call the populateTable function when the page loads
+window.addEventListener('DOMContentLoaded', populateTable);
 
