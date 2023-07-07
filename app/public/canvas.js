@@ -36,22 +36,6 @@ function preload() {
   bodyImage = loadImage("./models/human-front.png");
 }
 
-let leftArmPolygonPoints = [
-  { x: 55, y: 217 },
-  { x: 89, y: 225 },
-  { x: 81, y: 248 },
-  { x: 82, y: 271 },
-  { x: 70, y: 298 },
-  { x: 56, y: 326 },
-  { x: 49, y: 343 },
-  { x: 32, y: 330 },
-  { x: 34, y: 300 },
-  { x: 37, y: 275 },
-  { x: 44, y: 260 },
-  { x: 52, y: 238 },
-  { x: 54, y: 217 }
-];
-
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background("#D1E1FF");
@@ -80,7 +64,6 @@ function setup() {
     }
   }
   updatePixels();
-  fillPolygon(leftArmPolygonPoints);
 }
 
 
@@ -189,32 +172,6 @@ brushSizeRange.addEventListener("input", function () {
   brushSize = parseInt(brushSizeRange.value);
   brushSizeLabel.textContent = brushSize;
 });
-
-function fillPolygon(points, color = brushColor) {
-  noStroke();
-
-  // Extract the RGB values from the fill color
-  let fillR = red(color);
-  let fillG = green(color);
-  let fillB = blue(color);
-  
-  // Set the desired transparency level (alpha value)
-  let transparency = 100; // Adjust this value to the desired transparency (0 - 255)
-
-  // Make the fill transparent within the polygon
-  fill(fillR, fillG, fillB, transparency);
-  
-  beginShape();
-  for (const point of points) {
-    vertex(point.x, point.y);
-  }
-  endShape(CLOSE);
-  
-  // Reset the fill to the original color with transparency
-  fill(color);
-}
-
-
 
 // Define sample data
 const tableData = [
