@@ -20,19 +20,28 @@
     </nav>
   </header>
 
-  <section class="hero">
-    <div>
-      <h1>Medication Calculator</h1>
-      <p>This app will calculate the amount of medication that is needed when a consultant colour an area of the body</p>
-      <a href="patients.html"><button>Get started</button></a>
-    </div>
-    <img src="./models/undraw_doctors.svg" alt="Doctors">
+  <!-- Canvas -->
+  <p id="bsa">Area Percentage: </p>
+
+  <section class="buttons-bg">
+    <h1>OPTIONS</h1>
+    <button onclick="calculateSurfaceArea()">Calculate</button>
+    <button onclick="clearCanvas()">Clear</button>
+
+    <label for="color-picker">Colour Picker:</label>
+    <input type="color" id="color-picker" onchange="changeBrushColor()">
+
+    <br>
+    <label for="brushSizeRange">Brush Size:</label>
+    <input type="range" id="brushSizeRange" min="20" max="150" value="50">
+    <span id="brushSizeLabel"></span>
   </section>
 
   <footer id="footer">
     <p>Website created and designed by Marco and Adnaan</p>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
   <script src="canvas.js"></script>
 </body>
 

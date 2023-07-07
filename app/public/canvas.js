@@ -1,4 +1,4 @@
-document.addEventListener('scroll', function() {
+document.addEventListener('scroll', function () {
   let pixelFromTop = window.scrollY;
 
   let header = document.querySelector('header');
@@ -9,7 +9,7 @@ document.addEventListener('scroll', function() {
   }
 });
 
-window.addEventListener("scroll", function() {
+window.addEventListener("scroll", function () {
   let footer = document.getElementById("footer");
   let scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
   let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight || 0;
@@ -25,11 +25,11 @@ window.addEventListener("scroll", function() {
 let bodyImage;
 let mask;
 let brushColor = "#FFC867";
-let brushSize = 50; 
+let brushSize = 50;
 let coloredPixels = 0;
 let totalPixels = 0;
 
-window.onload = function() {
+window.onload = function () {
   document.getElementById("color-picker").value = brushColor;
 };
 function preload() {
@@ -46,7 +46,7 @@ function setup() {
   totalPixels = 0;
   loadPixels();
   totalPixels = 0;
-  const tolerance = 10;
+  const tolerance = 20;
 
   for (let i = 0; i < pixels.length; i += 4) {
     let pixelR = pixels[i];
@@ -88,7 +88,7 @@ function marker() {
 
   circle(mouseX, mouseY, radius);
 
-  
+
   let brushR = red(color(brushColor));
   let brushG = green(color(brushColor));
   let brushB = blue(color(brushColor));
@@ -116,7 +116,7 @@ function calculateColoredPercentage() {
 const bsa = document.getElementById("bsa");
 function calculateSurfaceArea() {
   coloredPixels = 0;
-  marker(); 
+  marker();
   let coloredPercentage = calculateColoredPercentage();
   bsa.innerHTML = "Area Percentage: " + coloredPercentage + "%";
 }
@@ -163,7 +163,7 @@ const brushSizeLabel = document.getElementById("brushSizeLabel");
 
 brushSizeLabel.textContent = brushSize;
 
-brushSizeRange.addEventListener("input", function() {
+brushSizeRange.addEventListener("input", function () {
   brushSize = parseInt(brushSizeRange.value);
   brushSizeLabel.textContent = brushSize;
 });
