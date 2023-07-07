@@ -29,6 +29,49 @@ let brushSize = 50;
 let coloredPixels = 0;
 let totalPixels = 0;
 
+let polygonPoints = [];
+let isDrawingPolygon = false;
+
+// Add event listener for button click
+document.getElementById('addPolygonPoints').addEventListener('click', function () {
+  // Toggle isDrawingPolygon variable
+  isDrawingPolygon = !isDrawingPolygon;
+});
+
+// Register mouse click to add polygon points
+function mouseClicked() {
+  // If we are in polygon drawing mode, add a new vertex to the polygon
+  if (isDrawingPolygon) {
+    // Check if mouse is within the canvas
+    if(mouseX > 0 && mouseX < width && mouseY > 0 && mouseY < height) {
+      // Add clicked point to polygon points array
+      polygonPoints.push({ x: mouseX, y: mouseY });
+    }
+  }
+}
+
+// Save polygon points to a file on button click
+document.getElementById('savePolygonPoints').addEventListener('click', function () {
+  savePolygonPoints();
+});
+
+// Save polygon points to a file
+function savePolygonPoints() {
+  // Convert polygon points array to string
+  let data = JSON.stringify(polygonPoints, null, 2);
+
+  // Create a blob of the data
+  let file = new Blob([data], { type: 'text/plain' });
+
+  // Create a link for our script to 'click'
+  let a = document.createElement('a');
+  a.href = URL.createObjectURL(file);
+  a.download = 'polygon_points.txt';
+
+  // Trigger the download
+  a.click();
+}
+
 window.onload = function () {
   document.getElementById("color-picker").value = brushColor;
 };
@@ -68,10 +111,61 @@ function setup() {
 
 
 function draw() {
+  // Always draw the body image at the start of each frame
+  image(bodyImage, 0, 0, 600, 700);
+
   if (mouseIsPressed) {
-    marker();
+    // If we are not in polygon drawing mode, draw with the marker.
+    if (!isDrawingPolygon) {
+      fill(brushColor);
+      circle(mouseX, mouseY, brushSize);
+    }
+  }
+  
+
+  // If we are in polygon drawing mode, draw the polygon
+  if (isDrawingPolygon) {
+    drawPolygon();
   }
 }
+
+
+
+function drawPolygon() {
+  // Draw a point at each polygon vertex
+  for (let point of polygonPoints) {
+    ellipse(point.x, point.y, 5, 5);  // Draws a small circle at (x, y)
+  }
+
+  // Set stroke color and weight
+  stroke(255, 0, 0); // Red color
+  strokeWeight(2); // 2 pixels wide
+
+  // No fill for the polygon
+  noFill();
+
+  // Draw lines between the polygon vertices
+  if (polygonPoints.length > 1) {
+    beginShape();
+    for (let point of polygonPoints) {
+      vertex(point.x, point.y);
+    }
+    if (!isDrawingPolygon) { // if drawing completed then close the polygon
+      endShape(CLOSE);
+    } else {
+      endShape();
+    }
+  }
+
+
+  // Re-enable fill for other drawing
+  fill(255);
+
+  // Reset stroke color and weight to default
+  stroke(0); // Black color
+  strokeWeight(1); // 1 pixel wide
+}
+
 
 function marker() {
   loadPixels();
