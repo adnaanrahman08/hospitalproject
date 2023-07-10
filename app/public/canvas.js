@@ -189,10 +189,42 @@ genderRadios.forEach((radio) => {
   radio.addEventListener("change", populateTable);
 });
 
+// Calculate Totals
+const dailyInput = document.getElementById('daily');
+const alternateInput = document.getElementById('alternate');
+const weekendInput = document.getElementById('weekend');
+const faceTotalSpan = document.getElementById('faceid');
+const trunkTotalSpan = document.getElementById('trunkid');
+
+let faceTCSValue = 0;
+let trunkTCSValue = 0;
+
+dailyInput.addEventListener('input', calculateTotal);
+alternateInput.addEventListener('input', calculateTotal);
+weekendInput.addEventListener('input', calculateTotal);
+
+function calculateTotal() {
+  const dailyValue = parseFloat(dailyInput.value);
+  const alternateValue = parseFloat(alternateInput.value);
+  const weekendValue = parseFloat(weekendInput.value);
+
+  const faceTotal = (dailyValue * 7 * faceTCSValue) + ((3 / 7) * alternateValue * 7 * faceTCSValue) + ((2 / 7) * weekendValue * 7 * faceTCSValue);
+  const trunkTotal = (dailyValue * 7 * trunkTCSValue) + ((3 / 7) * alternateValue * 7 * trunkTCSValue) + ((2 / 7) * weekendValue * 7 * trunkTCSValue);
+
+  faceTotalSpan.textContent = faceTotal.toFixed(2);
+  trunkTotalSpan.textContent = trunkTotal.toFixed(2);
+}
+
+const calculateButton = document.querySelector('button[onclick="updateTable()"]');
+calculateButton.addEventListener('click', updateTable);
+
 function populateTable() {
   const tableBody = document.querySelector('#data-table tbody');
 
   tableBody.innerHTML = '';
+
+  let totalTcsValue = 0;
+  const selectedGender = document.querySelector('input[name="gender"]:checked').value;
 
   bodyParts.forEach((part) => {
     const newRow = document.createElement('tr');
@@ -206,7 +238,6 @@ function populateTable() {
 
     let ftuValue = 0;
     let tcsValue = 0;
-    const selectedGender = document.querySelector('input[name="gender"]:checked').value;
 
     // Calculate ftu and tcs based on body part
     if (part.name === 'Trunk') {
@@ -216,6 +247,7 @@ function populateTable() {
       } else if (selectedGender === "female") {
         tcsValue = ftuValue * 0.4;
       }
+      totalTcsValue += tcsValue;
     } else if (part.name === 'Both Arms') {
       ftuValue = (parseFloat(part.remainingPercentage) / 100) * 6;
       if (selectedGender === "male") {
@@ -223,6 +255,7 @@ function populateTable() {
       } else if (selectedGender === "female") {
         tcsValue = ftuValue * 0.4;
       }
+      totalTcsValue += tcsValue;
     } else if (part.name === 'Both Hands') {
       ftuValue = (parseFloat(part.remainingPercentage) / 100) * 2;
       if (selectedGender === "male") {
@@ -230,6 +263,7 @@ function populateTable() {
       } else if (selectedGender === "female") {
         tcsValue = ftuValue * 0.4;
       }
+      totalTcsValue += tcsValue;
     } else if (part.name === 'Both Legs') {
       ftuValue = (parseFloat(part.remainingPercentage) / 100) * 12;
       if (selectedGender === "male") {
@@ -237,6 +271,7 @@ function populateTable() {
       } else if (selectedGender === "female") {
         tcsValue = ftuValue * 0.4;
       }
+      totalTcsValue += tcsValue;
     } else if (part.name === 'Feet') {
       ftuValue = (parseFloat(part.remainingPercentage) / 100) * 4;
       if (selectedGender === "male") {
@@ -244,6 +279,7 @@ function populateTable() {
       } else if (selectedGender === "female") {
         tcsValue = ftuValue * 0.4;
       }
+      totalTcsValue += tcsValue;
     } else if (part.name === 'Face & Neck') {
       ftuValue = (parseFloat(part.remainingPercentage) / 100) * 2.5;
       if (selectedGender === "male") {
@@ -251,7 +287,10 @@ function populateTable() {
       } else if (selectedGender === "female") {
         tcsValue = ftuValue * 0.4;
       }
+      faceTCSValue = tcsValue.toFixed(2);
     }
+
+    trunkTCSValue = totalTcsValue.toFixed(2);
 
     ftuCell.textContent = ftuValue.toFixed(1);
     tcsCell.textContent = tcsValue.toFixed(2);
@@ -263,10 +302,9 @@ function populateTable() {
 
     tableBody.appendChild(newRow);
   });
-}
 
-const calculateButton = document.querySelector('button[onclick="updateTable()"]');
-calculateButton.addEventListener('click', updateTable);
+  calculateTotal();
+}
 
 window.addEventListener('DOMContentLoaded', function () {
   calculateRemainingPixels();
