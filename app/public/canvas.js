@@ -179,6 +179,11 @@ function calculateRemainingPixels() {
   }
 }
 
+const genderRadios = document.getElementsByName("gender");
+genderRadios.forEach((radio) => {
+  radio.addEventListener("change", populateTable);
+});
+
 function populateTable() {
   const tableBody = document.querySelector('#data-table tbody');
 
@@ -188,33 +193,68 @@ function populateTable() {
     const newRow = document.createElement('tr');
     const bodyPartCell = document.createElement('td');
     const percentageCell = document.createElement('td');
-    const ftuCell = document.createElement('td'); // Add ftu cell
+    const ftuCell = document.createElement('td');
+    const tcsCell = document.createElement('td');
 
     bodyPartCell.textContent = part.name;
     percentageCell.textContent = part.remainingPercentage;
 
     let ftuValue = 0;
+    let tcsValue = 0;
+    const selectedGender = document.querySelector('input[name="gender"]:checked').value;
 
-    // Calculate ftu based on body part
+    // Calculate ftu and tcs based on body part
     if (part.name === 'Trunk') {
       ftuValue = (parseFloat(part.remainingPercentage) / 100) * 7;
+      if (selectedGender === "male") {
+        tcsValue = ftuValue * 0.5;
+      } else if (selectedGender === "female") {
+        tcsValue = ftuValue * 0.4;
+      }
     } else if (part.name === 'Both Arms') {
       ftuValue = (parseFloat(part.remainingPercentage) / 100) * 6;
+      if (selectedGender === "male") {
+        tcsValue = ftuValue * 0.5;
+      } else if (selectedGender === "female") {
+        tcsValue = ftuValue * 0.4;
+      }
     } else if (part.name === 'Both Hands') {
       ftuValue = (parseFloat(part.remainingPercentage) / 100) * 2;
+      if (selectedGender === "male") {
+        tcsValue = ftuValue * 0.5;
+      } else if (selectedGender === "female") {
+        tcsValue = ftuValue * 0.4;
+      }
     } else if (part.name === 'Both Legs') {
       ftuValue = (parseFloat(part.remainingPercentage) / 100) * 12;
+      if (selectedGender === "male") {
+        tcsValue = ftuValue * 0.5;
+      } else if (selectedGender === "female") {
+        tcsValue = ftuValue * 0.4;
+      }
     } else if (part.name === 'Feet') {
       ftuValue = (parseFloat(part.remainingPercentage) / 100) * 4;
+      if (selectedGender === "male") {
+        tcsValue = ftuValue * 0.5;
+      } else if (selectedGender === "female") {
+        tcsValue = ftuValue * 0.4;
+      }
     } else if (part.name === 'Face & Neck') {
       ftuValue = (parseFloat(part.remainingPercentage) / 100) * 2.5;
+      if (selectedGender === "male") {
+        tcsValue = ftuValue * 0.5;
+      } else if (selectedGender === "female") {
+        tcsValue = ftuValue * 0.4;
+      }
     }
 
     ftuCell.textContent = ftuValue.toFixed(1);
+    tcsCell.textContent = tcsValue.toFixed(2);
 
     newRow.appendChild(bodyPartCell);
     newRow.appendChild(percentageCell);
     newRow.appendChild(ftuCell);
+    newRow.appendChild(tcsCell);
 
     tableBody.appendChild(newRow);
   });
