@@ -56,21 +56,6 @@ button {
   cursor: pointer;
 }
 
-.buttons-bg {
-  background-color: #fff;
-  max-width: 500px;
-  max-height: 468px;
-  border: none;
-  border-radius: 40px;
-  padding: 15px;
-  display: inline-block;
-  margin: 40px auto;
-  text-align: center;
-  box-shadow: 0 4px 7px #00000087;
-  margin-left: 20px;
-
-}
-
 .buttons-bg h1 {
   font-size: 45px;
   margin: 0;
@@ -198,19 +183,6 @@ footer p {
   background-color: #e0e0e0;
 }
 
-.duration-box {
-  background-color: #fff;
-  max-width: 500px;
-  border: none;
-  border-radius: 40px;
-  padding: 15px;
-  display: inline-block;
-  margin: 40px auto;
-  text-align: center;
-  box-shadow: 0 4px 7px #00000087;
-  margin-left: 20px;
-}
-
 .duration-box h2 {
   font-size: 25px;
   margin-bottom: 20px;
@@ -229,8 +201,9 @@ footer p {
 .input-row input {
   width: 70px;
   height: 26px;
-  border-radius: 5px;
+  border-radius: 40px;
   text-align: center;
+  border: 2px solid #6C63FF;
 }
 
 .total-rows {
@@ -246,12 +219,20 @@ footer p {
 .total-rows input {
   width: 70px;
   height: 26px;
-  border-radius: 5px;
+  border-radius: 40px;
   text-align: center;
   margin-bottom: 10px;
+  border: 2px solid #6C63FF;
 }
 
-.steroids-list {
+.boxes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.duration-box,
+.buttons-bg {
   background-color: #fff;
   max-width: 500px;
   border: none;
@@ -260,7 +241,12 @@ footer p {
   display: inline-block;
   text-align: center;
   box-shadow: 0 4px 7px #00000087;
-  margin-left: 15px;
+  margin: 40px;
+  height: 300px;
+}
+
+.duration-box {
+  line-height: 0.1;
 }
 
 .dropdown {
@@ -299,7 +285,7 @@ footer p {
   padding: 3px;
   appearance: none;
   background-color: #fff;
-  padding-right: 25px; /* Added padding to accommodate the icon */
+  padding-right: 25px;
 }
 
 .dropdown select:focus {
@@ -314,5 +300,3 @@ footer p {
   transform: translateY(-50%);
   pointer-events: none;
 }
-
-
