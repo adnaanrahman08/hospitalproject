@@ -220,7 +220,6 @@ function populateTable() {
   });
 }
 
-// Call the calculateRemainingPixelsAndPercentage function and populateTable function when the page loads
 window.addEventListener('DOMContentLoaded', function () {
   calculateRemainingPixels();
   populateTable();
