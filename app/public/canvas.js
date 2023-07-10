@@ -32,7 +32,7 @@ let bodyParts = [
   { name: 'Trunk', color: [238, 238, 238], totalPixels: 0, originalTotalPixels: 0 },
   { name: 'Both Arms', color: [255, 226, 209], totalPixels: 0, originalTotalPixels: 0 },
   { name: 'Both Hands', color: [107, 171, 144], totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Both Legs', color: [226, 95, 43], totalPixels: 0, originalTotalPixels: 0 },
+  { name: 'Both Legs', color: [234, 171, 154], totalPixels: 0, originalTotalPixels: 0 },
   { name: 'Feet', color: [127, 154, 229], totalPixels: 0, originalTotalPixels: 0 },
 ];
 
