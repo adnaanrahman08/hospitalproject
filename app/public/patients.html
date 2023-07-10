@@ -21,41 +21,42 @@
   </header>
 
   <!-- Canvas -->
-  <section class="buttons-bg">
-    <h1>OPTIONS</h1>
-    <button onclick="updateTable()">Calculate</button>
-    <button onclick="clearCanvas()">Clear</button>
+  <section class="boxes">
+    <section class="buttons-bg">
+      <h1>OPTIONS</h1>
+      <button onclick="updateTable()">Calculate</button>
+      <button onclick="clearCanvas()">Clear</button>
 
-    <label for="color-picker">Colour Picker:</label>
-    <input type="color" id="color-picker" onchange="changeBrushColor()">
+      <label for="color-picker">Colour Picker:</label>
+      <input type="color" id="color-picker" onchange="changeBrushColor()">
 
-    <br>
-    <label for="brushSizeRange">Brush Size:</label>
-    <input type="range" id="brushSizeRange" min="20" max="150" value="50">
-    <span id="brushSizeLabel"></span>
+      <br>
+      <label for="brushSizeRange">Brush Size:</label>
+      <input type="range" id="brushSizeRange" min="20" max="150" value="50">
+      <span id="brushSizeLabel"></span>
 
-    <div id="gender">
-      <input type="radio" id="male" name="gender" value="male" checked />
-      <label for="male">Male</label>
-      <input type="radio" id="female" name="gender" value="female" />
-      <label for="female">Female</label>
-    </div>
-  </section>
+      <div id="gender">
+        <input type="radio" id="male" name="gender" value="male" checked />
+        <label for="male">Male</label>
+        <input type="radio" id="female" name="gender" value="female" />
+        <label for="female">Female</label>
+      </div>
+    </section>
 
-  <section class="duration-box">
-    <h2>Duration of Treatment (Weeks)</h2>
-    <div class="input-row">
-      <label for="daily">Daily Application:</label>
-      <input type="number" id="daily" min="0" max="7" step="1" value="0">
-    </div>
-    <div class="input-row">
-      <label for="alternate">Alternate Day Application:</label>
-      <input type="number" id="alternate" min="0" max="7" step="1" value="0">
-    </div>
-    <div class="input-row">
-      <label for="weekend">Weekend Therapy (Sat & Sun):</label>
-      <input type="number" id="weekend" min="0" max="2" step="1" value="0">
-    </div>
+    <section class="duration-box">
+      <h2>Duration of Treatment (Weeks)</h2>
+      <div class="input-row">
+        <label for="daily">Daily Application:</label>
+        <input type="number" id="daily" min="0" max="7" step="1" value="0">
+      </div>
+      <div class="input-row">
+        <label for="alternate">Alternate Day Application:</label>
+        <input type="number" id="alternate" min="0" max="7" step="1" value="0">
+      </div>
+      <div class="input-row">
+        <label for="weekend">Weekend Therapy (Sat & Sun):</label>
+        <input type="number" id="weekend" min="0" max="2" step="1" value="0">
+      </div>
 
     <h2>Totals</h2>
     <div class="total-rows">
@@ -64,39 +65,30 @@
       <label for="total-trunk-limbs">Total (g) TCS Required (Trunk & Limbs):</label>
       <input type="text" id="total-trunk-limbs" value="0" readonly>
     </div>
-
-    <h2>Topical Steroids</h2>
-    <div class="dropdown">
-      <select id="select-option">
-        <option value="option1">Option 1</option>
-        <option value="option2">Option 2</option>
-        <option value="option3">Option 3</option>
-      </select>
-    </div>
   </section>
 
-  <!-- Table content -->
-  <table id="data-table">
-    <thead>
-      <tr>
-        <th>Body Part</th>
-        <th>% Covered</th>
-        <th>FTU</th>
-        <th>TCS (g)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Table rows will be dynamically added using JavaScript -->
-    </tbody>
-  </table>
+    <!-- Table content -->
+    <table id="data-table">
+      <thead>
+        <tr>
+          <th>Body Part</th>
+          <th>% Covered</th>
+          <th>FTU</th>
+          <th>TCS (g)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Table rows will be dynamically added using JavaScript -->
+      </tbody>
+    </table>
 
-  <footer id="footer">
-    <p>Website created and designed by Marco and Adnaan</p>
-  </footer>
+    <footer id="footer">
+      <p>Website created and designed by Marco and Adnaan</p>
+    </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
-  <script src="https://kit.fontawesome.com/658e69eab6.js" crossorigin="anonymous"></script>
-  <script src="canvas.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+    <script src="https://kit.fontawesome.com/658e69eab6.js" crossorigin="anonymous"></script>
+    <script src="canvas.js"></script>
 </body>
 
 </html>

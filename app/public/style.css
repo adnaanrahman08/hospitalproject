@@ -56,21 +56,6 @@ button {
   cursor: pointer;
 }
 
-.buttons-bg {
-  background-color: #fff;
-  max-width: 500px;
-  max-height: 468px;
-  border: none;
-  border-radius: 40px;
-  padding: 15px;
-  display: inline-block;
-  margin: 40px auto;
-  text-align: center;
-  box-shadow: 0 4px 7px #00000087;
-  margin-left: 20px;
-
-}
-
 .buttons-bg h1 {
   font-size: 45px;
   margin: 0;
@@ -198,19 +183,6 @@ footer p {
   background-color: #e0e0e0;
 }
 
-.duration-box {
-  background-color: #fff;
-  max-width: 500px;
-  border: none;
-  border-radius: 40px;
-  padding: 15px;
-  display: inline-block;
-  margin: 40px auto;
-  text-align: center;
-  box-shadow: 0 4px 7px #00000087;
-  margin-left: 20px;
-}
-
 .duration-box h2 {
   font-size: 25px;
   margin-bottom: 20px;
@@ -229,8 +201,9 @@ footer p {
 .input-row input {
   width: 70px;
   height: 26px;
-  border-radius: 5px;
+  border-radius: 40px;
   text-align: center;
+  border: 2px solid #6C63FF;
 }
 
 .total-rows {
@@ -246,9 +219,57 @@ footer p {
 .total-rows input {
   width: 70px;
   height: 26px;
-  border-radius: 5px;
+  border-radius: 40px;
   text-align: center;
   margin-bottom: 10px;
+  border: 2px solid #6C63FF;
+}
+
+.boxes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.duration-box,
+.buttons-bg {
+  background-color: #fff;
+  max-width: 500px;
+  border: none;
+  border-radius: 40px;
+  padding: 15px;
+  display: inline-block;
+  text-align: center;
+  box-shadow: 0 4px 7px #00000087;
+  margin: 40px;
+  height: 300px;
+}
+
+.duration-box {
+  line-height: 0.1;
+}
+
+.steroids-list {
+  border: 2px solid #6C63FF;
+}
+
+.boxes {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.duration-box,
+.buttons-bg {
+  background-color: #fff;
+  max-width: 500px;
+  border: none;
+  border-radius: 40px;
+  padding: 15px;
+  display: inline-block;
+  text-align: center;
+  box-shadow: 0 4px 7px #00000087;
+  margin-left: 15px;
 }
 
 .steroids-list {
@@ -292,4 +313,8 @@ footer p {
 .dropdown select:focus {
   outline: none;
   box-shadow: 0 0 0 2px #6C63FF;
+}
+
+.duration-box {
+  line-height: 0.1;
 }
