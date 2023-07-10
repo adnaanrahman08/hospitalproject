@@ -281,7 +281,7 @@ footer p {
 }
 
 .dropdown select {
-  width: 200px;
+  width: 450px; 
   height: 30px;
   border-radius: 5px;
   font-size: 16px;
@@ -289,6 +289,7 @@ footer p {
   appearance: none;
   background-color: #fff;
   padding-right: 25px;
+  overflow-x: auto;
 }
 
 .dropdown select:focus {
@@ -302,7 +303,9 @@ footer p {
   right: 5px;
   transform: translateY(-50%);
   pointer-events: none;
+  z-index: 1; 
 }
+
 
 .patient-dropdown {
   position: relative;
@@ -352,5 +355,11 @@ footer p {
 }
 
 .dropbtn i {
+  margin-left: 5px;
+}
+
+.antifungal-label {
+  color: red;
+  font-weight: bold;
   margin-left: 5px;
 }
