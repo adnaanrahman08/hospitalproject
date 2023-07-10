@@ -21,8 +21,6 @@
   </header>
 
   <!-- Canvas -->
-  <p id="bsa">Area Percentage: </p>
-
   <section class="buttons-bg">
     <h1>OPTIONS</h1>
     <button onclick="updateTable()">Calculate</button>
@@ -35,6 +33,13 @@
     <label for="brushSizeRange">Brush Size:</label>
     <input type="range" id="brushSizeRange" min="20" max="150" value="50">
     <span id="brushSizeLabel"></span>
+
+    <div id="gender">
+      <input type="radio" id="male" name="gender" value="male" checked />
+      <label for="male">Male</label>
+      <input type="radio" id="female" name="gender" value="female" />
+      <label for="female">Female</label>
+    </div>
   </section>
 
     <!-- Table content -->

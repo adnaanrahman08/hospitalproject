@@ -1,16 +1,3 @@
-let bodyImage;
-let mask;
-let brushColor = "#FFC867";
-let brushSize = 50;
-let coloredPixels = 0;
-
-let bodyParts = [
-  { name: 'Arms', color: [255, 226, 209], coloredPixels: 0, totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Head', color: [214, 131, 131], coloredPixels: 0, totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Legs', color: [202, 196, 206], coloredPixels: 0, totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Chest', color: [238, 238, 238], coloredPixels: 0, totalPixels: 0, originalTotalPixels: 0 },
-];
-
 document.addEventListener('scroll', function () {
   let pixelFromTop = window.scrollY;
 
@@ -35,6 +22,20 @@ window.addEventListener("scroll", function () {
   }
 });
 
+let bodyImage;
+let mask;
+let brushColor = "#FFC867";
+let brushSize = 50;
+
+let bodyParts = [
+  { name: 'Face & Neck', color: [214, 131, 131], totalPixels: 0, originalTotalPixels: 0 },
+  { name: 'Trunk', color: [238, 238, 238], totalPixels: 0, originalTotalPixels: 0 },
+  { name: 'Both Arms', color: [255, 226, 209], totalPixels: 0, originalTotalPixels: 0 },
+  { name: 'Both Hands', color: [107, 171, 144], totalPixels: 0, originalTotalPixels: 0 },
+  { name: 'Both Legs', color: [202, 196, 206], totalPixels: 0, originalTotalPixels: 0 },
+  { name: 'Feet', color: [165, 204, 209], totalPixels: 0, originalTotalPixels: 0 },
+];
+
 window.onload = function () {
   document.getElementById("color-picker").value = brushColor;
 };
@@ -49,73 +50,57 @@ function setup() {
   mask = createGraphics(width, height);
   mask.image(bodyImage, 0, 0, 300, 700);
   calculateOriginalTotalPixels();
-  calculateTotalPixels();
-  logTotalPixels();
+  calculateTotalPixels()
 }
 
 function calculateOriginalTotalPixels() {
   const tolerance = 10;
 
+  loadPixels();
+
   for (const bodyPart of bodyParts) {
-    let partPixels = 0;
+    bodyPart.originalTotalPixels = 0;
 
-    for (let i = 0; i < bodyImage.width; i++) {
-      for (let j = 0; j < bodyImage.height; j++) {
-        const pixelColor = bodyImage.get(i, j);
+    for (let i = 0; i < pixels.length; i += 4) {
+      let pixelR = pixels[i];
+      let pixelG = pixels[i + 1];
+      let pixelB = pixels[i + 2];
 
-        if (
-          Math.abs(pixelColor[0] - bodyPart.color[0]) <= tolerance &&
-          Math.abs(pixelColor[1] - bodyPart.color[1]) <= tolerance &&
-          Math.abs(pixelColor[2] - bodyPart.color[2]) <= tolerance
-        ) {
-          partPixels++;
-        }
+      if (
+        Math.abs(pixelR - bodyPart.color[0]) <= tolerance &&
+        Math.abs(pixelG - bodyPart.color[1]) <= tolerance &&
+        Math.abs(pixelB - bodyPart.color[2]) <= tolerance
+      ) {
+        bodyPart.originalTotalPixels++;
       }
     }
-
-    bodyPart.originalTotalPixels = partPixels;
   }
+  updatePixels();
 }
 
 function calculateTotalPixels() {
   const tolerance = 10;
 
+  loadPixels();
+
   for (const bodyPart of bodyParts) {
-    let partPixels = 0;
+    bodyPart.totalPixels = 0; 
 
-    for (let i = 0; i < bodyImage.width; i++) {
-      for (let j = 0; j < bodyImage.height; j++) {
-        const pixelColor = bodyImage.get(i, j);
+    for (let i = 0; i < pixels.length; i += 4) {
+      let pixelR = pixels[i];
+      let pixelG = pixels[i + 1];
+      let pixelB = pixels[i + 2];
 
-        if (
-          Math.abs(pixelColor[0] - bodyPart.color[0]) <= tolerance &&
-          Math.abs(pixelColor[1] - bodyPart.color[1]) <= tolerance &&
-          Math.abs(pixelColor[2] - bodyPart.color[2]) <= tolerance
-        ) {
-          partPixels++;
-        }
+      if (
+        Math.abs(pixelR - bodyPart.color[0]) <= tolerance &&
+        Math.abs(pixelG - bodyPart.color[1]) <= tolerance &&
+        Math.abs(pixelB - bodyPart.color[2]) <= tolerance
+      ) {
+        bodyPart.totalPixels++;
       }
     }
-
-    bodyPart.totalPixels = partPixels;
   }
-}
-
-function calculateRemainingPixels() {
-  for (const bodyPart of bodyParts) {
-    const remainingPixels = bodyPart.originalTotalPixels - bodyPart.totalPixels;
-    bodyPart.remainingPixels = remainingPixels;
-
-    console.log(`Remaining pixels for ${bodyPart.name}:`, remainingPixels);
-    console.log(`Original pixels for ${bodyPart.name}:`, bodyPart.originalTotalPixels);
-    console.log(`Total pixels for ${bodyPart.name}:`, bodyPart.totalPixels);
-  }
-}
-
-function logTotalPixels() {
-  bodyParts.forEach((part) => {
-    console.log(`Total pixels for ${part.name}:`, part.totalPixels);
-  });
+  updatePixels();
 }
 
 function draw() {
@@ -135,64 +120,24 @@ function marker() {
   noStroke();
 
   let radius = brushSize / 2;
-
   circle(mouseX, mouseY, radius);
-
-
-  let brushR = red(color(brushColor));
-  let brushG = green(color(brushColor));
-  let brushB = blue(color(brushColor));
-
-  loadPixels();
-  for (let i = 0; i < pixels.length; i += 4) {
-    let pixelR = pixels[i];
-    let pixelG = pixels[i + 1];
-    let pixelB = pixels[i + 2];
-
-    // Check if the pixel matches the brush color
-    if (pixelR === brushR && pixelG === brushG && pixelB === brushB) {
-      coloredPixels++;
-    }
-  }
-  updatePixels();
 }
-
-function calculateColoredPercentage(part) {
-  let percentage = (part.coloredPixels / part.totalPixels) * 100;
-  percentage = Math.min(percentage, 100);
-  return percentage.toFixed(1) + '%';
-}
-
-const bsa = document.getElementById("bsa");
 
 // Clear the canvas
 function clearCanvas() {
   background("#D1E1FF");
   image(bodyImage, 0, 0, 300, 700);
 
-  coloredPixels = 0;
-  let totalPixels = 0;
   loadPixels();
-  const tolerance = 10;
+  calculateTotalPixels();
 
-  for (let i = 0; i < pixels.length; i += 4) {
-    let pixelR = pixels[i];
-    let pixelG = pixels[i + 1];
-    let pixelB = pixels[i + 2];
-    let pixelA = pixels[i + 3];
-
-    if (
-      Math.abs(pixelR - 238) <= tolerance &&
-      Math.abs(pixelG - 238) <= tolerance &&
-      Math.abs(pixelB - 238) <= tolerance &&
-      pixelA === 255
-    ) {
-      totalPixels++;
-    }
+  for (const bodyPart of bodyParts) {
+    bodyPart.totalPixels = bodyPart.originalTotalPixels;
   }
-  updatePixels();
 
-  bsa.innerHTML = "Area Percentage: ";
+  updatePixels();
+  calculateRemainingPixels();
+  populateTable();
 }
 
 // Change colour
@@ -223,22 +168,99 @@ function updateTable() {
   populateTable();
 }
 
-// Function to populate the table
-function populateTable() {
-  const tableBody = document.querySelector('#data-table tbody');
-  let tableContent = '';
-
+function calculateRemainingPixels() {
   for (const bodyPart of bodyParts) {
-    const remainingPercentage = ((bodyPart.remainingPixels / bodyPart.originalTotalPixels) * 100).toFixed(1) + '%';
+    const remainingPixels = bodyPart.originalTotalPixels - bodyPart.totalPixels;
+    bodyPart.remainingPixels = remainingPixels;
 
-    tableContent += `<tr>
-      <td>${bodyPart.name}</td>
-      <td>${remainingPercentage}</td>
-    </tr>`;
+    let percentage = (remainingPixels / bodyPart.originalTotalPixels) * 100;
+    percentage = Math.max(0, percentage);
+    bodyPart.remainingPercentage = percentage.toFixed(1) + '%';
   }
-
-  tableBody.innerHTML = tableContent;
 }
 
-// Call the populateTable function when the page loads
-window.addEventListener('DOMContentLoaded', populateTable);
+const genderRadios = document.getElementsByName("gender");
+genderRadios.forEach((radio) => {
+  radio.addEventListener("change", populateTable);
+});
+
+function populateTable() {
+  const tableBody = document.querySelector('#data-table tbody');
+
+  tableBody.innerHTML = '';
+
+  bodyParts.forEach((part) => {
+    const newRow = document.createElement('tr');
+    const bodyPartCell = document.createElement('td');
+    const percentageCell = document.createElement('td');
+    const ftuCell = document.createElement('td');
+    const tcsCell = document.createElement('td');
+
+    bodyPartCell.textContent = part.name;
+    percentageCell.textContent = part.remainingPercentage;
+
+    let ftuValue = 0;
+    let tcsValue = 0;
+    const selectedGender = document.querySelector('input[name="gender"]:checked').value;
+
+    // Calculate ftu and tcs based on body part
+    if (part.name === 'Trunk') {
+      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 7;
+      if (selectedGender === "male") {
+        tcsValue = ftuValue * 0.5;
+      } else if (selectedGender === "female") {
+        tcsValue = ftuValue * 0.4;
+      }
+    } else if (part.name === 'Both Arms') {
+      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 6;
+      if (selectedGender === "male") {
+        tcsValue = ftuValue * 0.5;
+      } else if (selectedGender === "female") {
+        tcsValue = ftuValue * 0.4;
+      }
+    } else if (part.name === 'Both Hands') {
+      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 2;
+      if (selectedGender === "male") {
+        tcsValue = ftuValue * 0.5;
+      } else if (selectedGender === "female") {
+        tcsValue = ftuValue * 0.4;
+      }
+    } else if (part.name === 'Both Legs') {
+      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 12;
+      if (selectedGender === "male") {
+        tcsValue = ftuValue * 0.5;
+      } else if (selectedGender === "female") {
+        tcsValue = ftuValue * 0.4;
+      }
+    } else if (part.name === 'Feet') {
+      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 4;
+      if (selectedGender === "male") {
+        tcsValue = ftuValue * 0.5;
+      } else if (selectedGender === "female") {
+        tcsValue = ftuValue * 0.4;
+      }
+    } else if (part.name === 'Face & Neck') {
+      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 2.5;
+      if (selectedGender === "male") {
+        tcsValue = ftuValue * 0.5;
+      } else if (selectedGender === "female") {
+        tcsValue = ftuValue * 0.4;
+      }
+    }
+
+    ftuCell.textContent = ftuValue.toFixed(1);
+    tcsCell.textContent = tcsValue.toFixed(2);
+
+    newRow.appendChild(bodyPartCell);
+    newRow.appendChild(percentageCell);
+    newRow.appendChild(ftuCell);
+    newRow.appendChild(tcsCell);
+
+    tableBody.appendChild(newRow);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  calculateRemainingPixels();
+  populateTable();
+});
