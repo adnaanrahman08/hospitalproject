@@ -310,3 +310,59 @@ window.addEventListener('DOMContentLoaded', function () {
   calculateRemainingPixels();
   populateTable();
 });
+
+function generatePDF() {
+  const dailyValue = document.getElementById('daily').value;
+  const alternateValue = document.getElementById('alternate').value;
+  const weekendValue = document.getElementById('weekend').value;
+  const faceValue = document.getElementById('faceid').textContent;
+  const trunkValue = document.getElementById('trunkid').textContent;
+  const selectedSteroidText = document.getElementById('select-option').selectedOptions[0].textContent;
+  const today = new Date();
+  const dateValue = today.toLocaleDateString();
+
+  const tableRows = document.querySelectorAll('#data-table tbody tr');
+  let tableContent = '';
+
+  tableRows.forEach((row) => {
+    const bodyPart = row.cells[0].textContent;
+    const percentageCovered = row.cells[1].textContent;
+    const ftuValue = row.cells[2].textContent;
+    const tcsValue = row.cells[3].textContent;
+
+    tableContent += `
+      <tr>
+        <td>${bodyPart}</td>
+        <td>${percentageCovered}</td>
+        <td>${ftuValue}</td>
+        <td>${tcsValue}</td>
+      </tr>
+    `;
+  });
+
+  fetch('template.html')
+    .then(response => response.text())
+    .then(template => {
+      const htmlContent = template
+        .replace('{dailyValue}', dailyValue)
+        .replace('{alternateValue}', alternateValue)
+        .replace('{weekendValue}', weekendValue)
+        .replace('{faceValue}', faceValue)
+        .replace('{trunkValue}', trunkValue)
+        .replace('{selectedSteroidText}', selectedSteroidText)
+        .replace('{tableRows}', tableContent)
+        .replace('{dateValue}', dateValue);
+
+      html2pdf()
+        .set({ html2canvas: { scale: 2 } })
+        .from(htmlContent)
+        .save('topicalsteroid-calculator.pdf');
+    })
+    .catch(error => {
+      console.error('Failed to load template.html:', error);
+    });
+}
+
+
+
+
