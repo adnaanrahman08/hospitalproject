@@ -67,6 +67,10 @@ button {
   display: inline-block;
 }
 
+.buttons-bg label i {
+  margin-right: 10px;
+}
+
 #color-picker {
   width: 75px;
   height: 36px;
