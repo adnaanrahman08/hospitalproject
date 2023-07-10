@@ -28,8 +28,8 @@ let brushColor = "#FFC867";
 let brushSize = 50;
 
 let bodyParts = [
-  { name: 'Head', color: [214, 131, 131], totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Chest', color: [238, 238, 238], totalPixels: 0, originalTotalPixels: 0 },
+  { name: 'Face & Neck', color: [214, 131, 131], totalPixels: 0, originalTotalPixels: 0 },
+  { name: 'Trunk', color: [238, 238, 238], totalPixels: 0, originalTotalPixels: 0 },
   { name: 'Both Arms', color: [255, 226, 209], totalPixels: 0, originalTotalPixels: 0 },
   { name: 'Both Hands', color: [107, 171, 144], totalPixels: 0, originalTotalPixels: 0 },
   { name: 'Both Legs', color: [202, 196, 206], totalPixels: 0, originalTotalPixels: 0 },
@@ -188,12 +188,33 @@ function populateTable() {
     const newRow = document.createElement('tr');
     const bodyPartCell = document.createElement('td');
     const percentageCell = document.createElement('td');
+    const ftuCell = document.createElement('td'); // Add ftu cell
 
     bodyPartCell.textContent = part.name;
     percentageCell.textContent = part.remainingPercentage;
 
+    let ftuValue = 0;
+
+    // Calculate ftu based on body part
+    if (part.name === 'Trunk') {
+      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 7;
+    } else if (part.name === 'Both Arms') {
+      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 6;
+    } else if (part.name === 'Both Hands') {
+      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 2;
+    } else if (part.name === 'Both Legs') {
+      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 12;
+    } else if (part.name === 'Feet') {
+      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 4;
+    } else if (part.name === 'Face & Neck') {
+      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 2.5;
+    }
+
+    ftuCell.textContent = ftuValue.toFixed(1);
+
     newRow.appendChild(bodyPartCell);
     newRow.appendChild(percentageCell);
+    newRow.appendChild(ftuCell);
 
     tableBody.appendChild(newRow);
   });
