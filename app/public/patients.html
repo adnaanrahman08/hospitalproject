@@ -27,6 +27,7 @@
     <h1>OPTIONS</h1>
     <button onclick="updateTable()">Calculate</button>
     <button onclick="clearCanvas()">Clear</button>
+    <button id="add-note-button">Add Note</button>
 
     <label for="color-picker">Colour Picker:</label>
     <input type="color" id="color-picker" onchange="changeBrushColor()">
@@ -37,27 +38,34 @@
     <span id="brushSizeLabel"></span>
   </section>
 
-    <!-- Table content -->
-    <table id="data-table">
-      <thead>
-        <tr>
-          <th>Body Part</th>
-          <th>% Covered</th>
-          <th>FTU</th>
-          <th>TCS (g)</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Table rows will be dynamically added using JavaScript -->
-      </tbody>
-    </table>
+  <div id="note-container"></div>
+
+  <!-- Table content -->
+  <table id="data-table">
+    <thead>
+      <tr>
+        <th>Body Part</th>
+        <th>% Covered</th>
+        <th>FTU</th>
+        <th>TCS (g)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Table rows will be dynamically added using JavaScript -->
+    </tbody>
+  </table>
+
+
 
   <footer id="footer">
     <p>Website created and designed by Marco and Adnaan</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
   <script src="canvas.js"></script>
+
+
 </body>
 
 </html>

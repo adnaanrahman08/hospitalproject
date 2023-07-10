@@ -11,6 +11,8 @@ let bodyParts = [
   { name: 'Chest', color: [238, 238, 238], coloredPixels: 0, totalPixels: 0, originalTotalPixels: 0 },
 ];
 
+let isNoteDragging = false;
+
 document.addEventListener('scroll', function () {
   let pixelFromTop = window.scrollY;
 
@@ -119,7 +121,7 @@ function logTotalPixels() {
 }
 
 function draw() {
-  if (mouseIsPressed) {
+  if (mouseIsPressed && !isNoteDragging) {
     marker();
   }
 }
@@ -242,3 +244,96 @@ function populateTable() {
 
 // Call the populateTable function when the page loads
 window.addEventListener('DOMContentLoaded', populateTable);
+
+// Add note button click event
+const addNoteButton = document.getElementById('add-note-button');
+addNoteButton.addEventListener('click', () => {
+  createNote();
+});
+
+function createNote() {
+  // Create note element
+  const note = document.createElement('div');
+  note.classList.add('note');
+
+  // Create close button
+  const closeButton = document.createElement('span');
+  closeButton.classList.add('close-button');
+  closeButton.innerHTML = '&#10006;'; // X icon
+  closeButton.addEventListener('click', () => {
+    note.remove(); // Remove the note when the close button is clicked
+  });
+
+  // Create text input
+  const textInput = document.createElement('textarea');
+  textInput.classList.add('note-text');
+  textInput.placeholder = 'Write your note...';
+
+  // Append close button and text input to the note element
+  note.appendChild(closeButton);
+  note.appendChild(textInput);
+
+  // Append the note to the note container
+  const noteContainer = document.getElementById('note-container');
+  noteContainer.appendChild(note);
+
+  // Make the note draggable
+  interact(note)
+    .draggable({
+      onmove: window.dragMoveListener
+    })
+    .resizable({
+      preserveAspectRatio: false,
+      edges: { left: true, right: true, bottom: true, top: true }
+    })
+    .on('dragstart', () => {
+      isNoteDragging = true; // Set the flag to indicate note dragging
+    })
+    .on('dragend', () => {
+      isNoteDragging = false; // Reset the flag when dragging ends
+    })
+    .on('dragmove', (event) => {
+      const target = event.target;
+      const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
+      const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+      target.style.transform = `translate(${x}px, ${y}px)`;
+
+      target.setAttribute('data-x', x);
+      target.setAttribute('data-y', y);
+    })
+    .on('resizemove', function (event) {
+      let target = event.target,
+        x = (parseFloat(target.getAttribute('data-x')) || 0),
+        y = (parseFloat(target.getAttribute('data-y')) || 0);
+
+      // update the element's style
+      target.style.width = event.rect.width + 'px';
+      target.style.height = event.rect.height + 'px';
+
+      // translate when resizing from top or left edges
+      x += event.deltaRect.left;
+      y += event.deltaRect.top;
+
+      target.style.webkitTransform = target.style.transform =
+        'translate(' + x + 'px,' + y + 'px)';
+
+      target.setAttribute('data-x', x);
+      target.setAttribute('data-y', y);
+    });
+}
+
+
+function dragMoveListener(event) {
+  let target = event.target,
+    // keep the dragged position in the data-x/data-y attributes
+    x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx,
+    y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+
+  // translate the element
+  target.style.transform = `translate(${x}px, ${y}px)`;
+
+  // update the position attributes
+  target.setAttribute('data-x', x);
+  target.setAttribute('data-y', y);
+}
