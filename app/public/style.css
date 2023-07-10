@@ -250,3 +250,46 @@ footer p {
   text-align: center;
   margin-bottom: 10px;
 }
+
+.steroids-list {
+  background-color: #fff;
+  max-width: 500px;
+  border: none;
+  border-radius: 40px;
+  padding: 15px;
+  display: inline-block;
+  text-align: center;
+  box-shadow: 0 4px 7px #00000087;
+  margin-left: 15px;
+}
+
+.steroids-list h2 {
+  font-size: 25px;
+  margin-bottom: 20px;
+}
+
+.dropdown {
+  margin-bottom: 15px;
+}
+
+.dropdown label {
+  font-size: 20px;
+  margin-right: 10px;
+  display: inline-block;
+}
+
+.dropdown select {
+  width: 200px;
+  height: 30px;
+  border-radius: 5px;
+  font-size: 16px;
+  padding: 3px;
+  appearance: none;
+  background-color: #fff;
+
+}
+
+.dropdown select:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #6C63FF;
+}
