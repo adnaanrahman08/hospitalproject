@@ -84,7 +84,7 @@ function calculateTotalPixels() {
   loadPixels();
 
   for (const bodyPart of bodyParts) {
-    bodyPart.totalPixels = 0; 
+    bodyPart.totalPixels = 0;
 
     for (let i = 0; i < pixels.length; i += 4) {
       let pixelR = pixels[i];
@@ -138,6 +138,11 @@ function clearCanvas() {
   updatePixels();
   calculateRemainingPixels();
   populateTable();
+
+  // Hide the table when clearing the canvas
+  const dataTable = document.getElementById('data-table');
+  dataTable.style.display = 'none';
+
 }
 
 // Change colour
@@ -161,12 +166,17 @@ function updateTable() {
   calculateTotalPixels();
   calculateRemainingPixels();
   populateTable();
+
+  // Show the table when the calculate button is clicked
+  const dataTable = document.getElementById('data-table');
+  dataTable.style.display = 'table';
 }
 
 function calculateRemainingPixels() {
   for (const bodyPart of bodyParts) {
     const remainingPixels = bodyPart.originalTotalPixels - bodyPart.totalPixels;
     bodyPart.remainingPixels = remainingPixels;
+
 
     let percentage = (remainingPixels / bodyPart.originalTotalPixels) * 100;
     percentage = Math.max(0, percentage);
@@ -254,6 +264,9 @@ function populateTable() {
     tableBody.appendChild(newRow);
   });
 }
+
+const calculateButton = document.querySelector('button[onclick="updateTable()"]');
+calculateButton.addEventListener('click', updateTable);
 
 window.addEventListener('DOMContentLoaded', function () {
   calculateRemainingPixels();
