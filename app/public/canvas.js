@@ -1,3 +1,16 @@
+let bodyImage;
+let mask;
+let brushColor = "#FFC867";
+let brushSize = 50;
+let coloredPixels = 0;
+
+let bodyParts = [
+  { name: 'Arms', color: [255, 226, 209], coloredPixels: 0, totalPixels: 0, originalTotalPixels: 0 },
+  { name: 'Head', color: [214, 131, 131], coloredPixels: 0, totalPixels: 0, originalTotalPixels: 0 },
+  { name: 'Legs', color: [202, 196, 206], coloredPixels: 0, totalPixels: 0, originalTotalPixels: 0 },
+  { name: 'Chest', color: [238, 238, 238], coloredPixels: 0, totalPixels: 0, originalTotalPixels: 0 },
+];
+
 document.addEventListener('scroll', function () {
   let pixelFromTop = window.scrollY;
 
@@ -21,19 +34,6 @@ window.addEventListener("scroll", function () {
     footer.classList.add('hidden2');
   }
 });
-
-let bodyImage;
-let mask;
-let brushColor = "#FFC867";
-let brushSize = 50;
-let coloredPixels = 0;
-
-let bodyParts = [
-  { name: 'Arms', color: [255, 226, 209], coloredPixels: 0, totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Head', color: [214, 131, 131], coloredPixels: 0, totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Legs', color: [202, 196, 206], coloredPixels: 0, totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Chest', color: [238, 238, 238], coloredPixels: 0, totalPixels: 0, originalTotalPixels: 0 },
-];
 
 window.onload = function () {
   document.getElementById("color-picker").value = brushColor;
@@ -165,19 +165,13 @@ function calculateColoredPercentage(part) {
 
 const bsa = document.getElementById("bsa");
 
-function calculateSurfaceArea() {
-  calculateTotalPixels();
-  calculateRemainingPixels();
-  populateTable();
-}
-
 // Clear the canvas
 function clearCanvas() {
   background("#D1E1FF");
   image(bodyImage, 0, 0, 300, 700);
 
   coloredPixels = 0;
-  totalPixels = 0;
+  let totalPixels = 0;
   loadPixels();
   const tolerance = 10;
 
@@ -232,25 +226,18 @@ function updateTable() {
 // Function to populate the table
 function populateTable() {
   const tableBody = document.querySelector('#data-table tbody');
+  let tableContent = '';
 
-  tableBody.innerHTML = '';
+  for (const bodyPart of bodyParts) {
+    const remainingPercentage = ((bodyPart.remainingPixels / bodyPart.originalTotalPixels) * 100).toFixed(1) + '%';
 
-  bodyParts.forEach((part) => {
-    const newRow = document.createElement('tr');
-    const bodyPartCell = document.createElement('td');
-    const percentageCell = document.createElement('td');
+    tableContent += `<tr>
+      <td>${bodyPart.name}</td>
+      <td>${remainingPercentage}</td>
+    </tr>`;
+  }
 
-    const remainingPercentage = (part.remainingPixels / part.originalColoredPixels) * 100;
-    part.remainingPercentage = Math.max(0, remainingPercentage).toFixed(1) + '%';
-
-    bodyPartCell.textContent = part.name;
-    percentageCell.textContent = part.remainingPercentage;
-
-    newRow.appendChild(bodyPartCell);
-    newRow.appendChild(percentageCell);
-
-    tableBody.appendChild(newRow);
-  });
+  tableBody.innerHTML = tableContent;
 }
 
 // Call the populateTable function when the page loads
