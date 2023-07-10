@@ -32,8 +32,8 @@ let bodyParts = [
   { name: 'Trunk', color: [238, 238, 238], totalPixels: 0, originalTotalPixels: 0 },
   { name: 'Both Arms', color: [255, 226, 209], totalPixels: 0, originalTotalPixels: 0 },
   { name: 'Both Hands', color: [107, 171, 144], totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Both Legs', color: [202, 196, 206], totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Feet', color: [165, 204, 209], totalPixels: 0, originalTotalPixels: 0 },
+  { name: 'Both Legs', color: [226, 95, 43], totalPixels: 0, originalTotalPixels: 0 },
+  { name: 'Feet', color: [127, 154, 229], totalPixels: 0, originalTotalPixels: 0 },
 ];
 
 window.onload = function () {
@@ -156,11 +156,6 @@ brushSizeRange.addEventListener("input", function () {
   brushSize = parseInt(brushSizeRange.value);
   brushSizeLabel.textContent = brushSize;
 });
-
-// Define sample data
-const tableData = [
-  { bodyPart: 'Left Arm', percentage: '0%', ftu: '0', tcs: '0' },
-];
 
 function updateTable() {
   calculateTotalPixels();
