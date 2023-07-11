@@ -315,11 +315,58 @@ function populateTable() {
 }
 
 window.addEventListener('DOMContentLoaded', function () {
+  const $selectOption = $("#select-option");
+  const $searchInput = $("#search-input");
+  let options = $selectOption.find('option').clone();
+
+  $selectOption.select2({
+    placeholder: "Select a topical steroid",
+    allowClear: true,
+    minimumResultsForSearch: -1, 
+  });
+
+  // Handle search functionality
+  $searchInput.on("input", function () {
+    const searchText = $searchInput.val().toLowerCase();
+
+    if (searchText === "") {
+      $selectOption.empty().append(options);
+    } else {
+      // Filter options based on search text
+      const filteredOptions = options.filter(function () {
+        const optionText = $(this).text().toLowerCase();
+        return optionText.includes(searchText);
+      });
+
+      $selectOption.select2('destroy');
+
+      $selectOption.empty().append(filteredOptions);
+
+      $selectOption.select2({
+        placeholder: "Select a topical steroid",
+        allowClear: true,
+        minimumResultsForSearch: -1, 
+      });
+    }
+
+    $selectOption.find("optgroup").show();
+
+    $selectOption.trigger("change");
+  });
+
   calculateRemainingPixels();
   populateTable();
 });
 
+
 function generatePDF() {
+  const form = document.querySelector('dialog form');
+  const isValid = form.checkValidity();
+
+  if (!isValid) {
+    return;
+  }
+
   const dailyValue = document.getElementById('daily').value;
   const alternateValue = document.getElementById('alternate').value;
   const weekendValue = document.getElementById('weekend').value;
@@ -328,6 +375,11 @@ function generatePDF() {
   const selectedSteroidText = document.getElementById('select-option').selectedOptions[0].textContent;
   const today = new Date();
   const dateValue = today.toLocaleDateString();
+
+  const name = document.getElementById('name').value;
+  const address = document.getElementById('address').value;
+  const dateOfBirth = document.getElementById('dob').value;
+  const hospitalNumber = document.getElementById('hospitalNumber').value;
 
   const tableRows = document.querySelectorAll('#data-table tbody tr');
   let tableContent = '';
@@ -359,7 +411,12 @@ function generatePDF() {
         .replace('{trunkValue}', trunkValue)
         .replace('{selectedSteroidText}', selectedSteroidText)
         .replace('{tableRows}', tableContent)
-        .replace('{dateValue}', dateValue);
+        .replace('{dateValue}', dateValue)
+        .replace('{name}', name)
+        .replace('{address}', address)
+        .replace('{dateOfBirth}', dateOfBirth)
+        .replace('{hospitalNumber}', hospitalNumber);
+
 
       html2pdf()
         .set({ html2canvas: { scale: 2 } })
@@ -369,6 +426,69 @@ function generatePDF() {
     .catch(error => {
       console.error('Failed to load template.html:', error);
     });
+}
+
+function openDialog() {
+  const dialog = document.createElement('dialog');
+  dialog.innerHTML = `
+  <form>
+    <div class="close-icon" onclick="closeDialog()">&#10006;</div>
+    <h2>Patient Details</h2>
+    <label for="name">Patient Name:</label>
+    <input type="text" id="name" required>
+
+    <label for="age">Age:</label>
+    <input type="number" id="age" required>
+
+    <label for="address">Address:</label>
+    <textarea id="address" required></textarea>
+
+    <label for="dob">Date of Birth:</label>
+    <input type="date" id="dob" required>
+      
+    <label for="hospitalNumber">Hospital Number:</label>
+    <input type="text" id="hospitalNumber" required>
+
+    <button onclick="generatePDF()">Generate PDF</button>
+    <button type="button" onclick="closeDialog()">Cancel</button>
+  </form>
+
+
+  `;
+
+  document.body.appendChild(dialog);
+
+  dialog.showModal();
+
+  const form = dialog.querySelector('form');
+  const generatePdfButton = dialog.querySelector('#generatePdfButton');
+
+  // Handle form submission
+  dialog.querySelector('form').addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const name = document.getElementById('name').value;
+    const address = document.getElementById('address').value;
+    const dateOfBirth = document.getElementById('dateOfBirth').value;
+    const hospitalNumber = document.getElementById('hospitalNumber').value;
+
+    console.log('Name:', name);
+    console.log('Address:', address);
+    console.log('Date of Birth:', dateOfBirth);
+    console.log('Hospital Number:', hospitalNumber);
+
+    closeDialog();
+  });
+
+  // form validity
+  form.addEventListener('input', function () {
+    generatePdfButton.disabled = !form.checkValidity();
+  });
+}
+
+function closeDialog() {
+  const dialog = document.querySelector('dialog');
+  dialog.remove();
 }
 
 

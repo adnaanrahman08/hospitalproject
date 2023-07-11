@@ -6,6 +6,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hospital Project</title>
   <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.4/awesomplete.min.css" />
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css"
+      rel="stylesheet"
+    />
+
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.min.js"
+      integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
+      integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
 </head>
 
 <body>
@@ -74,13 +93,18 @@
       </div>
 
       <h2>Topical Steroids</h2>
+      <div class="search-box">
+        <input type="text" id="search-input" placeholder="Search for a topical steroid">
+      </div>
+
+
       <div class="dropdown">
         <div class="select-wrapper">
-          <select id="select-option">
+          <select id="select-option" class="select2">
             <optgroup label="Mild">
-              <option value="Dermacort®">Dermacort® - Hydrocortisone 0.1% (available only over the counter)</option>
+              <option value="Dermacort®">Dermacort® - Hydrocortisone 0.1%</option>
               <option value="Dioderm®">Dioderm® - Hydrocortisone 0.1%</option>
-              <option value="Hc45®">Hc45® - Hydrocortisone 1% (available only over the counter)</option>
+              <option value="Hc45®">Hc45® - Hydrocortisone 1%</option>
               <option value="Hydrocortisone 0.5%">Hydrocortisone 0.5% - Hydrocortisone 0.5%</option>
               <option value="Hydrocortisone 1%">Hydrocortisone 1% - Hydrocortisone 1%</option>
               <option value="Hydrocortisone 2.5%">Hydrocortisone 2.5% - Hydrocortisone 2.5%</option>
@@ -102,7 +126,7 @@
               <option value="Betnovate-RD®">Betnovate-RD® - Betamethasone valerate 0.025%</option>
               <option value="Clobavate®">Clobavate® - Clobetasone butyrate 0.05%</option>
               <option value="Eumovate®">Eumovate® - Clobetasone butyrate 0.05%</option>
-              <option value="Haelan®">Haelan® - Fludroxycortide 0.0125% (available as cream, ointment and tape)</option>
+              <option value="Haelan®">Haelan® - Fludroxycortide 0.0125%</option>
               <option value="Modrasone®">Modrasone® - Alclometasone dipropionate 0.05%</option>
               <option value="Synalar 1 in 4®">Synalar 1 in 4® - Fluocinolone acetonide 0.00625%</option>
               <option value="Trimovate®">(Antibacterial, Antifungal) Trimovate® - Clobetasone butyrate 0.05% -
@@ -111,20 +135,17 @@
             </optgroup>
             <optgroup label="Potent">
               <option value="Ultralanum Plain®">Ultralanum Plain® - Fluocortolone hexanoate 0.25%</option>
-              <option value="Betacap®">Betacap® - Betamethasone valerate 0.1% (scalp application)</option>
+              <option value="Betacap®">Betacap® - Betamethasone valerate 0.1%</option>
               <option value="Beclometasone dipropionate">Beclometasone dipropionate - Beclometasone dipropionate 0.025%
               </option>
               <option value="Betnovate®">Betnovate® - Betamethasone valerate 0.1%</option>
-              <option value="Bettamousse®">Bettamousse® - Contains 1.2 mg betamethasone valerate 0.1% (scalp
-                application)</option>
+              <option value="Bettamousse®">Bettamousse® - Contains 1.2 mg betamethasone valerate 0.1% </option>
               <option value="Cutivate® ointment">Cutivate® ointment - Fluticasone propionate 0.005%</option>
               <option value="Cutivate® cream">Cutivate® cream - Fluticasone propionate 0.05%</option>
-              <option value="Diprosalic®">Diprosalic® - Betamethasone dipropionate 0.05% (ointment and scalp
-                preparation)</option>
+              <option value="Diprosalic®">Diprosalic® - Betamethasone dipropionate 0.05%</option>
               <option value="Diprosone®">Diprosone® - Betamethasone dipropionate 0.05%</option>
               <option value="Elocon®">Elocon® - Mometasone furoate 0.1%</option>
-              <option value="Locoid®">Locoid® - Hydrocortisone butyrate 0.1% (available as scalp application and lotion
-                'Locid Crelo')</option>
+              <option value="Locoid®">Locoid® - Hydrocortisone butyrate 0.1%</option>
               <option value="Metosyn®">Metosyn® - Fluocinonide 0.05%</option>
               <option value="Nerisone®">Nerisone® - Diflucortolone valerate 0.1%</option>
               <option value="Synalar®">Synalar® - Fluocinolone acetonide 0.025%</option>
@@ -143,9 +164,9 @@
               </option>
             </optgroup>
             <optgroup label="Very Potent">
-              <option value="Clarelux®">Clarelux® - Clobetasol propionate 0.05% (scalp application)</option>
+              <option value="Clarelux®">Clarelux® - Clobetasol propionate 0.05%</option>
               <option value="Dermovate®">Dermovate® - Clobetasol propionate 0.05%</option>
-              <option value="Etrivex®">Etrivex® - Clobetasol propionate 0.05% (shampoo)</option>
+              <option value="Etrivex®">Etrivex® - Clobetasol propionate 0.05%</option>
               <option value="Nerisone Forte®">Nerisone Forte® - Diflucortolone valerate 0.3%</option>
               <option value="Clobetasol with neomycin and nystatin">(Antibacterial, Antifungal) Clobetasol with neomycin
                 and nystatin - Clobetasol propionate 0.05% - Neomycin, Nystatin</option>
@@ -154,7 +175,7 @@
           <i class="fas fa-caret-down"></i>
         </div>
       </div>
-      <button onclick="generatePDF()">Generate PDF</button>
+      <button id="add-patient-button" onclick="openDialog()">Add Patient Details</button>
     </section>
   </section>
 
@@ -181,6 +202,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
   <script src="https://kit.fontawesome.com/658e69eab6.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.4/awesomplete.min.js"></script>
+
   <script src="canvas.js"></script>
 </body>
 
