@@ -24,6 +24,8 @@ window.addEventListener("scroll", function () {
 
 let bodyImage;
 let mask;
+let headImage;
+let mask2;
 let brushColor = "#FFC867";
 let brushSize = 50;
 
@@ -40,15 +42,20 @@ window.onload = function () {
   document.getElementById("color-picker").value = brushColor;
 };
 function preload() {
-  bodyImage = loadImage("./models/human-front.png");
+  headImage = loadImage("./models/human-head.png");
+  bodyImage = loadImage("./models/human-body.png");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   background("#D1E1FF");
-  image(bodyImage, 0, 0, 300, 700);
+  image(headImage, 0, 0, 200, 200); // head
+  image(bodyImage, 220, 0, 300, 700); // body
+  mask2 = createGraphics(width, height);
+
+  mask2.image(headImage, 0, 0, 200, 200); // head mask
   mask = createGraphics(width, height);
-  mask.image(bodyImage, 0, 0, 300, 700);
+  mask.image(bodyImage, 220, 0, 300, 700); // body mask
   calculateOriginalTotalPixels();
   calculateTotalPixels()
 }
@@ -112,8 +119,9 @@ function draw() {
 function marker() {
   loadPixels();
   mask.loadPixels();
+  mask2.loadPixels();
   for (let i = 0; i < pixels.length; i += 4) {
-    pixels[i + 3] = mask.pixels[i];
+    pixels[i + 3] = mask.pixels[i] || mask2.pixels[i];
   }
   updatePixels();
   fill(brushColor);
