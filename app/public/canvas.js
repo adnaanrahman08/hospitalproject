@@ -30,12 +30,8 @@ let brushColor = "#FFC867";
 let brushSize = 50;
 
 let bodyParts = [
-  { name: 'Face & Neck', color: [214, 131, 131], totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Trunk', color: [238, 238, 238], totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Both Arms', color: [255, 226, 209], totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Both Hands', color: [107, 171, 144], totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Both Legs', color: [234, 171, 154], totalPixels: 0, originalTotalPixels: 0 },
-  { name: 'Feet', color: [127, 154, 229], totalPixels: 0, originalTotalPixels: 0 },
+  { name: 'Face & Neck', color: [254, 138, 141], pixelsLeft: 0, originalTotalPixels: 0, originalColorPixels: 0, targetColorPixels: 0 },
+  { name: 'Trunk', color: [238, 238, 238], pixelsLeft: 0, originalTotalPixels: 0, originalColorPixels: 0, targetColorPixels: 0 },
 ];
 
 window.onload = function () {
@@ -57,57 +53,70 @@ function setup() {
   mask = createGraphics(width, height);
   mask.image(bodyImage, 220, 0, 300, 700); // body mask
   calculateOriginalTotalPixels();
-  calculateTotalPixels()
+  calculateTotalPixels();
 }
 
 function calculateOriginalTotalPixels() {
-  const tolerance = 10;
+  const selectedGender = document.querySelector('input[name="gender"]:checked').value;
+  let formulaValue = 0;
 
-  loadPixels();
+  if (selectedGender === "male") {
+    formulaValue = 0.5 * 82.98;
+  } else if (selectedGender === "female") {
+    formulaValue = 0.5 * 63.91;
+  }
+
+  // Define the target colors for each body part
+  const faceAndNeckColor = [254, 138, 141];
+  const trunkColor = [238, 238, 238];
+
+  // Calculate target color pixels for each body part
+  const faceAndNeckColorPixels = countPixelsByColor(faceAndNeckColor);
+  const trunkColorPixels = countPixelsByColor(trunkColor);
 
   for (const bodyPart of bodyParts) {
-    bodyPart.originalTotalPixels = 0;
-
-    for (let i = 0; i < pixels.length; i += 4) {
-      let pixelR = pixels[i];
-      let pixelG = pixels[i + 1];
-      let pixelB = pixels[i + 2];
-
-      if (
-        Math.abs(pixelR - bodyPart.color[0]) <= tolerance &&
-        Math.abs(pixelG - bodyPart.color[1]) <= tolerance &&
-        Math.abs(pixelB - bodyPart.color[2]) <= tolerance
-      ) {
-        bodyPart.originalTotalPixels++;
-      }
+    if (bodyPart.name === "Face & Neck") {
+      bodyPart.originalTotalPixels = (formulaValue * 0.09).toFixed(2);
+      bodyPart.originalColorPixels = faceAndNeckColorPixels;
+    } else if (bodyPart.name === "Trunk") {
+      bodyPart.originalTotalPixels = (formulaValue * 0.91).toFixed(2);
+      bodyPart.originalColorPixels = trunkColorPixels;
     }
   }
-  updatePixels();
+}
+
+function countPixelsByColor(targetColor) {
+  const tolerance = 10;
+  loadPixels();
+  let count = 0;
+
+  for (let i = 0; i < pixels.length; i += 4) {
+    let pixelR = pixels[i];
+    let pixelG = pixels[i + 1];
+    let pixelB = pixels[i + 2];
+
+    if (
+      Math.abs(pixelR - targetColor[0]) <= tolerance &&
+      Math.abs(pixelG - targetColor[1]) <= tolerance &&
+      Math.abs(pixelB - targetColor[2]) <= tolerance
+    ) {
+      count++;
+    }
+  }
+
+  return count;
 }
 
 function calculateTotalPixels() {
-  const tolerance = 10;
-
-  loadPixels();
-
   for (const bodyPart of bodyParts) {
-    bodyPart.totalPixels = 0;
+    const targetColor = bodyPart.color;
+    const targetColorPixels = countPixelsByColor(targetColor);
 
-    for (let i = 0; i < pixels.length; i += 4) {
-      let pixelR = pixels[i];
-      let pixelG = pixels[i + 1];
-      let pixelB = pixels[i + 2];
+    bodyPart.targetColorPixels = targetColorPixels;
 
-      if (
-        Math.abs(pixelR - bodyPart.color[0]) <= tolerance &&
-        Math.abs(pixelG - bodyPart.color[1]) <= tolerance &&
-        Math.abs(pixelB - bodyPart.color[2]) <= tolerance
-      ) {
-        bodyPart.totalPixels++;
-      }
-    }
+    bodyPart.pixelsLeft = (bodyPart.originalTotalPixels * (bodyPart.targetColorPixels / bodyPart.originalColorPixels)).toFixed(2);
+    console.log(`Pixels left for ${bodyPart.name}: ${bodyPart.pixelsLeft}`);
   }
-  updatePixels();
 }
 
 function draw() {
@@ -134,13 +143,14 @@ function marker() {
 // Clear the canvas
 function clearCanvas() {
   background("#D1E1FF");
-  image(bodyImage, 0, 0, 300, 700);
+  image(headImage, 0, 0, 200, 200); // head
+  image(bodyImage, 220, 0, 300, 700); // body
 
   loadPixels();
   calculateTotalPixels();
 
   for (const bodyPart of bodyParts) {
-    bodyPart.totalPixels = bodyPart.originalTotalPixels;
+    bodyPart.pixelsLeft = bodyPart.originalTotalPixels;
   }
 
   updatePixels();
@@ -182,19 +192,21 @@ function updateTable() {
 
 function calculateRemainingPixels() {
   for (const bodyPart of bodyParts) {
-    const remainingPixels = bodyPart.originalTotalPixels - bodyPart.totalPixels;
-    bodyPart.remainingPixels = remainingPixels;
-
-
-    let percentage = (remainingPixels / bodyPart.originalTotalPixels) * 100;
-    percentage = Math.max(0, percentage);
+    let percentage = ((bodyPart.originalTotalPixels - bodyPart.pixelsLeft) / bodyPart.originalTotalPixels) * 100;
+    percentage = Math.min(100, Math.max(0, percentage)); 
     bodyPart.remainingPercentage = percentage.toFixed(1) + '%';
   }
 }
 
 const genderRadios = document.getElementsByName("gender");
 genderRadios.forEach((radio) => {
-  radio.addEventListener("change", populateTable);
+  radio.addEventListener("change", function () {
+    selectedGender = document.querySelector('input[name="gender"]:checked').value;
+    calculateOriginalTotalPixels();
+    calculateTotalPixels();
+    calculateRemainingPixels();
+    populateTable();
+  });
 });
 
 // Calculate Totals
@@ -228,7 +240,6 @@ calculateButton.addEventListener('click', updateTable);
 
 function populateTable() {
   const tableBody = document.querySelector('#data-table tbody');
-
   tableBody.innerHTML = '';
 
   let totalTcsValue = 0;
@@ -249,39 +260,8 @@ function populateTable() {
 
     // Calculate ftu and tcs based on body part
     if (part.name === 'Trunk') {
-      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 7;
-      if (selectedGender === "male") {
-        tcsValue = ftuValue * 0.5;
-      } else if (selectedGender === "female") {
-        tcsValue = ftuValue * 0.4;
-      }
-      totalTcsValue += tcsValue;
-    } else if (part.name === 'Both Arms') {
-      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 6;
-      if (selectedGender === "male") {
-        tcsValue = ftuValue * 0.5;
-      } else if (selectedGender === "female") {
-        tcsValue = ftuValue * 0.4;
-      }
-      totalTcsValue += tcsValue;
-    } else if (part.name === 'Both Hands') {
-      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 2;
-      if (selectedGender === "male") {
-        tcsValue = ftuValue * 0.5;
-      } else if (selectedGender === "female") {
-        tcsValue = ftuValue * 0.4;
-      }
-      totalTcsValue += tcsValue;
-    } else if (part.name === 'Both Legs') {
-      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 12;
-      if (selectedGender === "male") {
-        tcsValue = ftuValue * 0.5;
-      } else if (selectedGender === "female") {
-        tcsValue = ftuValue * 0.4;
-      }
-      totalTcsValue += tcsValue;
-    } else if (part.name === 'Feet') {
-      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 4;
+      ftuValue = parseFloat(part.pixelsLeft / part.originalTotalPixels) / 2;
+      console.log("Trunk:", part.pixelsLeft)
       if (selectedGender === "male") {
         tcsValue = ftuValue * 0.5;
       } else if (selectedGender === "female") {
@@ -289,7 +269,8 @@ function populateTable() {
       }
       totalTcsValue += tcsValue;
     } else if (part.name === 'Face & Neck') {
-      ftuValue = (parseFloat(part.remainingPercentage) / 100) * 2.5;
+      ftuValue = parseFloat(part.pixelsLeft / part.originalTotalPixels) / 2;
+      console.log("Face:", part.pixelsLeft)
       if (selectedGender === "male") {
         tcsValue = ftuValue * 0.5;
       } else if (selectedGender === "female") {
@@ -490,7 +471,3 @@ function closeDialog() {
   const dialog = document.querySelector('dialog');
   dialog.remove();
 }
-
-
-
-
