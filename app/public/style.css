@@ -349,12 +349,18 @@ form label {
   font-weight: bold;
 }
 
-form input {
-  width: 300px;
+form input, form textarea {
+  width: 100%;
   height: 30px;
   border-radius: 5px;
   border: 1px solid #ccc;
   padding: 5px;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+}
+
+form textarea {
+  height: 100px;
 }
 
 form button {
@@ -373,20 +379,19 @@ dialog::backdrop {
 }
 
 dialog {
+  width: 50%;
+  padding: 20px;
+  box-sizing: border-box;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  position: relative;
+  max-height: 90vh;
+  overflow: auto;
 }
 
 dialog:not([open]) {
   display: none;
-}
-
-textarea {
-  width: 100%;
-  height: 100px;
-  padding: 5px;
-  font-size: 16px;
 }
 
 .close-icon {
@@ -395,4 +400,23 @@ textarea {
   right: 10px;
   font-size: 24px;
   cursor: pointer;
+}
+
+.hide {
+  display: none;
+}
+
+#step1 {
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+}
+
+#doctorNameError {
+  color: red;
+  margin-bottom: 10px;
+}
+
+button.generatepdf {
+  background-color: #33b249;
 }

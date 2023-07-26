@@ -322,7 +322,7 @@ window.addEventListener('DOMContentLoaded', function () {
   $selectOption.select2({
     placeholder: "Select a topical steroid",
     allowClear: true,
-    minimumResultsForSearch: -1, 
+    minimumResultsForSearch: -1,
   });
 
   // Handle search functionality
@@ -345,7 +345,7 @@ window.addEventListener('DOMContentLoaded', function () {
       $selectOption.select2({
         placeholder: "Select a topical steroid",
         allowClear: true,
-        minimumResultsForSearch: -1, 
+        minimumResultsForSearch: -1,
       });
     }
 
@@ -377,9 +377,13 @@ function generatePDF() {
   const dateValue = today.toLocaleDateString();
 
   const name = document.getElementById('name').value;
-  const address = document.getElementById('address').value;
   const dateOfBirth = document.getElementById('dob').value;
   const hospitalNumber = document.getElementById('hospitalNumber').value;
+  const doctorName = document.getElementById('doctorName').value;
+  const diagnosis = document.getElementById('diagnosis').value;
+  const soap = document.getElementById('soap').value;
+  const faceMoisturiser = document.getElementById('faceMoisturiser').value;
+  const bodyMoisturiser = document.getElementById('bodyMoisturiser').value;
 
   const tableRows = document.querySelectorAll('#data-table tbody tr');
   let tableContent = '';
@@ -400,10 +404,10 @@ function generatePDF() {
     `;
   });
 
-  fetch('template.html')
+  fetch('treatmentplan.html')
     .then(response => response.text())
-    .then(template => {
-      const htmlContent = template
+    .then(treatmentplan => {
+      const htmlContent = treatmentplan
         .replace('{dailyValue}', dailyValue)
         .replace('{alternateValue}', alternateValue)
         .replace('{weekendValue}', weekendValue)
@@ -413,10 +417,13 @@ function generatePDF() {
         .replace('{tableRows}', tableContent)
         .replace('{dateValue}', dateValue)
         .replace('{name}', name)
-        .replace('{address}', address)
         .replace('{dateOfBirth}', dateOfBirth)
-        .replace('{hospitalNumber}', hospitalNumber);
-
+        .replace('{hospitalNumber}', hospitalNumber)
+        .replace('{diagnosis}', diagnosis)
+        .replace('{soap}', soap)
+        .replace('{faceMoisturiser}', faceMoisturiser)
+        .replace('{bodyMoisturiser}', bodyMoisturiser)
+        .replace('{doctorName}', doctorName);
 
       html2pdf()
         .set({ html2canvas: { scale: 2 } })
@@ -424,7 +431,7 @@ function generatePDF() {
         .save('topicalsteroid-calculator.pdf');
     })
     .catch(error => {
-      console.error('Failed to load template.html:', error);
+      console.error('Failed to load treatmentplan.html:', error);
     });
 }
 
@@ -432,29 +439,43 @@ function openDialog() {
   const dialog = document.createElement('dialog');
   dialog.innerHTML = `
   <form>
-    <div class="close-icon" onclick="closeDialog()">&#10006;</div>
-    <h2>Patient Details</h2>
-    <label for="name">Patient Name:</label>
-    <input type="text" id="name" required>
+    <div id="step1">
+      <div class="close-icon" onclick="closeDialog()">&#10006;</div>
+      <h2>Add Consultant Name</h2>
+      <label for="doctorName">Consultant Name:</label>
+      <input type="text" id="doctorName" required>
+      <p id="doctorNameError" style="display:none;color:red;">Consultant Name is required.</p>
+      <button type="button" onclick="nextStep()">Next</button>
+    </div>
 
-    <label for="age">Age:</label>
-    <input type="number" id="age" required>
+    <div id="step2" class="hide">
+        <h2>Patient Details</h2>
+        <label for="name">Patient Name:</label>
+        <input type="text" id="name" required>
 
-    <label for="address">Address:</label>
-    <textarea id="address" required></textarea>
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" required>
+        
+        <label for="hospitalNumber">Hospital Number:</label>
+        <input type="text" id="hospitalNumber" required>
 
-    <label for="dob">Date of Birth:</label>
-    <input type="date" id="dob" required>
-      
-    <label for="hospitalNumber">Hospital Number:</label>
-    <input type="text" id="hospitalNumber" required>
+        <label for="diagnosis">Diagnosis:</label>
+        <input type="text" id="diagnosis" required>
 
-    <button onclick="generatePDF()">Generate PDF</button>
-    <button type="button" onclick="closeDialog()">Cancel</button>
-  </form>
+        <label for="soap">Soap Substitute:</label>
+        <input type="text" id="soap" required>
 
+        <label for="faceMoisturiser">Face Moisturiser:</label>
+        <input type="text" id="faceMoisturiser" required>
 
-  `;
+        <label for="bodyMoisturiser">Body Moisturiser:</label>
+        <input type="text" id="bodyMoisturiser" required>
+
+        <button class="generatepdf" onclick="generatePDF()">Generate PDF</button>
+        <button type="button" id="backButton" onclick="prevStep()">Back</button>
+        <button type="button" onclick="closeDialog()">Cancel</button>
+    </div>
+  </form>`;
 
   document.body.appendChild(dialog);
 
@@ -462,6 +483,15 @@ function openDialog() {
 
   const form = dialog.querySelector('form');
   const generatePdfButton = dialog.querySelector('#generatePdfButton');
+  const nextButton = dialog.querySelector('#nextButton');
+  const doctorName = dialog.querySelector('#doctorName');
+  const doctorNameError = dialog.querySelector('#doctorNameError');
+
+  doctorName.addEventListener('input', function () {
+    const isEmpty = doctorName.value.trim() === "";
+    nextButton.disabled = isEmpty;
+    doctorNameError.style.display = isEmpty ? "inline" : "none";
+  });
 
   // Handle form submission
   dialog.querySelector('form').addEventListener('submit', function (event) {
@@ -471,7 +501,9 @@ function openDialog() {
     const address = document.getElementById('address').value;
     const dateOfBirth = document.getElementById('dateOfBirth').value;
     const hospitalNumber = document.getElementById('hospitalNumber').value;
+    const doctorName = document.getElementById('doctorName').value;
 
+    console.log('Doctor Name:', doctorName);
     console.log('Name:', name);
     console.log('Address:', address);
     console.log('Date of Birth:', dateOfBirth);
@@ -484,6 +516,29 @@ function openDialog() {
   form.addEventListener('input', function () {
     generatePdfButton.disabled = !form.checkValidity();
   });
+}
+
+function nextStep() {
+  const doctorName = document.getElementById('doctorName');
+  const doctorNameError = document.getElementById('doctorNameError');
+
+  // trim the input value to remove whitespace
+  const doctorNameTrimmed = doctorName.value.trim();
+
+  if (doctorNameTrimmed === "") {
+    // if the input is empty, show the error message
+    doctorNameError.style.display = "inline";
+  } else {
+    // if the input is not empty, proceed to the next step
+    doctorNameError.style.display = "none";
+    document.getElementById('step1').style.display = "none";
+    document.getElementById('step2').style.display = "block";
+  }
+}
+
+function prevStep() {
+  document.getElementById('step1').style.display = "block";
+  document.getElementById('step2').style.display = "none";
 }
 
 function closeDialog() {
