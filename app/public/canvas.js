@@ -193,7 +193,7 @@ function updateTable() {
 function calculateRemainingPixels() {
   for (const bodyPart of bodyParts) {
     let percentage = ((bodyPart.originalTotalPixels - bodyPart.pixelsLeft) / bodyPart.originalTotalPixels) * 100;
-    percentage = Math.min(100, Math.max(0, percentage)); 
+    percentage = Math.min(100, Math.max(0, percentage));
     bodyPart.remainingPercentage = percentage.toFixed(1) + '%';
   }
 }
@@ -298,7 +298,6 @@ function populateTable() {
 window.addEventListener('DOMContentLoaded', function () {
   const $selectOption = $("#select-option");
   const $searchInput = $("#search-input");
-  let options = $selectOption.find('option').clone();
 
   $selectOption.select2({
     placeholder: "Select a topical steroid",
@@ -310,8 +309,11 @@ window.addEventListener('DOMContentLoaded', function () {
   $searchInput.on("input", function () {
     const searchText = $searchInput.val().toLowerCase();
 
+    // Always get the original options from the select element
+    let options = $selectOption.find('option');
+
     if (searchText === "") {
-      $selectOption.empty().append(options);
+      $selectOption.html(options);
     } else {
       // Filter options based on search text
       const filteredOptions = options.filter(function () {
@@ -321,7 +323,7 @@ window.addEventListener('DOMContentLoaded', function () {
 
       $selectOption.select2('destroy');
 
-      $selectOption.empty().append(filteredOptions);
+      $selectOption.html(filteredOptions);
 
       $selectOption.select2({
         placeholder: "Select a topical steroid",
@@ -338,6 +340,7 @@ window.addEventListener('DOMContentLoaded', function () {
   calculateRemainingPixels();
   populateTable();
 });
+
 
 
 function generatePDF() {
@@ -365,6 +368,8 @@ function generatePDF() {
   const soap = document.getElementById('soap').value;
   const faceMoisturiser = document.getElementById('faceMoisturiser').value;
   const bodyMoisturiser = document.getElementById('bodyMoisturiser').value;
+  const faceSteroid = document.getElementById('faceSteroid').value;
+  const bodySteroid = document.getElementById('bodySteroid').value;
 
   const tableRows = document.querySelectorAll('#data-table tbody tr');
   let tableContent = '';
@@ -389,22 +394,25 @@ function generatePDF() {
     .then(response => response.text())
     .then(treatmentplan => {
       const htmlContent = treatmentplan
-        .replace('{dailyValue}', dailyValue)
-        .replace('{alternateValue}', alternateValue)
-        .replace('{weekendValue}', weekendValue)
-        .replace('{faceValue}', faceValue)
-        .replace('{trunkValue}', trunkValue)
-        .replace('{selectedSteroidText}', selectedSteroidText)
-        .replace('{tableRows}', tableContent)
-        .replace('{dateValue}', dateValue)
-        .replace('{name}', name)
-        .replace('{dateOfBirth}', dateOfBirth)
-        .replace('{hospitalNumber}', hospitalNumber)
-        .replace('{diagnosis}', diagnosis)
-        .replace('{soap}', soap)
-        .replace('{faceMoisturiser}', faceMoisturiser)
-        .replace('{bodyMoisturiser}', bodyMoisturiser)
-        .replace('{doctorName}', doctorName);
+        .replace(/{dailyValue}/g, dailyValue)
+        .replace(/{alternateValue}/g, alternateValue)
+        .replace(/{weekendValue}/g, weekendValue)
+        .replace(/{faceValue}/g, faceValue)
+        .replace(/{trunkValue}/g, trunkValue)
+        .replace(/{selectedSteroidText}/g, selectedSteroidText)
+        .replace(/{tableRows}/g, tableContent)
+        .replace(/{dateValue}/g, dateValue)
+        .replace(/{name}/g, name)
+        .replace(/{dateOfBirth}/g, dateOfBirth)
+        .replace(/{hospitalNumber}/g, hospitalNumber)
+        .replace(/{diagnosis}/g, diagnosis)
+        .replace(/{soap}/g, soap)
+        .replace(/{faceMoisturiser}/g, faceMoisturiser)
+        .replace(/{bodyMoisturiser}/g, bodyMoisturiser)
+        .replace(/{doctorName}/g, doctorName)
+        .replace(/{faceSteroid}/g, faceSteroid)
+        .replace(/{bodySteroid}/g, bodySteroid);
+
 
       html2pdf()
         .set({ html2canvas: { scale: 2 } })
@@ -415,6 +423,43 @@ function generatePDF() {
       console.error('Failed to load treatmentplan.html:', error);
     });
 }
+
+function generatePDFPrescription() {
+  const name = document.getElementById('name').value;
+  const dateOfBirth = document.getElementById('dob').value;
+  const hospitalNumber = document.getElementById('hospitalNumber').value;
+  const address = document.getElementById('address').value;
+  const today = new Date();
+  const dateValue = today.toLocaleDateString();
+  const soap = document.getElementById('soap').value;
+  const faceMoisturiser = document.getElementById('faceMoisturiser').value;
+  const bodyMoisturiser = document.getElementById('bodyMoisturiser').value;
+  
+  fetch('prescription.html')
+    .then(response => response.text())
+    .then(prescription => {
+      const htmlContent = prescription
+        .replace(/{name}/g, name)
+        .replace(/{address}/g, address)
+        .replace(/{dateOfBirth}/g, dateOfBirth)
+        .replace(/{hospitalNumber}/g, hospitalNumber)
+        .replace(/{dateValue}/g, dateValue)
+        .replace(/{doctorName}/g, doctorName)
+        .replace(/{soap}/g, soap)
+        .replace(/{faceMoisturiser}/g, faceMoisturiser)
+        .replace(/{bodyMoisturiser}/g, bodyMoisturiser);
+
+
+      html2pdf()
+        .set({ html2canvas: { scale: 2 } })
+        .from(htmlContent)
+        .save('prescription.pdf');
+    })
+    .catch(error => {
+      console.error('Failed to load prescription.html:', error);
+    });
+}
+
 
 function openDialog() {
   const dialog = document.createElement('dialog');
@@ -436,6 +481,9 @@ function openDialog() {
 
         <label for="dob">Date of Birth:</label>
         <input type="date" id="dob" required>
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" required
         
         <label for="hospitalNumber">Hospital Number:</label>
         <input type="text" id="hospitalNumber" required>
@@ -452,7 +500,14 @@ function openDialog() {
         <label for="bodyMoisturiser">Body Moisturiser:</label>
         <input type="text" id="bodyMoisturiser" required>
 
-        <button class="generatepdf" onclick="generatePDF()">Generate PDF</button>
+        <label for="faceSteroid">Face/Neck Topical Steroid:</label>
+        <input type="text" id="faceSteroid" required>
+
+        <label for="bodySteroid">Body Topical Steroid:</label>
+        <input type="text" id="bodySteroid" required>
+
+        <button class="generatepdf" onclick="generatePDF()">Generate Skin Treatment Plan</button>
+        <button class="generatepdf" onclick="generatePDFPrescription()">Generate Prescription</button>
         <button type="button" id="backButton" onclick="prevStep()">Back</button>
         <button type="button" onclick="closeDialog()">Cancel</button>
     </div>

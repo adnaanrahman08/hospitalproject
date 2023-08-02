@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dermatology Skin Treatment Plan</title>
+
+    <link rel="stylesheet" href="prescriptionstyle.css">
+</head>
+
+<body>
+    <div class="report-header">
+        <h1>Topical Therapy Prescription</h1>
+    </div>
+
+    <table id="patient-details">
+        <tr>
+            <td><strong>Patient Name:</strong></td>
+            <td>{name}</td>
+        </tr>
+        <tr>
+            <td><strong>Address:</strong></td>
+            <td>{address}</td>
+        </tr>
+        <tr>
+            <td><strong>Date of Birth:</strong></td>
+            <td>{dateOfBirth}</td>
+        </tr>
+        <tr>
+            <td><strong>Hospital Number:</strong></td>
+            <td>{hospitalNumber}</td>
+        </tr>
+
+    </table>
+
+    <h2 class="">Date: {date}</h2>
+
+    <table id="medication-details">
+        <thead>
+            <tr>
+                <th>Medication Name</th>
+                <th>Dose</th>
+                <th>Frequency</th>
+                <th>Route</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="5" class="soap">Soap Substitute</td>
+            </tr>
+            <tr>
+                <td>{soap} to use as soap substitute</td>
+                <td>One Application</td>
+                <td>For washing</td>
+                <td>Topical</td>
+                <td>Continuous {dosageAmount} g per week</td>
+            </tr>
+            <tr>
+                <td colspan="5" class="soap">Emollient/Moisturiser</td>
+            </tr>
+            <tr>
+                <td>{faceMoisturiser}</td>
+                <td>One Application</td>
+                <td>Twice Daily</td>
+                <td>Topical</td>
+                <td>Continuous {dosageAmount} mg per week</td>
+            </tr>
+            <tr>
+                <td colspan="5" class="soap">Face & Neck</td>
+            </tr>
+            <tr>
+                <td rowspan="3">{bodyMoisturiser}</td>
+                <td>One Application</td>
+                <td>Twice Daily</td>
+                <td rowspan="3">To face and neck</td>
+                <td>For {weeklyAmount} weeks then</td>
+            </tr>
+            <tr>
+                <td>One Application</td>
+                <td>Alternate days</td>
+                <td>For {weeklyAmount} weeks then</td>
+            </tr>
+            <tr>
+                <td>One Application</td>
+                <td>Twice weekly</td>
+                <td>For {weeklyAmount} weeks then</td>
+            </tr>
+            <tr>
+                <td><strong>Dispensing Note:</strong> Based on affected body surface area, duration and frequency of prescription patient will require {1x30} g tube of {bodyMoisturiser}</td>
+            </tr>
+
+            <tr>
+                <td colspan="5" class="soap">Trunk and Limbs</td>
+            </tr>
+            <tr>
+                <td rowspan="3">{bodyMoisturiser}</td>
+                <td>One Application</td>
+                <td>Twice Daily</td>
+                <td rowspan="3">To face and neck</td>
+                <td>For {weeklyAmount} weeks then</td>
+            </tr>
+            <tr>
+                <td>One Application</td>
+                <td>Alternate days</td>
+                <td>For {weeklyAmount} weeks then</td>
+            </tr>
+            <tr>
+                <td>One Application</td>
+                <td>Twice weekly</td>
+                <td>For {weeklyAmount} weeks then</td>
+            </tr>
+            <tfoot>
+                <tr>
+                    <td><strong>Dispensing Note:</strong> Based on affected body surface area, duration and frequency of prescription patient will require {1x30} g tube of {bodyMoisturiser}</td>
+                </tr>
+            </tfoot>
+
+        </tbody>
+    </table>
+
+
+
+</body>
+
+</html>
