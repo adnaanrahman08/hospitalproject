@@ -249,19 +249,20 @@ function populateTable() {
     const newRow = document.createElement('tr');
     const bodyPartCell = document.createElement('td');
     const percentageCell = document.createElement('td');
+    const bsaCell = document.createElement('td');
     const ftuCell = document.createElement('td');
     const tcsCell = document.createElement('td');
 
     bodyPartCell.textContent = part.name;
     percentageCell.textContent = part.remainingPercentage;
+    bsaCell.textContent = (part.originalTotalPixels - part.pixelsLeft).toFixed(2)
 
     let ftuValue = 0;
     let tcsValue = 0;
 
     // Calculate ftu and tcs based on body part
     if (part.name === 'Trunk') {
-      ftuValue = parseFloat(part.pixelsLeft / part.originalTotalPixels) / 2;
-      console.log("Trunk:", part.pixelsLeft)
+      ftuValue = parseFloat(part.originalTotalPixels - part.pixelsLeft) / 2;
       if (selectedGender === "male") {
         tcsValue = ftuValue * 0.5;
       } else if (selectedGender === "female") {
@@ -269,8 +270,7 @@ function populateTable() {
       }
       totalTcsValue += tcsValue;
     } else if (part.name === 'Face & Neck') {
-      ftuValue = parseFloat(part.pixelsLeft / part.originalTotalPixels) / 2;
-      console.log("Face:", part.pixelsLeft)
+      ftuValue = parseFloat(part.originalTotalPixels - part.pixelsLeft) / 2;
       if (selectedGender === "male") {
         tcsValue = ftuValue * 0.5;
       } else if (selectedGender === "female") {
@@ -286,6 +286,7 @@ function populateTable() {
 
     newRow.appendChild(bodyPartCell);
     newRow.appendChild(percentageCell);
+    newRow.appendChild(bsaCell);
     newRow.appendChild(ftuCell);
     newRow.appendChild(tcsCell);
 
