@@ -352,11 +352,6 @@ function generatePDF() {
     return;
   }
 
-  const dailyValue = document.getElementById('daily').value;
-  const alternateValue = document.getElementById('alternate').value;
-  const weekendValue = document.getElementById('weekend').value;
-  const faceValue = document.getElementById('faceid').textContent;
-  const trunkValue = document.getElementById('trunkid').textContent;
   const today = new Date();
   const dateValue = today.toLocaleDateString();
 
@@ -371,35 +366,10 @@ function generatePDF() {
   const faceSteroid = document.getElementById('faceSteroid').value;
   const bodySteroid = document.getElementById('bodySteroid').value;
 
-  const tableRows = document.querySelectorAll('#data-table tbody tr');
-  let tableContent = '';
-
-  tableRows.forEach((row) => {
-    const bodyPart = row.cells[0].textContent;
-    const percentageCovered = row.cells[1].textContent;
-    const ftuValue = row.cells[2].textContent;
-    const tcsValue = row.cells[3].textContent;
-
-    tableContent += `
-      <tr>
-        <td>${bodyPart}</td>
-        <td>${percentageCovered}</td>
-        <td>${ftuValue}</td>
-        <td>${tcsValue}</td>
-      </tr>
-    `;
-  });
-
   fetch('treatmentplan.html')
     .then(response => response.text())
     .then(treatmentplan => {
       const htmlContent = treatmentplan
-        .replace(/{dailyValue}/g, dailyValue)
-        .replace(/{alternateValue}/g, alternateValue)
-        .replace(/{weekendValue}/g, weekendValue)
-        .replace(/{faceValue}/g, faceValue)
-        .replace(/{trunkValue}/g, trunkValue)
-        .replace(/{tableRows}/g, tableContent)
         .replace(/{dateValue}/g, dateValue)
         .replace(/{name}/g, name)
         .replace(/{dateOfBirth}/g, dateOfBirth)
@@ -413,9 +383,9 @@ function generatePDF() {
         .replace(/{bodySteroid}/g, bodySteroid);
 
 
-        const options = {
-          margin: 20,
-          filename: 'topical-steroid calculator.pdf',
+      const options = {
+        margin: 20,
+        filename: 'topical-steroid calculator.pdf',
       };
 
       html2pdf().from(htmlContent).set(options).save();
@@ -433,6 +403,9 @@ function generatePDFPrescription() {
     return;
   }
 
+  const dailyValue = document.getElementById('daily').value;
+  const alternateValue = document.getElementById('alternate').value;
+  const weekendValue = document.getElementById('weekend').value;
   const name = document.getElementById('name').value;
   const dateOfBirth = document.getElementById('dob').value;
   const hospitalNumber = document.getElementById('hospitalNumber').value;
@@ -442,11 +415,16 @@ function generatePDFPrescription() {
   const soap = document.getElementById('soap').value;
   const faceMoisturiser = document.getElementById('faceMoisturiser').value;
   const bodyMoisturiser = document.getElementById('bodyMoisturiser').value;
-
+  const doctorName = document.getElementById('doctorName').value;
+  
   fetch('prescription.html')
     .then(response => response.text())
     .then(prescription => {
       const htmlContent = prescription
+        .replace(/{tableRows}/g, tableContent)
+        .replace(/{dailyValue}/g, dailyValue)
+        .replace(/{alternateValue}/g, alternateValue)
+        .replace(/{weekendValue}/g, weekendValue)
         .replace(/{name}/g, name)
         .replace(/{address}/g, address)
         .replace(/{dateOfBirth}/g, dateOfBirth)
@@ -457,12 +435,12 @@ function generatePDFPrescription() {
         .replace(/{faceMoisturiser}/g, faceMoisturiser)
         .replace(/{bodyMoisturiser}/g, bodyMoisturiser);
 
-        const options = {
-            margin: 20,
-            filename: 'prescription.pdf',
-        };
+      const options = {
+        margin: 20,
+        filename: 'prescription.pdf',
+      };
 
-        html2pdf().from(htmlContent).set(options).save();
+      html2pdf().from(htmlContent).set(options).save();
     })
     .catch(error => {
       console.error('Failed to load prescription.html:', error);
