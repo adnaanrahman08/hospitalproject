@@ -299,9 +299,10 @@ function populateTable() {
 window.addEventListener('DOMContentLoaded', function () {
   const $selectOption = $("#select-option");
   const $searchInput = $("#search-input");
+  const $selectedItem = $("#selected-item");
 
   $selectOption.select2({
-    placeholder: "Select a topical steroid",
+    placeholder: "Search for a topical steroid",
     allowClear: true,
     minimumResultsForSearch: -1,
   });
@@ -311,37 +312,36 @@ window.addEventListener('DOMContentLoaded', function () {
     const searchText = $searchInput.val().toLowerCase();
 
     // Always get the original options from the select element
-    let options = $selectOption.find('option');
+    const originalOptions = $selectOption.find('option');
 
     if (searchText === "") {
-      $selectOption.html(options);
+      $selectOption.html(originalOptions);
     } else {
       // Filter options based on search text
-      const filteredOptions = options.filter(function () {
+      const filteredOptions = originalOptions.filter(function () {
         const optionText = $(this).text().toLowerCase();
         return optionText.includes(searchText);
       });
 
-      $selectOption.select2('destroy');
-
       $selectOption.html(filteredOptions);
-
-      $selectOption.select2({
-        placeholder: "Select a topical steroid",
-        allowClear: true,
-        minimumResultsForSearch: -1,
-      });
     }
-
-    $selectOption.find("optgroup").show();
 
     $selectOption.trigger("change");
   });
 
-  calculateRemainingPixels();
-  populateTable();
+  $selectOption.on("change", function () {
+    const selectedOption = $selectOption.find(":selected").text();
+    $selectedItem.val(selectedOption);
+  });
+
+  $selectOption.find("optgroup").show();
+
+  $selectOption.trigger("change");
 });
 
+
+calculateRemainingPixels();
+populateTable();
 
 
 function generatePDF() {
@@ -426,6 +426,13 @@ function generatePDF() {
 }
 
 function generatePDFPrescription() {
+  const form = document.querySelector('dialog form');
+  const isValid = form.checkValidity();
+
+  if (!isValid) {
+    return;
+  }
+
   const name = document.getElementById('name').value;
   const dateOfBirth = document.getElementById('dob').value;
   const hospitalNumber = document.getElementById('hospitalNumber').value;
@@ -435,7 +442,7 @@ function generatePDFPrescription() {
   const soap = document.getElementById('soap').value;
   const faceMoisturiser = document.getElementById('faceMoisturiser').value;
   const bodyMoisturiser = document.getElementById('bodyMoisturiser').value;
-  
+
   fetch('prescription.html')
     .then(response => response.text())
     .then(prescription => {
@@ -533,18 +540,6 @@ function openDialog() {
   // Handle form submission
   dialog.querySelector('form').addEventListener('submit', function (event) {
     event.preventDefault();
-
-    const name = document.getElementById('name').value;
-    const address = document.getElementById('address').value;
-    const dateOfBirth = document.getElementById('dateOfBirth').value;
-    const hospitalNumber = document.getElementById('hospitalNumber').value;
-    const doctorName = document.getElementById('doctorName').value;
-
-    console.log('Doctor Name:', doctorName);
-    console.log('Name:', name);
-    console.log('Address:', address);
-    console.log('Date of Birth:', dateOfBirth);
-    console.log('Hospital Number:', hospitalNumber);
 
     closeDialog();
   });

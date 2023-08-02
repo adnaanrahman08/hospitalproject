@@ -420,3 +420,21 @@ dialog:not([open]) {
 button.generatepdf {
   background-color: #33b249;
 }
+
+select.select2 {
+  width: 100%;
+  padding: 10px; 
+  border-radius: 5px;  
+  border: 1px solid #ccc; 
+  font-size: 16px; 
+  color: #333;
+}
+
+select.select2 option {
+  padding: 10px; 
+}
+
+select.select2 option:hover {
+  background-color: #f2f2f2; 
+}
+
