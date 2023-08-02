@@ -357,7 +357,6 @@ function generatePDF() {
   const weekendValue = document.getElementById('weekend').value;
   const faceValue = document.getElementById('faceid').textContent;
   const trunkValue = document.getElementById('trunkid').textContent;
-  const selectedSteroidText = document.getElementById('select-option').selectedOptions[0].textContent;
   const today = new Date();
   const dateValue = today.toLocaleDateString();
 
@@ -400,7 +399,6 @@ function generatePDF() {
         .replace(/{weekendValue}/g, weekendValue)
         .replace(/{faceValue}/g, faceValue)
         .replace(/{trunkValue}/g, trunkValue)
-        .replace(/{selectedSteroidText}/g, selectedSteroidText)
         .replace(/{tableRows}/g, tableContent)
         .replace(/{dateValue}/g, dateValue)
         .replace(/{name}/g, name)
@@ -542,7 +540,6 @@ function openDialog() {
   dialog.querySelector('form').addEventListener('submit', function (event) {
     event.preventDefault();
 
-    closeDialog();
   });
 
   // form validity
