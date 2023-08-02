@@ -416,12 +416,11 @@ function generatePDFPrescription() {
   const faceMoisturiser = document.getElementById('faceMoisturiser').value;
   const bodyMoisturiser = document.getElementById('bodyMoisturiser').value;
   const doctorName = document.getElementById('doctorName').value;
-  
+
   fetch('prescription.html')
     .then(response => response.text())
     .then(prescription => {
       const htmlContent = prescription
-        .replace(/{tableRows}/g, tableContent)
         .replace(/{dailyValue}/g, dailyValue)
         .replace(/{alternateValue}/g, alternateValue)
         .replace(/{weekendValue}/g, weekendValue)
