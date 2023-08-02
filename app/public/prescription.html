@@ -15,25 +15,25 @@
     </div>
 
     <div class="table-wrapper">
-    <table id="patient-details">
-        <tr>
-            <td><strong>Patient Name:</strong></td>
-            <td>{name}</td>
-        </tr>
-        <tr>
-            <td><strong>Address:</strong></td>
-            <td>{address}</td>
-        </tr>
-        <tr>
-            <td><strong>Date of Birth:</strong></td>
-            <td>{dateOfBirth}</td>
-        </tr>
-        <tr>
-            <td><strong>Hospital Number:</strong></td>
-            <td>{hospitalNumber}</td>
-        </tr>
+        <table id="patient-details">
+            <tr>
+                <td><strong>Patient Name:</strong></td>
+                <td>{name}</td>
+            </tr>
+            <tr>
+                <td><strong>Address:</strong></td>
+                <td>{address}</td>
+            </tr>
+            <tr>
+                <td><strong>Date of Birth:</strong></td>
+                <td>{dateOfBirth}</td>
+            </tr>
+            <tr>
+                <td><strong>Hospital Number:</strong></td>
+                <td>{hospitalNumber}</td>
+            </tr>
 
-    </table>
+        </table>
     </div>
 
     <h2 class="">Date: {date}</h2>
@@ -89,10 +89,15 @@
                 <td>Twice weekly</td>
                 <td>For {weeklyAmount} weeks then</td>
             </tr>
-            <tr>
-                <td><strong>Dispensing Note:</strong> Based on affected body surface area, duration and frequency of prescription patient will require {1x30} g tube of {bodyMoisturiser}</td>
-            </tr>
+        </tbody>
+    </table>
 
+    <div class="dispensing-note">
+        <strong>Dispensing Note:</strong> Based on affected body surface area, duration, and frequency of the
+        prescription, the patient will require {1x30} g tube of {bodyMoisturiser}
+    </div>
+    <table id="medication-details">
+        <tbody>
             <tr>
                 <td colspan="5" class="soap">Trunk and Limbs</td>
             </tr>
@@ -113,13 +118,13 @@
                 <td>Twice weekly</td>
                 <td>For {weeklyAmount} weeks then</td>
             </tr>
-            <tfoot>
-                <tr>
-                    <td><strong>Dispensing Note:</strong> Based on affected body surface area, duration and frequency of prescription patient will require {1x30} g tube of {bodyMoisturiser}</td>
-                </tr>
-            </tfoot>
 
         </tbody>
     </table>
+    <div class="dispensing-note">
+        <strong>Dispensing Note:</strong> Based on affected body surface area, duration, and frequency of the
+        prescription, the patient will require {1x30} g tube of {bodyMoisturiser}
+    </div>
 </body>
+
 </html>

@@ -38,7 +38,7 @@ h3 {
 table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
 }
 
 table th,
@@ -62,7 +62,7 @@ table td {
 #medication-details td,
 #medication-details th {
   border: 1px solid black;
-  padding: 10px;
+  padding: 1px;
 }
 
 #medication-details th {
