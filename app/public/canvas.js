@@ -415,10 +415,12 @@ function generatePDF() {
         .replace(/{bodySteroid}/g, bodySteroid);
 
 
-      html2pdf()
-        .set({ html2canvas: { scale: 2 } })
-        .from(htmlContent)
-        .save('topicalsteroid-calculator.pdf');
+        const options = {
+          margin: 20,
+          filename: 'topical-steroid calculator.pdf',
+      };
+
+      html2pdf().from(htmlContent).set(options).save();
     })
     .catch(error => {
       console.error('Failed to load treatmentplan.html:', error);
@@ -457,11 +459,12 @@ function generatePDFPrescription() {
         .replace(/{faceMoisturiser}/g, faceMoisturiser)
         .replace(/{bodyMoisturiser}/g, bodyMoisturiser);
 
+        const options = {
+            margin: 20,
+            filename: 'prescription.pdf',
+        };
 
-      html2pdf()
-        .set({ html2canvas: { scale: 2 } })
-        .from(htmlContent)
-        .save('prescription.pdf');
+        html2pdf().from(htmlContent).set(options).save();
     })
     .catch(error => {
       console.error('Failed to load prescription.html:', error);
@@ -525,15 +528,13 @@ function openDialog() {
 
   dialog.showModal();
 
-  const form = dialog.querySelector('form');
-  const generatePdfButton = dialog.querySelector('#generatePdfButton');
-  const nextButton = dialog.querySelector('#nextButton');
+  const generatePdfButton = dialog.querySelector('#step2 button[class="generatepdf"]');
   const doctorName = dialog.querySelector('#doctorName');
   const doctorNameError = dialog.querySelector('#doctorNameError');
 
   doctorName.addEventListener('input', function () {
     const isEmpty = doctorName.value.trim() === "";
-    nextButton.disabled = isEmpty;
+    generatePdfButton.disabled = !form.checkValidity();
     doctorNameError.style.display = isEmpty ? "inline" : "none";
   });
 
@@ -545,6 +546,7 @@ function openDialog() {
   });
 
   // form validity
+  const form = dialog.querySelector('form');
   form.addEventListener('input', function () {
     generatePdfButton.disabled = !form.checkValidity();
   });
