@@ -12,6 +12,8 @@
     <div class="report-header">
         <img src="./models/tallaght-hospital-logo.png" alt="Hospital Logo">
         <h1>TOPICAL THERAPY PRESCRIPTION</h1>
+        <h2 class="">Date: {dateValue}</h2>
+
     </div>
 
     <div class="table-wrapper">
@@ -36,7 +38,12 @@
         </table>
     </div>
 
-    <h2 class="">Date: {dateValue}</h2>
+
+    <h2>Totals</h2>
+    <div class="total-rows">
+        <p>Total (g) TCS Required (Face & Neck): {faceid}</p>
+        <p>Total (g) TCS Required (Trunk & Limbs): {trunkid}</p>
+    </div>
 
     <table id="medication-details">
         <thead>

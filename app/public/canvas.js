@@ -403,9 +403,6 @@ function generatePDFPrescription() {
     return;
   }
 
-  const dailyValue = document.getElementById('daily').value;
-  const alternateValue = document.getElementById('alternate').value;
-  const weekendValue = document.getElementById('weekend').value;
   const name = document.getElementById('name').value;
   const dateOfBirth = document.getElementById('dob').value;
   const hospitalNumber = document.getElementById('hospitalNumber').value;
@@ -416,14 +413,14 @@ function generatePDFPrescription() {
   const faceMoisturiser = document.getElementById('faceMoisturiser').value;
   const bodyMoisturiser = document.getElementById('bodyMoisturiser').value;
   const doctorName = document.getElementById('doctorName').value;
+  const trunkValue = trunkTotalSpan.textContent;
+  const faceValue = faceTotalSpan.textContent;
+
 
   fetch('prescription.html')
     .then(response => response.text())
     .then(prescription => {
       const htmlContent = prescription
-        .replace(/{dailyValue}/g, dailyValue)
-        .replace(/{alternateValue}/g, alternateValue)
-        .replace(/{weekendValue}/g, weekendValue)
         .replace(/{name}/g, name)
         .replace(/{address}/g, address)
         .replace(/{dateOfBirth}/g, dateOfBirth)
@@ -432,10 +429,12 @@ function generatePDFPrescription() {
         .replace(/{doctorName}/g, doctorName)
         .replace(/{soap}/g, soap)
         .replace(/{faceMoisturiser}/g, faceMoisturiser)
+        .replace(/{trunkid}/g, trunkValue)
+        .replace(/{faceid}/g, faceValue)
         .replace(/{bodyMoisturiser}/g, bodyMoisturiser);
 
       const options = {
-        margin: 20,
+        margin: 10,
         filename: 'prescription.pdf',
       };
 
