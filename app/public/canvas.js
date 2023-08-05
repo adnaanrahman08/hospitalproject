@@ -382,10 +382,11 @@ function generatePDF() {
         .replace(/{faceSteroid}/g, faceSteroid)
         .replace(/{bodySteroid}/g, bodySteroid);
 
+      const generateFileName = () => `${name}-${dateValue}-Skin-Treatment-Plan.pdf`;
 
       const options = {
         margin: 20,
-        filename: 'topical-steroid calculator.pdf',
+        filename: generateFileName(),
       };
 
       html2pdf().from(htmlContent).set(options).save();
@@ -433,9 +434,11 @@ function generatePDFPrescription() {
         .replace(/{faceid}/g, faceValue)
         .replace(/{bodyMoisturiser}/g, bodyMoisturiser);
 
+      const generateFileName = () => `${name}-${dateValue}-Prescription.pdf`;
+
       const options = {
-        margin: 10,
-        filename: 'prescription.pdf',
+        margin: 5,
+        filename: generateFileName(),
       };
 
       html2pdf().from(htmlContent).set(options).save();
@@ -460,7 +463,12 @@ function openDialog() {
     </div>
 
     <div id="step2" class="hide">
-        <h2>Patient Details</h2>
+    <div class="close-icon" onclick="closeDialog()">&#10006;</div>
+      <h2>Patient Details</h2>
+
+      <!-- Patient Information Section -->
+      <div class="form-section">
+        <h3>Patient Information</h3>
         <label for="name">Patient Name:</label>
         <input type="text" id="name" required>
 
@@ -468,11 +476,15 @@ function openDialog() {
         <input type="date" id="dob" required>
 
         <label for="address">Address:</label>
-        <input type="text" id="address" required
-        
+        <input type="text" id="address" required>
+
         <label for="hospitalNumber">Hospital Number:</label>
         <input type="text" id="hospitalNumber" required>
+      </div>
 
+      <!-- Diagnosis and Treatment Section -->
+      <div class="form-section">
+        <h3>Diagnosis and Treatment</h3>
         <label for="diagnosis">Diagnosis:</label>
         <input type="text" id="diagnosis" required>
 
@@ -490,11 +502,23 @@ function openDialog() {
 
         <label for="bodySteroid">Body Topical Steroid:</label>
         <input type="text" id="bodySteroid" required>
+      </div>
 
-        <button class="generatepdf" onclick="generatePDF()">Generate Skin Treatment Plan</button>
-        <button class="generatepdf" onclick="generatePDFPrescription()">Generate Prescription</button>
-        <button type="button" id="backButton" onclick="prevStep()">Back</button>
-        <button type="button" onclick="closeDialog()">Cancel</button>
+      <!-- Generate PDF Section -->
+      <div class="form-section">
+        <h3>Generate PDF</h3>
+        <label for="generateOption">Generate:</label>
+        <select id="generateOption" required>
+          <option value="" disabled selected>Select an option</option>
+          <option value="skinTreatmentPlan">Skin Treatment Plan</option>
+          <option value="prescription">Prescription</option>
+        </select>
+
+        <button class="generate" onclick="generatePDFBasedOnSelection()">Generate</button>
+      </div>
+
+      <button type="button" id="backButton" onclick="prevStep()">Back</button>
+      <button type="button" onclick="closeDialog()">Cancel</button>
     </div>
   </form>`;
 
@@ -515,7 +539,7 @@ function openDialog() {
   // Handle form submission
   dialog.querySelector('form').addEventListener('submit', function (event) {
     event.preventDefault();
-
+    generatePDFBasedOnSelection();
   });
 
   // form validity
@@ -523,6 +547,16 @@ function openDialog() {
   form.addEventListener('input', function () {
     generatePdfButton.disabled = !form.checkValidity();
   });
+}
+
+function generatePDFBasedOnSelection() {
+  const selectedOption = document.getElementById('generateOption').value;
+
+  if (selectedOption === "skinTreatmentPlan") {
+    generatePDF();
+  } else if (selectedOption === "prescription") {
+    generatePDFPrescription();
+  }
 }
 
 function nextStep() {
