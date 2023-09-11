@@ -360,11 +360,11 @@ function generatePDF() {
   const hospitalNumber = document.getElementById('hospitalNumber').value;
   const doctorName = document.getElementById('doctorName').value;
   const diagnosis = document.getElementById('diagnosis').value;
-  const soap = document.getElementById('soap').value;
-  const faceMoisturiser = document.getElementById('faceMoisturiser').value;
-  const bodyMoisturiser = document.getElementById('bodyMoisturiser').value;
-  const faceSteroid = document.getElementById('faceSteroid').value;
-  const bodySteroid = document.getElementById('bodySteroid').value;
+  const soaps = document.getElementById('soaps').value;
+  // const faceMoisturiser = document.getElementById('faceMoisturiser').value;
+  const bodyMoisturiser = document.getElementById('bodyMoisturizer').value;
+  const faceSteroid = document.getElementById('faceSteroidInput').value;
+  const bodySteroid = document.getElementById('bodySteroidInput').value;
 
   fetch('treatmentplan.html')
     .then(response => response.text())
@@ -375,12 +375,12 @@ function generatePDF() {
         .replace(/{dateOfBirth}/g, dateOfBirth)
         .replace(/{hospitalNumber}/g, hospitalNumber)
         .replace(/{diagnosis}/g, diagnosis)
-        .replace(/{soap}/g, soap)
-        .replace(/{faceMoisturiser}/g, faceMoisturiser)
-        .replace(/{bodyMoisturiser}/g, bodyMoisturiser)
+        .replace(/{soaps}/g, soaps)
+        // .replace(/{faceMoisturiser}/g, faceMoisturiser)
+        .replace(/{bodyMoisturizer}/g, bodyMoisturiser)
         .replace(/{doctorName}/g, doctorName)
-        .replace(/{faceSteroid}/g, faceSteroid)
-        .replace(/{bodySteroid}/g, bodySteroid);
+        .replace(/{faceSteroidInput}/g, faceSteroid)
+        .replace(/{bodySteroidInput}/g, bodySteroid);
 
       const generateFileName = () => `${name}-${dateValue}-Skin-Treatment-Plan.pdf`;
 
@@ -410,9 +410,9 @@ function generatePDFPrescription() {
   const address = document.getElementById('address').value;
   const today = new Date();
   const dateValue = today.toLocaleDateString();
-  const soap = document.getElementById('soap').value;
-  const faceMoisturiser = document.getElementById('faceMoisturiser').value;
-  const bodyMoisturiser = document.getElementById('bodyMoisturiser').value;
+  const soaps = document.getElementById('soaps').value;
+  // const faceMoisturiser = document.getElementById('faceMoisturiser').value;
+  const bodyMoisturiser = document.getElementById('bodyMoisturizer').value;
   const doctorName = document.getElementById('doctorName').value;
   const trunkValue = trunkTotalSpan.textContent;
   const faceValue = faceTotalSpan.textContent;
@@ -428,11 +428,11 @@ function generatePDFPrescription() {
         .replace(/{hospitalNumber}/g, hospitalNumber)
         .replace(/{dateValue}/g, dateValue)
         .replace(/{doctorName}/g, doctorName)
-        .replace(/{soap}/g, soap)
-        .replace(/{faceMoisturiser}/g, faceMoisturiser)
+        .replace(/{soaps}/g, soaps)
+        // .replace(/{faceMoisturiser}/g, faceMoisturiser)
         .replace(/{trunkid}/g, trunkValue)
         .replace(/{faceid}/g, faceValue)
-        .replace(/{bodyMoisturiser}/g, bodyMoisturiser);
+        .replace(/{bodyMoisturizer}/g, bodyMoisturiser);
 
       const generateFileName = () => `${name}-${dateValue}-Prescription.pdf`;
 
