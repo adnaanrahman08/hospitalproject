@@ -201,7 +201,6 @@ function calculateRemainingPixels() {
 const genderRadios = document.getElementsByName("gender");
 genderRadios.forEach((radio) => {
   radio.addEventListener("change", function () {
-    selectedGender = document.querySelector('input[name="gender"]:checked').value;
     calculateOriginalTotalPixels();
     calculateTotalPixels();
     calculateRemainingPixels();
@@ -360,11 +359,10 @@ function generatePDF() {
   const hospitalNumber = document.getElementById('hospitalNumber').value;
   const doctorName = document.getElementById('doctorName').value;
   const diagnosis = document.getElementById('diagnosis').value;
-  const soaps = document.getElementById('soaps').value;
-  // const faceMoisturiser = document.getElementById('faceMoisturiser').value;
-  const bodyMoisturiser = document.getElementById('bodyMoisturizer').value;
-  const faceSteroid = document.getElementById('faceSteroidInput').value;
-  const bodySteroid = document.getElementById('bodySteroidInput').value;
+  const soaps = document.getElementById('soap').value;
+  const bodyMoisturiser = document.getElementById('bodyMoisturizers').value;
+  const faceSteroidInput = document.getElementById('faceSteroidInput').value;
+  const bodySteroidInput = document.getElementById('bodySteroidInput').value;
 
   fetch('treatmentplan.html')
     .then(response => response.text())
@@ -376,8 +374,7 @@ function generatePDF() {
         .replace(/{hospitalNumber}/g, hospitalNumber)
         .replace(/{diagnosis}/g, diagnosis)
         .replace(/{soaps}/g, soaps)
-        // .replace(/{faceMoisturiser}/g, faceMoisturiser)
-        .replace(/{bodyMoisturizer}/g, bodyMoisturizer)
+        .replace(/{bodyMoisturiser}/g, bodyMoisturiser)
         .replace(/{doctorName}/g, doctorName)
         .replace(/{faceSteroidInput}/g, faceSteroidInput)
         .replace(/{bodySteroidInput}/g, bodySteroidInput)
@@ -411,7 +408,6 @@ function generatePDFPrescription() {
   const today = new Date();
   const dateValue = today.toLocaleDateString();
   const soaps = document.getElementById('soap').value;
-  const weekInput = document.getElementById('weeks').value;
   const bodyMoisturiser = document.getElementById('bodyMoisturizers').value;
   const faceSteroidInput = document.getElementById('faceSteroidInput').value;
   const bodySteroidInput = document.getElementById('bodySteroidInput').value;
