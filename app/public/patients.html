@@ -60,99 +60,26 @@
       <div class="input-row">
         <label for="daily">Daily Application:</label>
         <input type="number" id="daily" min="0" max="7" step="1" value="0">
+        <label for="daily">&nbspWeeks:</label>
+        <input type="number" id="weeks" min="0" max="12" step="1" value="0">
       </div>
       <div class="input-row">
         <label for="alternate">Alternate Day Application:</label>
         <input type="number" id="alternate" min="0" max="7" step="1" value="0">
+        <label for="daily">&nbspWeeks:</label>
+        <input type="number" id="weeks" min="0" max="12" step="1" value="0">
       </div>
       <div class="input-row">
-        <label for="weekend">Weekend Therapy (Sat & Sun):</label>
+        <label for="weekend">Weekend Therapy:</label>
         <input type="number" id="weekend" min="0" max="2" step="1" value="0">
+        <label for="daily">&nbspWeeks:</label>
+        <input type="number" id="weeks" min="0" max="12" step="1" value="0">
       </div>
 
       <h2>Totals</h2>
       <div class="total-rows">
         <p>Total (g) TCS Required (Face & Neck): <span id="faceid">0</span></p>
         <p>Total (g) TCS Required (Trunk & Limbs): <span id="trunkid">0</span></p>
-      </div>
-
-      <h2>Topical Steroids</h2>
-      <div class="dropdown">
-        <div class="select-wrapper">
-          <select id="select-option" class="select2" multiple>
-            <optgroup label="Mild">
-              <option value="Dermacort®">Dermacort® - Hydrocortisone 0.1%</option>
-              <option value="Dioderm®">Dioderm® - Hydrocortisone 0.1%</option>
-              <option value="Hc45®">Hc45® - Hydrocortisone 1%</option>
-              <option value="Hydrocortisone 0.5%">Hydrocortisone 0.5% - Hydrocortisone 0.5%</option>
-              <option value="Hydrocortisone 1%">Hydrocortisone 1% - Hydrocortisone 1%</option>
-              <option value="Hydrocortisone 2.5%">Hydrocortisone 2.5% - Hydrocortisone 2.5%</option>
-              <option value="Mildison Lipocream®">Mildison Lipocream® - Hydrocortisone 1%</option>
-              <option value="Synalar 1 in 10®">Synalar 1 in 10® - Fluocinolone acetonide 0.0025%</option>
-              <option value="Zenoxone® cream">Zenoxone® cream - Hydrocortisone 1%</option>
-              <option value="Canesten HC®">(AntiFungal) Canesten HC® - Hydrocortisone 1% - Clotrimazole</option>
-              <option value="Daktacort®">(AntiFungal) Daktacort® - Hydrocortisone 1% - Miconazole nitrate</option>
-              <option value="Fucidin H®">(Antibacterial) Fucidin H® - Hydrocortisone 1% - Fusidic acid</option>
-              <option value="Nystaform HC®">(Antibacterial, Antifungal) Nystaform HC® - Hydrocortisone 0.5% -
-                Chlorhexidine, Nystatin</option>
-              <option value="Terra-Cortril®">(Antibacterial) Terra-Cortril® - Hydrocortisone 1% - Oxytetracycline
-              </option>
-              <option value="Timodine®">(Antibacterial, Antifungal) Timodine® - Hydrocortisone 0.5% - Benzalkonium
-                chloride, Nystatin</option>
-            </optgroup>
-            <optgroup label="Moderate">
-              <option value="Alphaderm®">Alphaderm® - Hydrocortisone 1%, urea 10%</option>
-              <option value="Betnovate-RD®">Betnovate-RD® - Betamethasone valerate 0.025%</option>
-              <option value="Clobavate®">Clobavate® - Clobetasone butyrate 0.05%</option>
-              <option value="Eumovate®">Eumovate® - Clobetasone butyrate 0.05%</option>
-              <option value="Haelan®">Haelan® - Fludroxycortide 0.0125%</option>
-              <option value="Modrasone®">Modrasone® - Alclometasone dipropionate 0.05%</option>
-              <option value="Synalar 1 in 4®">Synalar 1 in 4® - Fluocinolone acetonide 0.00625%</option>
-              <option value="Trimovate®">(Antibacterial, Antifungal) Trimovate® - Clobetasone butyrate 0.05% -
-                Oxytetracycline, Nystatin</option>
-
-            </optgroup>
-            <optgroup label="Potent">
-              <option value="Ultralanum Plain®">Ultralanum Plain® - Fluocortolone hexanoate 0.25%</option>
-              <option value="Betacap®">Betacap® - Betamethasone valerate 0.1%</option>
-              <option value="Beclometasone dipropionate">Beclometasone dipropionate - Beclometasone dipropionate 0.025%
-              </option>
-              <option value="Betnovate®">Betnovate® - Betamethasone valerate 0.1%</option>
-              <option value="Bettamousse®">Bettamousse® - Contains 1.2 mg betamethasone valerate 0.1% </option>
-              <option value="Cutivate® ointment">Cutivate® ointment - Fluticasone propionate 0.005%</option>
-              <option value="Cutivate® cream">Cutivate® cream - Fluticasone propionate 0.05%</option>
-              <option value="Diprosalic®">Diprosalic® - Betamethasone dipropionate 0.05%</option>
-              <option value="Diprosone®">Diprosone® - Betamethasone dipropionate 0.05%</option>
-              <option value="Elocon®">Elocon® - Mometasone furoate 0.1%</option>
-              <option value="Locoid®">Locoid® - Hydrocortisone butyrate 0.1%</option>
-              <option value="Metosyn®">Metosyn® - Fluocinonide 0.05%</option>
-              <option value="Nerisone®">Nerisone® - Diflucortolone valerate 0.1%</option>
-              <option value="Synalar®">Synalar® - Fluocinolone acetonide 0.025%</option>
-              <option value="Aureocort®">(Antibacterial) Aureocort® - Triamcinolone acetonide 0.1% - Chlortetracycline,
-                hydrochloride</option>
-              <option value="Betamethasone and clioquinol">(Antibacterial) Betamethasone and clioquinol - Betamethasone
-                valerate 0.1% - Clioquinol</option>
-              <option value="Betamethasone and neomycin">(Antibacterial) Betamethasone and neomycin - Betamethasone
-                valerate 0.1% - Neomycin sulphate</option>
-              <option value="Fucibet®">(Antibacterial) Fucibet® - Betamethasone valerate 0.1% - Fucidic acid</option>
-              <option value="Lotriderm®">(Antifungal) Lotriderm® - Betamethasone dipropionate 0.064% - Clotrimazole
-              </option>
-              <option value="Synalar C®">(Antibacterial) Synalar C® - Fluocinolone acetonide 0.025% - Clioquinol
-              </option>
-              <option value="Synalar N®">(Antifungal) Synalar N® - Fluocinolone acetonide 0.025% - Neomycin sulphate
-              </option>
-            </optgroup>
-            <optgroup label="Very Potent">
-              <option value="Clarelux®">Clarelux® - Clobetasol propionate 0.05%</option>
-              <option value="Dermovate®">Dermovate® - Clobetasol propionate 0.05%</option>
-              <option value="Etrivex®">Etrivex® - Clobetasol propionate 0.05%</option>
-              <option value="Nerisone Forte®">Nerisone Forte® - Diflucortolone valerate 0.3%</option>
-              <option value="Clobetasol with neomycin and nystatin">(Antibacterial, Antifungal) Clobetasol with neomycin
-                and nystatin - Clobetasol propionate 0.05% - Neomycin, Nystatin</option>
-            </optgroup>
-          </select>
-          <i class="fas fa-caret-down"></i>
-        </div>
       </div>
       <button id="add-patient-button" onclick="openDialog()">Add Patient Details</button>
     </section>

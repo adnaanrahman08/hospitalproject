@@ -377,10 +377,10 @@ function generatePDF() {
         .replace(/{diagnosis}/g, diagnosis)
         .replace(/{soaps}/g, soaps)
         // .replace(/{faceMoisturiser}/g, faceMoisturiser)
-        .replace(/{bodyMoisturizer}/g, bodyMoisturiser)
+        .replace(/{bodyMoisturizer}/g, bodyMoisturizer)
         .replace(/{doctorName}/g, doctorName)
-        .replace(/{faceSteroidInput}/g, faceSteroid)
-        .replace(/{bodySteroidInput}/g, bodySteroid);
+        .replace(/{faceSteroidInput}/g, faceSteroidInput)
+        .replace(/{bodySteroidInput}/g, bodySteroidInput)
 
       const generateFileName = () => `${name}-${dateValue}-Skin-Treatment-Plan.pdf`;
 
@@ -410,9 +410,11 @@ function generatePDFPrescription() {
   const address = document.getElementById('address').value;
   const today = new Date();
   const dateValue = today.toLocaleDateString();
-  const soaps = document.getElementById('soaps').value;
-  // const faceMoisturiser = document.getElementById('faceMoisturiser').value;
-  const bodyMoisturiser = document.getElementById('bodyMoisturizer').value;
+  const soaps = document.getElementById('soap').value;
+  const weekInput = document.getElementById('weeks').value;
+  const bodyMoisturiser = document.getElementById('bodyMoisturizers').value;
+  const faceSteroidInput = document.getElementById('faceSteroidInput').value;
+  const bodySteroidInput = document.getElementById('bodySteroidInput').value;
   const doctorName = document.getElementById('doctorName').value;
   const trunkValue = trunkTotalSpan.textContent;
   const faceValue = faceTotalSpan.textContent;
@@ -429,10 +431,11 @@ function generatePDFPrescription() {
         .replace(/{dateValue}/g, dateValue)
         .replace(/{doctorName}/g, doctorName)
         .replace(/{soaps}/g, soaps)
-        // .replace(/{faceMoisturiser}/g, faceMoisturiser)
         .replace(/{trunkid}/g, trunkValue)
         .replace(/{faceid}/g, faceValue)
-        .replace(/{bodyMoisturizer}/g, bodyMoisturiser);
+        .replace(/{bodyMoisturizer}/g, bodyMoisturiser)
+        .replace(/{faceSteroidInput}/g, faceSteroidInput)
+        .replace(/{bodySteroidInput}/g, bodySteroidInput)
 
       const generateFileName = () => `${name}-${dateValue}-Prescription.pdf`;
 
@@ -486,9 +489,9 @@ function openDialog() {
       <div class="form-section">
         <h3>Diagnosis and Treatment</h3>
         <label>Diagnosis:
-        <input list="diagnosis" name="diagnosis" />
+        <input list="diagnosiss" name="diagnosis" id="diagnosis" />
         </label>
-        <datalist id="diagnosis">
+        <datalist id="diagnosiss" >
         <option value="diagnosis1">
         <option value="diagnosis2">
         <option value="diagnosis3">
@@ -497,7 +500,7 @@ function openDialog() {
         </datalist>
 
         <label>Soap Substitute:
-        <input list="soaps" name="soap" />
+        <input list="soaps" name="soap" id="soap" />
         </label>
         <datalist id="soaps">
         <option value="Soap1">
@@ -508,7 +511,7 @@ function openDialog() {
         </datalist>
 
         <label>Body Moisturizer:
-        <input list="bodyMoisturizer" name="body-Moisturizer" />
+        <input list="bodyMoisturizer" name="body-Moisturizer" id="bodyMoisturizers" />
         </label>
         <datalist id="bodyMoisturizer">
         <option value="Moist1">
