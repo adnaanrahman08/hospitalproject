@@ -1,0 +1,126 @@
+body {
+  font-family: "Roboto", sans-serif;
+  background-color: #f5f5f5;
+  width: 754px; 
+  padding: 50px;
+  margin: auto; 
+  box-sizing: border-box;
+}
+.report-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+h1 {
+  color: #333;
+}
+
+h2 {
+  color: #333;
+  margin-bottom: 10px;
+}
+
+h3 {
+  color: #333;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+  border: 2px solid #333; 
+}
+
+table th,
+table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+table th {
+  background-color: #f5f5f5;
+}
+
+table tr:last-child td {
+  border-bottom: none;
+}
+
+#patient-details td:first-child {
+  font-weight: bold;
+  color: #333;
+  width: 20%;
+}
+
+p {
+  margin-bottom: 10px;
+}
+
+.diagnosis {
+  text-align: center;
+}
+
+#washing-bathing-steps td:first-child {
+  font-weight: bold;
+  width: 10%;
+}
+
+#washing-bathing-steps td:nth-child(2) {
+  width: 90%;
+}
+
+#washing-bathing-steps {
+  border: 1px solid #ddd;
+}
+
+#washing-bathing-steps td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+#moisturising-steps td:first-child {
+  font-weight: bold;
+  width: 10%;
+}
+
+#moisturising-steps td:nth-child(2) {
+  width: 90%;
+}
+
+#moisturising-steps {
+  border: 1px solid #ddd;
+}
+
+#moisturising-steps td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+#moisturising-steps ul {
+  padding-left: 20px;
+}
+
+#moisturising-steps li {
+  margin-bottom: 10px;
+}
+
+#moisturiser-table {
+  border: 1px solid #ddd;
+  width: 50%;
+}
+
+#moisturiser-table th, 
+#moisturiser-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+#moisturiser-section {
+  margin-top: 90px;
+}
+
+.topicalsteroids {
+  margin-top: 90px;
+
+}

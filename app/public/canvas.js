@@ -1,528 +1,726 @@
-const canvas = new fabric.Canvas('canvas');
-let polygonCount = 1;
-let startDrawingPolygon = false;
-let canAddPoints = true;
-let ArrayLength;
-let addTexture = false;
-let circleCount = 1;
-let circles = [];
-let pointRadius = 7;
-let annotationMode = false;
-const fillColor = "rgba(46, 240, 56, 0.5)";
-const weightInput = document.getElementById("weightInput");
-const heightInput = document.getElementById("heightInput");
-const areaDisplay = document.getElementById("areaDisplay");
-const shapeTableBody = document.querySelector("#shapeTable tbody");
-const shapeTable = document.getElementById("shapeTable");
+document.addEventListener('scroll', function () {
+  let pixelFromTop = window.scrollY;
 
-function calculateBSA(weight, height) {
-  // Du Bois Body Surface Area formula
-  return 0.007184 * Math.pow(weight, 0.425) * Math.pow(height, 0.725);
-}
-
-function done() {
-  startDrawingPolygon = true;
-  ArrayLength = circleCount;
-  circleCount = 1;
-
-  if (!startDrawingPolygon || circles.length === 0) {
-    alert("Please add points to the body before calculating the BSA.");
-    return;
-  }
-
-  window["polygon" + polygonCount] = new fabric.Polygon(
-    [{ x: 0, y: 0 }, { x: 0.5, y: 0.5 }],
-    {
-      fill: fillColor,
-      PolygonNumber: polygonCount,
-      name: "Polygon",
-      type: 'normal',
-      noofcircles: ArrayLength
-    }
-  );
-  canvas.add(window["polygon" + polygonCount]);
-
-  const points = window["polygon" + polygonCount].get("points");
-  for (const obj of canvas.getObjects()) {
-    if (obj.polygonNo === polygonCount) {
-      if (obj.circleNo === 1) {
-        points[0].x = obj.left - window["polygon" + polygonCount].get("left");
-        points[0].y = obj.top - window["polygon" + polygonCount].get("top");
-      } else if (obj.circleNo === 2) {
-        points[1].x = obj.left - window["polygon" + polygonCount].get("left");
-        points[1].y = obj.top - window["polygon" + polygonCount].get("top");
-      } else {
-        points.push({
-          x: obj.left - window["polygon" + polygonCount].get("left"),
-          y: obj.top - window["polygon" + polygonCount].get("top"),
-        });
-      }
-    }
-  }
-  window["polygon" + polygonCount].set({ points: points });
-
-  canvas.renderAll();
-  polygonCount++;
-
-  // Calculate BSA using Du Bois formula
-  const weight = parseFloat(weightInput.value);
-  const height = parseFloat(heightInput.value);
-  const bsa = calculateBSA(weight, height);
-
-  // Calculate area using Shoelace formula
-  let area = 0;
-  const n = points.length;
-  for (let i = 0; i < n; i++) {
-    const curr = points[i];
-    const next = points[(i + 1) % n];
-    area += curr.x * next.y;
-    area -= curr.y * next.x;
-  }
-  area = Math.abs(area / 2);
-
-  // Adjust area by BSA
-  const adjustedArea = area / bsa;
-
-  // Check if the adjusted area is 0
-  if (adjustedArea === 0) {
-    return;
-  }
-
-  // Display the adjusted area on the screen
-  areaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " m\u00B2";
-
-  // Add the shape area to the table
-  const shapeNumber = polygonCount - 1;
-  const newRow = `
-    <tr>
-      <td>${shapeNumber}</td>
-      <td>${adjustedArea.toFixed(2)}</td>
-      <td><i class="fa-solid fa-xmark"></i></td>
-    </tr>`;
-
-  if (adjustedArea !== 0) {
-    shapeTableBody.innerHTML += newRow;
-  }
-
-  // Show the table if there is data
-  shapeTable.style.display = "table";
-
-  canAddPoints = false;
-}
-
-function Addpolygon() {
-  const weight = weightInput.value;
-  const height = heightInput.value;
-
-  if (weight === "" || height === "") {
-    alert("Please enter weight and height first.");
-    return;
-  }
-
-  startDrawingPolygon = true;
-  canAddPoints = true;
-}
-
-canvas.on('object:moving', function (option) {
-  const startY = option.e.offsetY;
-  const startX = option.e.offsetX;
-  const points = window["polygon" + option.target.polygonNo].get("points");
-
-  for (const obj of canvas.getObjects()) {
-    if (obj.name === "Polygon" && obj.PolygonNumber === option.target.polygonNo) {
-      points[option.target.circleNo - 1].x = startX - obj.left;
-      points[option.target.circleNo - 1].y = startY - obj.top;
-      obj.set({ points });
-
-      // Calculate BSA using Du Bois formula
-      const weight = parseFloat(weightInput.value);
-      const height = parseFloat(heightInput.value);
-      const bsa = calculateBSA(weight, height);
-
-      // Calculate area using Shoelace formula
-      let area = 0;
-      const n = points.length;
-      for (let i = 0; i < n; i++) {
-        const curr = points[i];
-        const next = points[(i + 1) % n];
-        area += curr.x * next.y;
-        area -= curr.y * next.x;
-      }
-      area = Math.abs(area / 2);
-
-      // Adjust area by BSA
-      const adjustedArea = area / bsa;
-
-      // Display the adjusted area on the screen
-      areaDisplay.textContent = "Body Surface Area: " + adjustedArea.toFixed(2) + " m\u00B2";
-
-      // Update the shape area in the table
-      const shapeNumber = obj.PolygonNumber;
-      const shapeRows = shapeTableBody.getElementsByTagName("tr");
-      const shapeRow = shapeRows[shapeNumber - 1];
-      const shapeAreaCell = shapeRow.getElementsByTagName("td")[1];
-      shapeAreaCell.textContent = adjustedArea.toFixed(2);
-    }
-
-    if (obj.name === "draggableCircle") {
-      canvas.bringForward(obj);
-    }
-  }
-
-  canvas.renderAll();
-});
-
-// Function that checks if a point is inside the body shape
-function isPointInsideBody(x, y) {
-  const img = document.getElementById("shapeImage");
-  const canvas = document.createElement("canvas");
-  const context = canvas.getContext("2d");
-
-  canvas.width = img.width;
-  canvas.height = img.height;
-
-  context.drawImage(img, 0, 0, img.width, img.height);
-
-  const imgPosition = img.getBoundingClientRect();
-  const xInsideImage = x - imgPosition.left;
-  const yInsideImage = y - imgPosition.top;
-
-  const pixelData = context.getImageData(xInsideImage, yInsideImage, 1, 1).data;
-  const [red, green, blue, alpha] = pixelData;
-
-  if (!(red === 0 && green === 0 && blue === 0 && alpha === 0)) {
-    return true;
+  let header = document.querySelector('header');
+  if (pixelFromTop > 50) {
+    header.classList.add('hidden');
   } else {
-    console.log(`Background Color: rgba(${red}, ${green}, ${blue}, ${alpha})`);
-    return false;
-  }
-}
-
-canvas.on('mouse:down', function (option) {
-  const weight = weightInput.value;
-  const height = heightInput.value;
-
-  if (weight === "" || height === "") {
-    alert("Please enter weight and height first.");
-    return;
-  }
-
-  if (!canAddPoints) {
-    return;
-  }
-
-  if (typeof option.target !== "undefined") {
-    return;
-  } else {
-    const x = option.e.clientX;
-    const y = option.e.clientY;
-
-    if (isPointInsideBody(x, y)) {
-      console.log("Inside the path");
-    } else {
-      console.log("Outside the path");
-      return;
-    }
-
-    if (addTexture) {
-      console.log(option);
-    }
-
-    if (startDrawingPolygon) {
-      const circle = new fabric.Circle({
-        left: canvas.getPointer(option.e).x,
-        top: canvas.getPointer(option.e).y,
-        radius: pointRadius,
-        hasBorders: false,
-        hasControls: false,
-        polygonNo: polygonCount,
-        name: "draggableCircle",
-        circleNo: circleCount,
-        fill: "rgba(0, 0, 0, 0.5)",
-        hasRotatingPoint: false,
-        originX: 'center',
-        originY: 'center'
-      });
-      canvas.add(circle);
-      circles.push(circle);
-      canvas.bringToFront(circle);
-      circleCount++;
-      canvas.renderAll();
-    }
+    header.classList.remove('hidden');
   }
 });
 
-// prevents user from opening right click browser menu while undoing point
-canvas.upperCanvasEl.oncontextmenu = function (e) {
-  e.preventDefault();
+window.addEventListener("scroll", function () {
+  let footer = document.getElementById("footer");
+  let scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+  let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight || 0;
+  let windowHeight = window.innerHeight || document.documentElement.clientHeight || document.body.clientHeight || 0;
+
+  if (scrollPosition >= scrollHeight - windowHeight - 50) {
+    footer.classList.remove('hidden2');
+  } else {
+    footer.classList.add('hidden2');
+  }
+});
+
+let bodyImage;
+let mask;
+let headImage;
+let mask2;
+let brushColor = "#FFC867";
+let brushSize = 50;
+
+let bodyParts = [
+  { name: 'Face & Neck', color: [254, 138, 141], pixelsLeft: 0, originalTotalPixels: 0, originalColorPixels: 0, targetColorPixels: 0 },
+  { name: 'Trunk', color: [238, 238, 238], pixelsLeft: 0, originalTotalPixels: 0, originalColorPixels: 0, targetColorPixels: 0 },
+];
+
+window.onload = function () {
+  document.getElementById("color-picker").value = brushColor;
 };
-
-canvas.on('mouse:up', function (option) {
-  if (option.e.button === 2 && startDrawingPolygon && circles.length > 0) {
-    const circle = circles.pop();
-    canvas.remove(circle);
-    circleCount--;
-    canvas.renderAll();
-  }
-});
-
-
-document.getElementById("addPolygonBtn").addEventListener("click", function () {
-  Addpolygon();
-});
-
-document.getElementById("createPolygonBtn").addEventListener("click", function () {
-  done();
-
-});
-
-document.getElementById("clearPolygonBtn").addEventListener("click", function () {
-  clearPolygons();
-});
-
-const pointSizeSlider = document.getElementById("pointSizeSlider");
-const pointSizeDisplay = document.getElementById("pointSizeDisplay");
-
-pointSizeSlider.addEventListener("input", function () {
-  pointRadius = pointSizeSlider.value;
-  pointSizeDisplay.textContent = pointSizeSlider.value;
-
-  let activeObject = canvas.getActiveObject();
-  if (activeObject && activeObject.name === 'draggableCircle') {
-    activeObject.set('radius', pointRadius);
-    activeObject.scaleToWidth(pointRadius * 2);
-    activeObject.scaleToHeight(pointRadius * 2);
-
-    canvas.renderAll();
-  }
-});
-
-// Function to remove all polygons from the canvas
-function clearPolygons() {
-  const objects = canvas.getObjects().filter(obj => obj.name === "Polygon" || obj.name === "draggableCircle");
-  canvas.remove(...objects);
-  polygonCount = 1;
-  circleCount = 1;
-
-  // Clear area display
-  areaDisplay.textContent = "";
-  circles = [];
-
-  // Clear the shape table
-  shapeTableBody.innerHTML = "";
-
-  // Hide the table if there is no data
-  shapeTable.style.display = "none";
+function preload() {
+  headImage = loadImage("./models/human-head.png");
+  bodyImage = loadImage("./models/human-body.png");
 }
 
-// Add event listener to table body for remove icon click
-shapeTableBody.addEventListener("click", function (event) {
-  const target = event.target;
-  if (target.classList.contains("fa-xmark")) {
-    // Remove the row from the table
-    const row = target.parentNode.parentNode;
-    const shapeNumber = row.getElementsByTagName("td")[0].textContent;
-    const shapeToRemove = window["polygon" + shapeNumber];
-    if (shapeToRemove) {
-      // Remove the shape and its associated circle points
-      const shapeCircles = canvas.getObjects().filter(obj => obj.polygonNo === Number(shapeNumber) && obj.name === "draggableCircle");
-      canvas.remove(shapeToRemove, ...shapeCircles);
-    }
-    shapeTableBody.removeChild(row);
+function setup() {
+  createCanvas(windowWidth, windowHeight);
+  background("#D1E1FF");
+  image(headImage, 0, 0, 200, 200); // head
+  image(bodyImage, 220, 0, 300, 700); // body
+  mask2 = createGraphics(width, height);
 
-    // Update the shape numbers in the table
-    const remainingRows = shapeTableBody.getElementsByTagName("tr");
-    for (let i = 0; i < remainingRows.length; i++) {
-      const shapeNumberCell = remainingRows[i].getElementsByTagName("td")[0];
-      shapeNumberCell.textContent = i + 1;
-    }
+  mask2.image(headImage, 0, 0, 200, 200); // head mask
+  mask = createGraphics(width, height);
+  mask.image(bodyImage, 220, 0, 300, 700); // body mask
+  calculateOriginalTotalPixels();
+  calculateTotalPixels();
+}
 
-    // Check if the removed row was the last one
-    if (remainingRows.length === 0) {
-      // Reset the table
-      clearPolygons();
+function calculateOriginalTotalPixels() {
+  const selectedGender = document.querySelector('input[name="gender"]:checked').value;
+  let formulaValue = 0;
+
+  if (selectedGender === "male") {
+    formulaValue = 0.5 * 82.98;
+  } else if (selectedGender === "female") {
+    formulaValue = 0.5 * 63.91;
+  }
+
+  // Define the target colors for each body part
+  const faceAndNeckColor = [254, 138, 141];
+  const trunkColor = [238, 238, 238];
+
+  // Calculate target color pixels for each body part
+  const faceAndNeckColorPixels = countPixelsByColor(faceAndNeckColor);
+  const trunkColorPixels = countPixelsByColor(trunkColor);
+
+  for (const bodyPart of bodyParts) {
+    if (bodyPart.name === "Face & Neck") {
+      bodyPart.originalTotalPixels = (formulaValue * 0.09).toFixed(2);
+      bodyPart.originalColorPixels = faceAndNeckColorPixels;
+    } else if (bodyPart.name === "Trunk") {
+      bodyPart.originalTotalPixels = (formulaValue * 0.91).toFixed(2);
+      bodyPart.originalColorPixels = trunkColorPixels;
     }
   }
+}
+
+function countPixelsByColor(targetColor) {
+  const tolerance = 10;
+  loadPixels();
+  let count = 0;
+
+  for (let i = 0; i < pixels.length; i += 4) {
+    let pixelR = pixels[i];
+    let pixelG = pixels[i + 1];
+    let pixelB = pixels[i + 2];
+
+    if (
+      Math.abs(pixelR - targetColor[0]) <= tolerance &&
+      Math.abs(pixelG - targetColor[1]) <= tolerance &&
+      Math.abs(pixelB - targetColor[2]) <= tolerance
+    ) {
+      count++;
+    }
+  }
+
+  return count;
+}
+
+function calculateTotalPixels() {
+  for (const bodyPart of bodyParts) {
+    const targetColor = bodyPart.color;
+    const targetColorPixels = countPixelsByColor(targetColor);
+
+    bodyPart.targetColorPixels = targetColorPixels;
+
+    bodyPart.pixelsLeft = (bodyPart.originalTotalPixels * (bodyPart.targetColorPixels / bodyPart.originalColorPixels)).toFixed(2);
+    console.log(`Pixels left for ${bodyPart.name}: ${bodyPart.pixelsLeft}`);
+  }
+}
+
+function draw() {
+  if (mouseIsPressed) {
+    marker();
+  }
+}
+
+function marker() {
+  loadPixels();
+  mask.loadPixels();
+  mask2.loadPixels();
+  for (let i = 0; i < pixels.length; i += 4) {
+    pixels[i + 3] = mask.pixels[i] || mask2.pixels[i];
+  }
+  updatePixels();
+  fill(brushColor);
+  noStroke();
+
+  let radius = brushSize / 2;
+  circle(mouseX, mouseY, radius);
+}
+
+// Clear the canvas
+function clearCanvas() {
+  background("#D1E1FF");
+  image(headImage, 0, 0, 200, 200); // head
+  image(bodyImage, 220, 0, 300, 700); // body
+
+  loadPixels();
+  calculateTotalPixels();
+
+  for (const bodyPart of bodyParts) {
+    bodyPart.pixelsLeft = bodyPart.originalTotalPixels;
+  }
+
+  updatePixels();
+  calculateRemainingPixels();
+  populateTable();
+
+  // Hide the table when clearing the canvas
+  const dataTable = document.getElementById('data-table');
+  dataTable.style.display = 'none';
+
+}
+
+// Change colour
+function changeBrushColor() {
+  let colorPicker = document.getElementById("color-picker");
+  brushColor = colorPicker.value;
+}
+
+// Change brush size
+const brushSizeRange = document.getElementById("brushSizeRange");
+const brushSizeLabel = document.getElementById("brushSizeLabel");
+
+brushSizeLabel.textContent = brushSize;
+
+brushSizeRange.addEventListener("input", function () {
+  brushSize = parseInt(brushSizeRange.value);
+  brushSizeLabel.textContent = brushSize;
 });
 
-let colorPicker;
-colorPicker = document.querySelector("#color-picker");
-colorPicker.addEventListener("input", updateFillColor, false);
-colorPicker.addEventListener("change", updateFillColor, false);
-colorPicker.select();
+function updateTable() {
+  calculateTotalPixels();
+  calculateRemainingPixels();
+  populateTable();
 
-function updateFillColor(event) {
-  const polygons = canvas.getObjects().filter(obj => obj.name === "Polygon" && obj.type === "normal");
-  if (polygons.length > 0) {
-    const lastShape = polygons[polygons.length - 1];
-    lastShape.set({ fill: event.target.value });
-    canvas.renderAll();
+  // Show the table when the calculate button is clicked
+  const dataTable = document.getElementById('data-table');
+  dataTable.style.display = 'table';
+}
+
+function calculateRemainingPixels() {
+  for (const bodyPart of bodyParts) {
+    let percentage = ((bodyPart.originalTotalPixels - bodyPart.pixelsLeft) / bodyPart.originalTotalPixels) * 100;
+    percentage = Math.min(100, Math.max(0, percentage));
+    bodyPart.remainingPercentage = percentage.toFixed(1) + '%';
   }
 }
 
-// Function to enter/exit annotation mode
-function toggleAnnotationMode() {
-  const addNoteBtn = document.getElementById("addNoteBtn");
-  annotationMode = !annotationMode;
+const genderRadios = document.getElementsByName("gender");
+genderRadios.forEach((radio) => {
+  radio.addEventListener("change", function () {
+    calculateOriginalTotalPixels();
+    calculateTotalPixels();
+    calculateRemainingPixels();
+    populateTable();
+  });
+});
 
-  if (annotationMode) {
-    // Enable annotation mode
-    addNoteBtn.classList.add('highlight');
-    canvas.on('mouse:up', addAnnotationNote);
-  } else {
-    // Disable annotation mode
-    addNoteBtn.classList.remove('highlight');
-    canvas.off('mouse:up', addAnnotationNote);
-  }
+// Calculate Totals
+const dailyInput = document.getElementById('daily');
+const alternateInput = document.getElementById('alternate');
+const weekendInput = document.getElementById('weekend');
+const faceTotalSpan = document.getElementById('faceid');
+const trunkTotalSpan = document.getElementById('trunkid');
+
+let faceTCSValue = 0;
+let trunkTCSValue = 0;
+
+dailyInput.addEventListener('input', calculateTotal);
+alternateInput.addEventListener('input', calculateTotal);
+weekendInput.addEventListener('input', calculateTotal);
+
+function calculateTotal() {
+  const dailyValue = parseFloat(dailyInput.value);
+  const alternateValue = parseFloat(alternateInput.value);
+  const weekendValue = parseFloat(weekendInput.value);
+
+  const faceTotal = (dailyValue * 7 * faceTCSValue) + ((3 / 7) * alternateValue * 7 * faceTCSValue) + ((2 / 7) * weekendValue * 7 * faceTCSValue);
+  const trunkTotal = (dailyValue * 7 * trunkTCSValue) + ((3 / 7) * alternateValue * 7 * trunkTCSValue) + ((2 / 7) * weekendValue * 7 * trunkTCSValue);
+
+  faceTotalSpan.textContent = faceTotal.toFixed(2);
+  trunkTotalSpan.textContent = trunkTotal.toFixed(2);
 }
 
-// Function to add annotation notes
-function addAnnotationNote(option) {
-  if (annotationMode) {
-    const x = option.e.clientX;
-    const y = option.e.clientY;
+const calculateButton = document.querySelector('button[onclick="updateTable()"]');
+calculateButton.addEventListener('click', updateTable);
 
-    // Create a note element
-    const note = document.createElement('div');
-    note.classList.add('annotation-note');
-    note.style.left = `${x}px`;
-    note.style.top = `${y}px`;
+function populateTable() {
+  const tableBody = document.querySelector('#data-table tbody');
+  tableBody.innerHTML = '';
 
-    // Make the note draggable and resizable
-    makeNoteInteractable(note);
+  let totalTcsValue = 0;
+  const selectedGender = document.querySelector('input[name="gender"]:checked').value;
 
-    // Add the note to the document body
-    document.body.appendChild(note);
-  }
-  toggleAnnotationMode();
-}
+  bodyParts.forEach((part) => {
+    const newRow = document.createElement('tr');
+    const bodyPartCell = document.createElement('td');
+    const percentageCell = document.createElement('td');
+    const bsaCell = document.createElement('td');
+    const ftuCell = document.createElement('td');
+    const tcsCell = document.createElement('td');
 
-// Function to make the note draggable and resizable
-function makeNoteInteractable(note) {
-  const noteContent = document.createElement('div');
-  noteContent.classList.add('note-content');
-  noteContent.contentEditable = true;
-  note.appendChild(noteContent);
+    bodyPartCell.textContent = part.name;
+    percentageCell.textContent = part.remainingPercentage;
+    bsaCell.textContent = (part.originalTotalPixels - part.pixelsLeft).toFixed(2)
 
-  const removeIcon = document.createElement('i');
-  removeIcon.classList.add('fa', 'fa-xmark', 'note-remove-icon');
-  note.appendChild(removeIcon);
+    let ftuValue = 0;
+    let tcsValue = 0;
 
-  removeIcon.addEventListener('click', function () {
-    note.remove();
+    // Calculate ftu and tcs based on body part
+    if (part.name === 'Trunk') {
+      ftuValue = parseFloat(part.originalTotalPixels - part.pixelsLeft) / 2;
+      if (selectedGender === "male") {
+        tcsValue = ftuValue * 0.5;
+      } else if (selectedGender === "female") {
+        tcsValue = ftuValue * 0.4;
+      }
+      totalTcsValue += tcsValue;
+    } else if (part.name === 'Face & Neck') {
+      ftuValue = parseFloat(part.originalTotalPixels - part.pixelsLeft) / 2;
+      if (selectedGender === "male") {
+        tcsValue = ftuValue * 0.5;
+      } else if (selectedGender === "female") {
+        tcsValue = ftuValue * 0.4;
+      }
+      faceTCSValue = tcsValue.toFixed(2);
+    }
+
+    trunkTCSValue = totalTcsValue.toFixed(2);
+
+    ftuCell.textContent = ftuValue.toFixed(1);
+    tcsCell.textContent = tcsValue.toFixed(2);
+
+    newRow.appendChild(bodyPartCell);
+    newRow.appendChild(percentageCell);
+    newRow.appendChild(bsaCell);
+    newRow.appendChild(ftuCell);
+    newRow.appendChild(tcsCell);
+
+    tableBody.appendChild(newRow);
   });
 
-  interact(note)
-    .draggable({
-      modifiers: [
-        interact.modifiers.restrictRect({
-          restriction: 'body'
-        })
-      ],
-      listeners: {
-        move(event) {
-          const target = event.target;
-          const x = (parseFloat(target.getAttribute('data-x')) || 0) + event.dx;
-          const y = (parseFloat(target.getAttribute('data-y')) || 0) + event.dy;
+  calculateTotal();
+}
 
-          // Update the position of the note
-          target.style.transform = `translate(${x}px, ${y}px)`;
-          target.setAttribute('data-x', x);
-          target.setAttribute('data-y', y);
-        }
-      }
+window.addEventListener('DOMContentLoaded', function () {
+  const $selectOption = $("#select-option");
+  const $searchInput = $("#search-input");
+  const $selectedItem = $("#selected-item");
+
+  $selectOption.select2({
+    placeholder: "Search for a topical steroid",
+    allowClear: true,
+    minimumResultsForSearch: -1,
+  });
+
+  // Handle search functionality
+  $searchInput.on("input", function () {
+    const searchText = $searchInput.val().toLowerCase();
+
+    // Always get the original options from the select element
+    const originalOptions = $selectOption.find('option');
+
+    if (searchText === "") {
+      $selectOption.html(originalOptions);
+    } else {
+      // Filter options based on search text
+      const filteredOptions = originalOptions.filter(function () {
+        const optionText = $(this).text().toLowerCase();
+        return optionText.includes(searchText);
+      });
+
+      $selectOption.html(filteredOptions);
+    }
+
+    $selectOption.trigger("change");
+  });
+
+  $selectOption.on("change", function () {
+    const selectedOption = $selectOption.find(":selected").text();
+    $selectedItem.val(selectedOption);
+  });
+
+  $selectOption.find("optgroup").show();
+
+  $selectOption.trigger("change");
+});
+
+
+calculateRemainingPixels();
+populateTable();
+
+
+function generatePDF() {
+  const form = document.querySelector('dialog form');
+  const isValid = form.checkValidity();
+
+  if (!isValid) {
+    return;
+  }
+
+  const today = new Date();
+  const dateValue = today.toLocaleDateString();
+
+  const name = document.getElementById('name').value;
+  const dateOfBirth = document.getElementById('dob').value;
+  const hospitalNumber = document.getElementById('hospitalNumber').value;
+  const doctorName = document.getElementById('doctorName').value;
+  const diagnosis = document.getElementById('diagnosis').value;
+  const soaps = document.getElementById('soap').value;
+  const bodyMoisturiser = document.getElementById('bodyMoisturizers').value;
+  const faceSteroidInput = document.getElementById('faceSteroidInput').value;
+  const bodySteroidInput = document.getElementById('bodySteroidInput').value;
+
+  fetch('treatmentplan.html')
+    .then(response => response.text())
+    .then(treatmentplan => {
+      const htmlContent = treatmentplan
+        .replace(/{dateValue}/g, dateValue)
+        .replace(/{name}/g, name)
+        .replace(/{dateOfBirth}/g, dateOfBirth)
+        .replace(/{hospitalNumber}/g, hospitalNumber)
+        .replace(/{diagnosis}/g, diagnosis)
+        .replace(/{soaps}/g, soaps)
+        .replace(/{bodyMoisturiser}/g, bodyMoisturiser)
+        .replace(/{doctorName}/g, doctorName)
+        .replace(/{faceSteroidInput}/g, faceSteroidInput)
+        .replace(/{bodySteroidInput}/g, bodySteroidInput)
+
+      const generateFileName = () => `${name}-${dateValue}-Skin-Treatment-Plan.pdf`;
+
+      const options = {
+        margin: 20,
+        filename: generateFileName(),
+      };
+
+      html2pdf().from(htmlContent).set(options).save();
     })
-    .resizable({
-      edges: { left: true, right: true, bottom: true, top: true },
-      modifiers: [
-        interact.modifiers.restrictSize({
-          min: { width: 100, height: 40 }
-        })
-      ],
-      listeners: {
-        move(event) {
-          const target = event.target;
-          const { width, height } = event.rect;
-
-          // Update the size of the note
-          target.style.width = width + 'px';
-          target.style.height = height + 'px';
-        }
-      }
+    .catch(error => {
+      console.error('Failed to load treatmentplan.html:', error);
     });
 }
 
-// Event listener for the Add Note button
-document.getElementById("addNoteBtn").addEventListener("click", toggleAnnotationMode);
+function generatePDFPrescription() {
+  const form = document.querySelector('dialog form');
+  const isValid = form.checkValidity();
 
-// Function to export the canvas and body image to an image file
-function exportImage() {
-  const objects = canvas.getObjects().filter(obj => obj.name === "draggableCircle" || obj.name === "Polygon");
-  if (objects.length === 0) {
-    alert("Please add points or shapes before exporting.");
+  if (!isValid) {
     return;
   }
 
-  // Get the canvas element
-  const canvasElement = document.getElementById('canvas');
+  const name = document.getElementById('name').value;
+  const dateOfBirth = document.getElementById('dob').value;
+  const hospitalNumber = document.getElementById('hospitalNumber').value;
+  const address = document.getElementById('address').value;
+  const today = new Date();
+  const dateValue = today.toLocaleDateString();
+  const soaps = document.getElementById('soap').value;
+  const bodyMoisturiser = document.getElementById('bodyMoisturizers').value;
+  const faceSteroidInput = document.getElementById('faceSteroidInput').value;
+  const bodySteroidInput = document.getElementById('bodySteroidInput').value;
+  const doctorName = document.getElementById('doctorName').value;
+  const trunkValue = trunkTotalSpan.textContent;
+  const faceValue = faceTotalSpan.textContent;
 
-  // Create a new canvas with the same dimensions
-  const exportCanvas = document.createElement('canvas');
-  exportCanvas.width = canvasElement.width;
-  exportCanvas.height = canvasElement.height;
 
-  // Render all objects on the canvas
-  canvas.renderAll();
+  fetch('prescription.html')
+    .then(response => response.text())
+    .then(prescription => {
+      const htmlContent = prescription
+        .replace(/{name}/g, name)
+        .replace(/{address}/g, address)
+        .replace(/{dateOfBirth}/g, dateOfBirth)
+        .replace(/{hospitalNumber}/g, hospitalNumber)
+        .replace(/{dateValue}/g, dateValue)
+        .replace(/{doctorName}/g, doctorName)
+        .replace(/{soaps}/g, soaps)
+        .replace(/{trunkid}/g, trunkValue)
+        .replace(/{faceid}/g, faceValue)
+        .replace(/{bodyMoisturizer}/g, bodyMoisturiser)
+        .replace(/{faceSteroidInput}/g, faceSteroidInput)
+        .replace(/{bodySteroidInput}/g, bodySteroidInput)
 
-  // Get the canvas context
-  const exportContext = exportCanvas.getContext('2d');
+      const generateFileName = () => `${name}-${dateValue}-Prescription.pdf`;
 
-  // Draw the canvas and body image onto the export canvas
-  exportContext.drawImage(canvasElement, 0, 0);
-  exportContext.drawImage(document.getElementById('shapeImage'), 0, 0);
+      const options = {
+        margin: 5,
+        filename: generateFileName(),
+      };
 
-  // Draw each shape on the export canvas
-  objects.forEach(obj => {
-    if (obj.name === "draggableCircle") {
-      // Draw a circle
-      exportContext.beginPath();
-      exportContext.arc(obj.left, obj.top, obj.radius, 0, 2 * Math.PI);
-      exportContext.fillStyle = obj.fill;
-      exportContext.fill();
-      exportContext.lineWidth = obj.strokeWidth;
-      exportContext.strokeStyle = obj.stroke;
-      exportContext.stroke();
-    } else if (obj.name === "Polygon") {
-      // Draw a polygon
-      exportContext.beginPath();
-      const points = obj.points.map(point => ({
-        x: point.x + obj.left,
-        y: point.y + obj.top
-      }));
-      exportContext.moveTo(points[0].x, points[0].y);
-      for (let i = 1; i < points.length; i++) {
-        exportContext.lineTo(points[i].x, points[i].y);
-      }
-      exportContext.closePath();
-      exportContext.fillStyle = obj.fill;
-      exportContext.fill();
-      exportContext.lineWidth = obj.strokeWidth;
-      exportContext.strokeStyle = obj.stroke;
-      exportContext.stroke();
-    }
-  });
-
-  // Convert the export canvas to a data URL
-  const dataURL = exportCanvas.toDataURL('image/png');
-
-  // Create a link element to download the image
-  const link = document.createElement('a');
-  link.href = dataURL;
-  link.download = 'canvas.png';
-
-  // Simulate a click event to download the image
-  link.dispatchEvent(new MouseEvent('click'));
+      html2pdf().from(htmlContent).set(options).save();
+    })
+    .catch(error => {
+      console.error('Failed to load prescription.html:', error);
+    });
 }
 
-// Add event listener to export button
-document.getElementById('exportBtn').addEventListener('click', exportImage);
+
+function openDialog() {
+  const dialog = document.createElement('dialog');
+  dialog.innerHTML = `
+  <form>
+    <div id="step1">
+      <div class="close-icon" onclick="closeDialog()">&#10006;</div>
+      <h2>Add Consultant Name</h2>
+      <label for="doctorName">Consultant Name:</label>
+      <input type="text" id="doctorName" required>
+      <p id="doctorNameError" style="display:none;color:red;">Consultant Name is required.</p>
+      <button type="button" onclick="nextStep()">Next</button>
+    </div>
+
+    <div id="step2" class="hide">
+    <div class="close-icon" onclick="closeDialog()">&#10006;</div>
+      <h2>Patient Details</h2>
+
+      <!-- Patient Information Section -->
+      <div class="form-section">
+        <h3>Patient Information</h3>
+        <label for="name">Patient Name:</label>
+        <input type="text" id="name" required>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" required>
+
+        <label for="address">Address:</label>
+        <input type="text" id="address" required>
+
+        <label for="hospitalNumber">Hospital Number:</label>
+        <input type="text" id="hospitalNumber" required>
+      </div>
+
+      <!-- Diagnosis and Treatment Section -->
+      <div class="form-section">
+        <h3>Diagnosis and Treatment</h3>
+        <label>Diagnosis:
+        <input list="diagnosiss" name="diagnosis" id="diagnosis" />
+        </label>
+        <datalist id="diagnosiss" >
+        <option value="diagnosis1">
+        <option value="diagnosis2">
+        <option value="diagnosis3">
+        <option value="diagnosis4">
+        <option value="diagnosis5">
+        </datalist>
+
+        <label>Soap Substitute:
+        <input list="soaps" name="soap" id="soap" />
+        </label>
+        <datalist id="soaps">
+        <option value="Soap1">
+        <option value="Soap2">
+        <option value="Soap3">
+        <option value="Soap4">
+        <option value="Soap5">
+        </datalist>
+
+        <label>Body Moisturizer:
+        <input list="bodyMoisturizer" name="body-Moisturizer" id="bodyMoisturizers" />
+        </label>
+        <datalist id="bodyMoisturizer">
+        <option value="Moist1">
+        <option value="Moist2">
+        <option value="Moist3">
+        <option value="Moist4">
+        <option value="Moist5">
+        </datalist>
+
+        <label for="faceSteroid">Face/Neck Topical Steroid:</label>
+        <input list="faceSteroidOptions" id="faceSteroidInput" required>
+        <datalist id="faceSteroidOptions">
+          <optgroup label="Mild">
+            <option value="Dermacort®">Dermacort® - Hydrocortisone 0.1%</option>
+            <option value="Dioderm®">Dioderm® - Hydrocortisone 0.1%</option>
+            <option value="Hc45®">Hc45® - Hydrocortisone 1%</option>
+            <option value="Hydrocortisone 0.5%">Hydrocortisone 0.5% - Hydrocortisone 0.5%</option>
+            <option value="Hydrocortisone 1%">Hydrocortisone 1% - Hydrocortisone 1%</option>
+            <option value="Hydrocortisone 2.5%">Hydrocortisone 2.5% - Hydrocortisone 2.5%</option>
+            <option value="Mildison Lipocream®">Mildison Lipocream® - Hydrocortisone 1%</option>
+            <option value="Synalar 1 in 10®">Synalar 1 in 10® - Fluocinolone acetonide 0.0025%</option>
+            <option value="Zenoxone® cream">Zenoxone® cream - Hydrocortisone 1%</option>
+            <option value="Canesten HC®">(AntiFungal) Canesten HC® - Hydrocortisone 1% - Clotrimazole</option>
+            <option value="Daktacort®">(AntiFungal) Daktacort® - Hydrocortisone 1% - Miconazole nitrate</option>
+            <option value="Fucidin H®">(Antibacterial) Fucidin H® - Hydrocortisone 1% - Fusidic acid</option>
+            <option value="Nystaform HC®">(Antibacterial, Antifungal) Nystaform HC® - Hydrocortisone 0.5% - Chlorhexidine, Nystatin</option>
+            <option value="Terra-Cortril®">(Antibacterial) Terra-Cortril® - Hydrocortisone 1% - Oxytetracycline</option>
+            <option value="Timodine®">(Antibacterial, Antifungal) Timodine® - Hydrocortisone 0.5% - Benzalkonium chloride, Nystatin</option>
+          </optgroup>
+          <optgroup label="Moderate">
+            <option value="Alphaderm®">Alphaderm® - Hydrocortisone 1%, urea 10%</option>
+            <option value="Betnovate-RD®">Betnovate-RD® - Betamethasone valerate 0.025%</option>
+            <option value="Clobavate®">Clobavate® - Clobetasone butyrate 0.05%</option>
+            <option value="Eumovate®">Eumovate® - Clobetasone butyrate 0.05%</option>
+            <option value="Haelan®">Haelan® - Fludroxycortide 0.0125%</option>
+            <option value="Modrasone®">Modrasone® - Alclometasone dipropionate 0.05%</option>
+            <option value="Synalar 1 in 4®">Synalar 1 in 4® - Fluocinolone acetonide 0.00625%</option>
+            <option value="Trimovate®">(Antibacterial, Antifungal) Trimovate® - Clobetasone butyrate 0.05% - Oxytetracycline, Nystatin</option>
+          </optgroup>
+          <optgroup label="Potent">
+            <option value="Ultralanum Plain®">Ultralanum Plain® - Fluocortolone hexanoate 0.25%</option>
+            <option value="Betacap®">Betacap® - Betamethasone valerate 0.1%</option>
+            <option value="Beclometasone dipropionate">Beclometasone dipropionate - Beclometasone dipropionate 0.025%</option>
+            <option value="Betnovate®">Betnovate® - Betamethasone valerate 0.1%</option>
+            <option value="Bettamousse®">Bettamousse® - Contains 1.2 mg betamethasone valerate 0.1%</option>
+            <option value="Cutivate® ointment">Cutivate® ointment - Fluticasone propionate 0.005%</option>
+            <option value="Cutivate® cream">Cutivate® cream - Fluticasone propionate 0.05%</option>
+            <option value="Diprosalic®">Diprosalic® - Betamethasone dipropionate 0.05%</option>
+            <option value="Diprosone®">Diprosone® - Betamethasone dipropionate 0.05%</option>
+            <option value="Elocon®">Elocon® - Mometasone furoate 0.1%</option>
+            <option value="Locoid®">Locoid® - Hydrocortisone butyrate 0.1%</option>
+            <option value="Metosyn®">Metosyn® - Fluocinonide 0.05%</option>
+            <option value="Nerisone®">Nerisone® - Diflucortolone valerate 0.1%</option>
+            <option value="Synalar®">Synalar® - Fluocinolone acetonide 0.025%</option>
+            <option value="Aureocort®">(Antibacterial) Aureocort® - Triamcinolone acetonide 0.1% - Chlortetracycline, hydrochloride</option>
+            <option value="Betamethasone and clioquinol">(Antibacterial) Betamethasone and clioquinol - Betamethasone valerate 0.1% - Clioquinol</option>
+            <option value="Betamethasone and neomycin">(Antibacterial) Betamethasone and neomycin - Betamethasone valerate 0.1% - Neomycin sulphate</option>
+            <option value="Fucibet®">(Antibacterial) Fucibet® - Betamethasone valerate 0.1% - Fucidic acid</option>
+            <option value="Lotriderm®">(Antifungal) Lotriderm® - Betamethasone dipropionate 0.064% - Clotrimazole</option>
+            <option value="Synalar C®">(Antibacterial) Synalar C® - Fluocinolone acetonide 0.025% - Clioquinol</option>
+            <option value="Synalar N®">(Antifungal) Synalar N® - Fluocinolone acetonide 0.025% - Neomycin sulphate</option>
+          </optgroup>
+          <optgroup label="Very Potent">
+            <option value="Clarelux®">Clarelux® - Clobetasol propionate 0.05%</option>
+            <option value="Dermovate®">Dermovate® - Clobetasol propionate 0.05%</option>
+            <option value="Etrivex®">Etrivex® - Clobetasol propionate 0.05%</option>
+            <option value="Nerisone Forte®">Nerisone Forte® - Diflucortolone valerate 0.3%</option>
+            <option value="Clobetasol with neomycin and nystatin">(Antibacterial, Antifungal) Clobetasol with neomycin and nystatin - Clobetasol propionate 0.05% - Neomycin, Nystatin</option>
+          </optgroup>
+        </datalist>
+
+        <label for="bodySteroid">Trunk & Limbs Topical Steroid:</label>
+        <input list="bodySteroidOptions" id="bodySteroidInput" required>
+        <datalist id="bodySteroidOptions">
+          <optgroup label="Mild">
+            <option value="Dermacort®">Dermacort® - Hydrocortisone 0.1%</option>
+            <option value="Dioderm®">Dioderm® - Hydrocortisone 0.1%</option>
+            <option value="Hc45®">Hc45® - Hydrocortisone 1%</option>
+            <option value="Hydrocortisone 0.5%">Hydrocortisone 0.5% - Hydrocortisone 0.5%</option>
+            <option value="Hydrocortisone 1%">Hydrocortisone 1% - Hydrocortisone 1%</option>
+            <option value="Hydrocortisone 2.5%">Hydrocortisone 2.5% - Hydrocortisone 2.5%</option>
+            <option value="Mildison Lipocream®">Mildison Lipocream® - Hydrocortisone 1%</option>
+            <option value="Synalar 1 in 10®">Synalar 1 in 10® - Fluocinolone acetonide 0.0025%</option>
+            <option value="Zenoxone® cream">Zenoxone® cream - Hydrocortisone 1%</option>
+            <option value="Canesten HC®">(AntiFungal) Canesten HC® - Hydrocortisone 1% - Clotrimazole</option>
+            <option value="Daktacort®">(AntiFungal) Daktacort® - Hydrocortisone 1% - Miconazole nitrate</option>
+            <option value="Fucidin H®">(Antibacterial) Fucidin H® - Hydrocortisone 1% - Fusidic acid</option>
+            <option value="Nystaform HC®">(Antibacterial, Antifungal) Nystaform HC® - Hydrocortisone 0.5% - Chlorhexidine, Nystatin</option>
+            <option value="Terra-Cortril®">(Antibacterial) Terra-Cortril® - Hydrocortisone 1% - Oxytetracycline</option>
+            <option value="Timodine®">(Antibacterial, Antifungal) Timodine® - Hydrocortisone 0.5% - Benzalkonium chloride, Nystatin</option>
+          </optgroup>
+          <optgroup label="Moderate">
+            <option value="Alphaderm®">Alphaderm® - Hydrocortisone 1%, urea 10%</option>
+            <option value="Betnovate-RD®">Betnovate-RD® - Betamethasone valerate 0.025%</option>
+            <option value="Clobavate®">Clobavate® - Clobetasone butyrate 0.05%</option>
+            <option value="Eumovate®">Eumovate® - Clobetasone butyrate 0.05%</option>
+            <option value="Haelan®">Haelan® - Fludroxycortide 0.0125%</option>
+            <option value="Modrasone®">Modrasone® - Alclometasone dipropionate 0.05%</option>
+            <option value="Synalar 1 in 4®">Synalar 1 in 4® - Fluocinolone acetonide 0.00625%</option>
+            <option value="Trimovate®">(Antibacterial, Antifungal) Trimovate® - Clobetasone butyrate 0.05% - Oxytetracycline, Nystatin</option>
+          </optgroup>
+          <optgroup label="Potent">
+            <option value="Ultralanum Plain®">Ultralanum Plain® - Fluocortolone hexanoate 0.25%</option>
+            <option value="Betacap®">Betacap® - Betamethasone valerate 0.1%</option>
+            <option value="Beclometasone dipropionate">Beclometasone dipropionate - Beclometasone dipropionate 0.025%</option>
+            <option value="Betnovate®">Betnovate® - Betamethasone valerate 0.1%</option>
+            <option value="Bettamousse®">Bettamousse® - Contains 1.2 mg betamethasone valerate 0.1%</option>
+            <option value="Cutivate® ointment">Cutivate® ointment - Fluticasone propionate 0.005%</option>
+            <option value="Cutivate® cream">Cutivate® cream - Fluticasone propionate 0.05%</option>
+            <option value="Diprosalic®">Diprosalic® - Betamethasone dipropionate 0.05%</option>
+            <option value="Diprosone®">Diprosone® - Betamethasone dipropionate 0.05%</option>
+            <option value="Elocon®">Elocon® - Mometasone furoate 0.1%</option>
+            <option value="Locoid®">Locoid® - Hydrocortisone butyrate 0.1%</option>
+            <option value="Metosyn®">Metosyn® - Fluocinonide 0.05%</option>
+            <option value="Nerisone®">Nerisone® - Diflucortolone valerate 0.1%</option>
+            <option value="Synalar®">Synalar® - Fluocinolone acetonide 0.025%</option>
+            <option value="Aureocort®">(Antibacterial) Aureocort® - Triamcinolone acetonide 0.1% - Chlortetracycline, hydrochloride</option>
+            <option value="Betamethasone and clioquinol">(Antibacterial) Betamethasone and clioquinol - Betamethasone valerate 0.1% - Clioquinol</option>
+            <option value="Betamethasone and neomycin">(Antibacterial) Betamethasone and neomycin - Betamethasone valerate 0.1% - Neomycin sulphate</option>
+            <option value="Fucibet®">(Antibacterial) Fucibet® - Betamethasone valerate 0.1% - Fucidic acid</option>
+            <option value="Lotriderm®">(Antifungal) Lotriderm® - Betamethasone dipropionate 0.064% - Clotrimazole</option>
+            <option value="Synalar C®">(Antibacterial) Synalar C® - Fluocinolone acetonide 0.025% - Clioquinol</option>
+            <option value="Synalar N®">(Antifungal) Synalar N® - Fluocinolone acetonide 0.025% - Neomycin sulphate</option>
+          </optgroup>
+          <optgroup label="Very Potent">
+            <option value="Clarelux®">Clarelux® - Clobetasol propionate 0.05%</option>
+            <option value="Dermovate®">Dermovate® - Clobetasol propionate 0.05%</option>
+            <option value="Etrivex®">Etrivex® - Clobetasol propionate 0.05%</option>
+            <option value="Nerisone Forte®">Nerisone Forte® - Diflucortolone valerate 0.3%</option>
+            <option value="Clobetasol with neomycin and nystatin">(Antibacterial, Antifungal) Clobetasol with neomycin and nystatin - Clobetasol propionate 0.05% - Neomycin, Nystatin</option>
+          </optgroup>
+        </datalist>
+      </div>
+
+      <!-- Generate PDF Section -->
+      <div class="form-section">
+        <h3>Generate PDF</h3>
+        <label for="generateOption">Generate:</label>
+        <select id="generateOption" required>
+          <option value="" disabled selected>Select an option</option>
+          <option value="skinTreatmentPlan">Skin Treatment Plan</option>
+          <option value="prescription">Prescription</option>
+        </select>
+
+        <button class="generate" onclick="generatePDFBasedOnSelection()">Generate</button>
+      </div>
+
+      <button type="button" id="backButton" onclick="prevStep()">Back</button>
+      <button type="button" onclick="closeDialog()">Cancel</button>
+    </div>
+  </form>`;
+
+  document.body.appendChild(dialog);
+
+  dialog.showModal();
+
+  const generatePdfButton = dialog.querySelector('#step2 button[class="generatepdf"]');
+  const doctorName = dialog.querySelector('#doctorName');
+  const doctorNameError = dialog.querySelector('#doctorNameError');
+
+  doctorName.addEventListener('input', function () {
+    const isEmpty = doctorName.value.trim() === "";
+    generatePdfButton.disabled = !form.checkValidity();
+    doctorNameError.style.display = isEmpty ? "inline" : "none";
+  });
+
+  // Handle form submission
+  dialog.querySelector('form').addEventListener('submit', function (event) {
+    event.preventDefault();
+    generatePDFBasedOnSelection();
+  });
+
+  // form validity
+  const form = dialog.querySelector('form');
+  form.addEventListener('input', function () {
+    generatePdfButton.disabled = !form.checkValidity();
+  });
+}
+
+function generatePDFBasedOnSelection() {
+  const selectedOption = document.getElementById('generateOption').value;
+
+  if (selectedOption === "skinTreatmentPlan") {
+    generatePDF();
+  } else if (selectedOption === "prescription") {
+    generatePDFPrescription();
+  }
+}
+
+function nextStep() {
+  const doctorName = document.getElementById('doctorName');
+  const doctorNameError = document.getElementById('doctorNameError');
+
+  // trim the input value to remove whitespace
+  const doctorNameTrimmed = doctorName.value.trim();
+
+  if (doctorNameTrimmed === "") {
+    // if the input is empty, show the error message
+    doctorNameError.style.display = "inline";
+  } else {
+    // if the input is not empty, proceed to the next step
+    doctorNameError.style.display = "none";
+    document.getElementById('step1').style.display = "none";
+    document.getElementById('step2').style.display = "block";
+  }
+}
+
+function prevStep() {
+  document.getElementById('step1').style.display = "block";
+  document.getElementById('step2').style.display = "none";
+}
+
+function closeDialog() {
+  const dialog = document.querySelector('dialog');
+  dialog.remove();
+}

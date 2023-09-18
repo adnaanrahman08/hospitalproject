@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dermatology Skin Treatment Plan</title>
+
+    <link rel="stylesheet" href="prescriptionstyle.css">
+</head>
+
+<body>
+    <div class="report-header">
+        <img src="./models/tallaght-hospital-logo.png" alt="Hospital Logo">
+        <h1>TOPICAL THERAPY PRESCRIPTION</h1>
+        <h2 class="">Date: {dateValue}</h2>
+
+    </div>
+
+    <div class="table-wrapper">
+        <table id="patient-details">
+            <tr>
+                <td><strong>Patient Name:</strong></td>
+                <td>{name}</td>
+            </tr>
+            <tr>
+                <td><strong>Address:</strong></td>
+                <td>{address}</td>
+            </tr>
+            <tr>
+                <td><strong>Date of Birth:</strong></td>
+                <td>{dateOfBirth}</td>
+            </tr>
+            <tr>
+                <td><strong>Hospital Number:</strong></td>
+                <td>{hospitalNumber}</td>
+            </tr>
+
+        </table>
+    </div>
+
+
+    <h2>Totals</h2>
+    <div class="total-rows">
+        <p>Total (g) TCS Required (Face & Neck): {faceid}</p>
+        <p>Total (g) TCS Required (Trunk & Limbs): {trunkid}</p>
+    </div>
+
+    <table id="medication-details">
+        <thead>
+            <tr>
+                <th>Medication Name</th>
+                <th>Dose</th>
+                <th>Frequency</th>
+                <th>Route</th>
+                <th>Duration</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td colspan="5" class="soap">Soap Substitute</td>
+            </tr>
+            <tr>
+                <td>{soaps} to use as soap substitute</td>
+                <td>One Application</td>
+                <td>For washing</td>
+                <td>Topical</td>
+                <td>Continuous {dosageAmount} g per week</td>
+            </tr>
+            <tr>
+                <td colspan="5" class="soap">Emollient/Moisturiser</td>
+            </tr>
+            <tr>
+                <td>{bodyMoisturizer}</td>
+                <td>One Application</td>
+                <td>Twice Daily</td>
+                <td>Topical</td>
+                <td>Continuous {dosageAmount} mg per week</td>
+            </tr>
+            <tr>
+                <td colspan="5" class="soap">Face & Neck</td>
+            </tr>
+            <tr>
+                <td rowspan="3">{faceSteroidInput}</td>
+                <td>One Application</td>
+                <td>Twice Daily</td>
+                <td rowspan="3">To face and neck</td>
+                <td>For {weeklyAmount} weeks then</td>
+            </tr>
+            <tr>
+                <td>One Application</td>
+                <td>Alternate days</td>
+                <td>For {weeklyAmount} weeks then</td>
+            </tr>
+            <tr>
+                <td>One Application</td>
+                <td>Twice weekly</td>
+                <td>For {weeklyAmount} weeks then</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="dispensing-note">
+        <strong>Dispensing Note:</strong> Based on affected body surface area, duration, and frequency of the
+        prescription, the patient will require {1x30} g tube of {faceSteroidInput}
+    </div>
+    <table id="medication-details">
+        <tbody>
+            <tr>
+                <td colspan="5" class="soap">Trunk and Limbs</td>
+            </tr>
+            <tr>
+                <td rowspan="3">{bodySteroidInput}</td>
+                <td>One Application</td>
+                <td>Twice Daily</td>
+                <td rowspan="3">To face and neck</td>
+                <td>For {weeklyAmount} weeks then</td>
+            </tr>
+            <tr>
+                <td>One Application</td>
+                <td>Alternate days</td>
+                <td>For {weeklyAmount} weeks then</td>
+            </tr>
+            <tr>
+                <td>One Application</td>
+                <td>Twice weekly</td>
+                <td>For {weeklyAmount} weeks then</td>
+            </tr>
+
+        </tbody>
+    </table>
+    <div class="dispensing-note">
+        <strong>Dispensing Note:</strong> Based on affected body surface area, duration, and frequency of the
+        prescription, the patient will require {1x30} g tube of {bodySteroidInput}
+    </div>
+</body>
+
+</html>

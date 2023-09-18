@@ -2,67 +2,38 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hospital Project</title>
-  <link rel="stylesheet" type="text/css" href="./style.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <div class="container">
-
-    <p id="areaDisplay"></p>
-
-    <table id="shapeTable" class="display-table" style="display: none;">
-      <thead>
-        <tr>
-          <th>Shape Number</th>
-          <th>Area (m<sup>2</sup>)</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-
-    <div style="position:relative;width:205px">
-      <canvas id="canvas" width="400px" height="500px" style="z-index:10;background-color:transparent;"></canvas>
-      <div id="backgroundCanvas" style="width:400px;height:500px">
-        <img id="shapeImage" src="./models/human-front.svg" alt="front human body" style="width:100%;height:100%;" />
+  <!-- Navigation Bar -->
+  <header>
+    <nav>
+      <a href="https://www.tuh.ie" target="_blank"><img src="./models/tallaght-hospital-logo.png" alt="Tallaght Hospital Logo"></a>
+      <div>
+        <a href="index.html">Home</a>
+        <a href="patients.html">Calculator</a>
       </div>
-    </div>
-    <input id="weightInput" type="number" placeholder="Enter Weight In kg">
-    <input id="heightInput" type="number" placeholder="Enter Height In cm">
+    </nav>
+  </header>
 
-    <div class="button-container">
-      <button id="addPolygonBtn"><i class="fa-solid fa-plus"></i>Add Points</button>
-      <button id="createPolygonBtn">Calculate</button>
-      <button id="clearPolygonBtn" class="clear-button">Clear</button>
-    </div>
-
-    <div class="input-container">
-      <label for="color-picker">Colour Picker:</label>
-      <input type="color" value="#4CAF50" id="color-picker" />
-    </div>
-
+  <section class="hero">
     <div>
-      <button id="addNoteBtn">Add Note</button>
-      <button id="exportBtn" onclick="exportImage()"><i class="fa-solid fa-file-export"></i>Export</button>
+      <h1>Topical Steroid Calculator</h1>
+      <p>This app will calculate the amount of topical steroids that is needed when a consultant colours an area of the body</p>
+      <a href="patients.html"><button>Get started</button></a>
     </div>
+    <img src="./models/undraw_doctors.svg" alt="Doctors">
+  </section>
 
-    <div class="input-container">
-      <label for="pointSizeSlider">Point Size:</label>
-      <input type="range" id="pointSizeSlider" min="1" max="20" value="7">
-      <span id="pointSizeDisplay">7</span>
-    </div>
-  </div>
-
-  <!-- Scripts -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/1.5.0/fabric.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/interactjs/dist/interact.min.js"></script>
-  <script src="https://kit.fontawesome.com/658e69eab6.js" crossorigin="anonymous"></script>
-
+  <footer id="footer">
+    <p>Website created and designed by Marco and Adnaan</p>
+  </footer>
 
   <script src="canvas.js"></script>
-  <script src="background.js"></script>
 </body>
 
 </html>

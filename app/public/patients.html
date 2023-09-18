@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hospital Project</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.4/awesomplete.min.css" />
+
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+    integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
+    integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <header>
+    <nav>
+      <a href="https://www.tuh.ie" target="_blank"><img src="./models/tallaght-hospital-logo.png" alt="Tallaght Hospital Logo"></a>
+      <div>
+        <a href="index.html">Home</a>
+        <a href="patients.html">Calculator</a>
+      </div>
+    </nav>
+
+  </header>
+
+  <!-- Canvas -->
+  <section class="boxes">
+    <section class="buttons-bg">
+      <h1>OPTIONS</h1>
+      <button onclick="updateTable()">Calculate</button>
+      <button onclick="clearCanvas()">Clear</button>
+
+      <label for="color-picker"><i class="fa-solid fa-palette"></i>Colour Picker:</label>
+      <input type="color" id="color-picker" onchange="changeBrushColor()">
+
+      <br>
+      <label for="brushSizeRange"><i class="fa-solid fa-brush"></i>Brush Size:</label>
+      <input type="range" id="brushSizeRange" min="20" max="150" value="50">
+      <span id="brushSizeLabel"></span>
+
+      <div id="gender">
+        <input type="radio" id="male" name="gender" value="male" checked />
+        <label for="male"><i class="fas fa-mars"></i> Male</label>
+        <input type="radio" id="female" name="gender" value="female" />
+        <label for="female"><i class="fas fa-venus"></i> Female</label>
+      </div>
+
+    </section>
+
+    <section class="duration-box">
+      <h2>Duration of Treatment (Weeks)</h2>
+      <div class="input-row">
+        <label for="daily">Daily Application:</label>
+        <input type="number" id="daily" min="0" max="7" step="1" value="0">
+        <label for="daily">&nbspWeeks:</label>
+        <input type="number" id="weeks" min="0" max="12" step="1" value="0">
+      </div>
+      <div class="input-row">
+        <label for="alternate">Alternate Day Application:</label>
+        <input type="number" id="alternate" min="0" max="7" step="1" value="0">
+        <label for="daily">&nbspWeeks:</label>
+        <input type="number" id="weeks" min="0" max="12" step="1" value="0">
+      </div>
+      <div class="input-row">
+        <label for="weekend">Weekend Therapy:</label>
+        <input type="number" id="weekend" min="0" max="2" step="1" value="0">
+        <label for="daily">&nbspWeeks:</label>
+        <input type="number" id="weeks" min="0" max="12" step="1" value="0">
+      </div>
+
+      <h2>Totals</h2>
+      <div class="total-rows">
+        <p>Total (g) TCS Required (Face & Neck): <span id="faceid">0</span></p>
+        <p>Total (g) TCS Required (Trunk & Limbs): <span id="trunkid">0</span></p>
+      </div>
+      <button id="add-patient-button" onclick="openDialog()">Add Patient Details</button>
+    </section>
+  </section>
+
+
+  <!-- Table content -->
+  <table id="data-table">
+    <thead>
+      <tr>
+        <th>Body Part</th>
+        <th>% Coloured</th>
+        <th>% BSA</th>
+        <th>FTU</th>
+        <th>TCS (g)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Table rows will be dynamically added using JavaScript -->
+    </tbody>
+  </table>
+
+  <footer id="footer">
+    <p>Website created and designed by Marco and Adnaan</p>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+  <script src="https://kit.fontawesome.com/658e69eab6.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.2/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/awesomplete/1.1.4/awesomplete.min.js"></script>
+
+  <script src="canvas.js"></script>
+</body>
+
+</html>
