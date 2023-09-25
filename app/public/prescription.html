@@ -38,13 +38,6 @@
         </table>
     </div>
 
-
-    <h2>Totals</h2>
-    <div class="total-rows">
-        <p>Total (g) TCS Required (Face & Neck): {faceid}</p>
-        <p>Total (g) TCS Required (Trunk & Limbs): {trunkid}</p>
-    </div>
-
     <table id="medication-details">
         <thead>
             <tr>
@@ -101,7 +94,7 @@
 
     <div class="dispensing-note">
         <strong>Dispensing Note:</strong> Based on affected body surface area, duration, and frequency of the
-        prescription, the patient will require {1x30} g tube of {faceSteroidInput}
+        prescription, the patient will require {faceid} g of {faceSteroidInput}
     </div>
     <table id="medication-details">
         <tbody>
@@ -130,7 +123,7 @@
     </table>
     <div class="dispensing-note">
         <strong>Dispensing Note:</strong> Based on affected body surface area, duration, and frequency of the
-        prescription, the patient will require {1x30} g tube of {bodySteroidInput}
+        prescription, the patient will require {trunkid} g of {bodySteroidInput}
     </div>
 </body>
 
