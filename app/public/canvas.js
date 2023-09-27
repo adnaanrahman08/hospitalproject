@@ -247,13 +247,11 @@ function populateTable() {
   bodyParts.forEach((part) => {
     const newRow = document.createElement('tr');
     const bodyPartCell = document.createElement('td');
-    const percentageCell = document.createElement('td');
     const bsaCell = document.createElement('td');
     const ftuCell = document.createElement('td');
     const tcsCell = document.createElement('td');
 
     bodyPartCell.textContent = part.name;
-    percentageCell.textContent = part.remainingPercentage;
     bsaCell.textContent = (part.originalTotalPixels - part.pixelsLeft).toFixed(2)
 
     let ftuValue = 0;
@@ -284,7 +282,6 @@ function populateTable() {
     tcsCell.textContent = tcsValue.toFixed(2);
 
     newRow.appendChild(bodyPartCell);
-    newRow.appendChild(percentageCell);
     newRow.appendChild(bsaCell);
     newRow.appendChild(ftuCell);
     newRow.appendChild(tcsCell);
