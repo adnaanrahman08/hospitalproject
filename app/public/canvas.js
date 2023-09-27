@@ -515,7 +515,7 @@ function openDialog() {
         </datalist>
 
         <label for="faceSteroid">Face/Neck Topical Steroid:</label>
-        <input list="faceSteroidOptions" id="faceSteroidInput" required>
+        <input list="faceSteroidOptions" id="faceSteroidInput">
         <datalist id="faceSteroidOptions">
           <optgroup label="Mild">
             <option value="Dermacort®">Dermacort® - Hydrocortisone 0.1%</option>
@@ -577,7 +577,7 @@ function openDialog() {
         </datalist>
 
         <label for="bodySteroid">Trunk & Limbs Topical Steroid:</label>
-        <input list="bodySteroidOptions" id="bodySteroidInput" required>
+        <input list="bodySteroidOptions" id="bodySteroidInput">
         <datalist id="bodySteroidOptions">
           <optgroup label="Mild">
             <option value="Dermacort®">Dermacort® - Hydrocortisone 0.1%</option>
@@ -656,6 +656,8 @@ function openDialog() {
       <button type="button" onclick="closeDialog()">Cancel</button>
     </div>
   </form>`;
+
+
 
   document.body.appendChild(dialog);
 
