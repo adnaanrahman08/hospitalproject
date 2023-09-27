@@ -409,6 +409,7 @@ function generatePDFPrescription() {
   const faceSteroidInput = document.getElementById('faceSteroidInput').value;
   const bodySteroidInput = document.getElementById('bodySteroidInput').value;
   const doctorName = document.getElementById('doctorName').value;
+  const weeklyAmount = document.getElementById('weeklyAmount').value;
   const trunkValue = trunkTotalSpan.textContent;
   const faceValue = faceTotalSpan.textContent;
 
@@ -429,6 +430,7 @@ function generatePDFPrescription() {
         .replace(/{bodyMoisturizer}/g, bodyMoisturiser)
         .replace(/{faceSteroidInput}/g, faceSteroidInput)
         .replace(/{bodySteroidInput}/g, bodySteroidInput)
+        .replace(/{weeklyAmount}/g, weeklyAmount)
 
       const generateFileName = () => `${name}-${dateValue}-Prescription.pdf`;
 
@@ -637,6 +639,9 @@ function openDialog() {
             <option value="Clobetasol with neomycin and nystatin">(Antibacterial, Antifungal) Clobetasol with neomycin and nystatin - Clobetasol propionate 0.05% - Neomycin, Nystatin</option>
           </optgroup>
         </datalist>
+
+        <label for="weeklyAmount">Weekly Amount:</label>
+        <input type="number" id="weeklyAmount" required>
       </div>
 
       <!-- Generate PDF Section -->
