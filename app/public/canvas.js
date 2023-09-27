@@ -247,13 +247,11 @@ function populateTable() {
   bodyParts.forEach((part) => {
     const newRow = document.createElement('tr');
     const bodyPartCell = document.createElement('td');
-    const percentageCell = document.createElement('td');
     const bsaCell = document.createElement('td');
     const ftuCell = document.createElement('td');
     const tcsCell = document.createElement('td');
 
     bodyPartCell.textContent = part.name;
-    percentageCell.textContent = part.remainingPercentage;
     bsaCell.textContent = (part.originalTotalPixels - part.pixelsLeft).toFixed(2)
 
     let ftuValue = 0;
@@ -284,7 +282,6 @@ function populateTable() {
     tcsCell.textContent = tcsValue.toFixed(2);
 
     newRow.appendChild(bodyPartCell);
-    newRow.appendChild(percentageCell);
     newRow.appendChild(bsaCell);
     newRow.appendChild(ftuCell);
     newRow.appendChild(tcsCell);
@@ -382,7 +379,7 @@ function generatePDF() {
       const generateFileName = () => `${name}-${dateValue}-Skin-Treatment-Plan.pdf`;
 
       const options = {
-        margin: 20,
+        margin: 17,
         filename: generateFileName(),
       };
 
@@ -412,6 +409,7 @@ function generatePDFPrescription() {
   const faceSteroidInput = document.getElementById('faceSteroidInput').value;
   const bodySteroidInput = document.getElementById('bodySteroidInput').value;
   const doctorName = document.getElementById('doctorName').value;
+  const weeklyAmount = document.getElementById('weeklyAmount').value;
   const trunkValue = trunkTotalSpan.textContent;
   const faceValue = faceTotalSpan.textContent;
 
@@ -432,6 +430,7 @@ function generatePDFPrescription() {
         .replace(/{bodyMoisturizer}/g, bodyMoisturiser)
         .replace(/{faceSteroidInput}/g, faceSteroidInput)
         .replace(/{bodySteroidInput}/g, bodySteroidInput)
+        .replace(/{weeklyAmount}/g, weeklyAmount)
 
       const generateFileName = () => `${name}-${dateValue}-Prescription.pdf`;
 
@@ -518,7 +517,7 @@ function openDialog() {
         </datalist>
 
         <label for="faceSteroid">Face/Neck Topical Steroid:</label>
-        <input list="faceSteroidOptions" id="faceSteroidInput" required>
+        <input list="faceSteroidOptions" id="faceSteroidInput">
         <datalist id="faceSteroidOptions">
           <optgroup label="Mild">
             <option value="Dermacort®">Dermacort® - Hydrocortisone 0.1%</option>
@@ -580,7 +579,7 @@ function openDialog() {
         </datalist>
 
         <label for="bodySteroid">Trunk & Limbs Topical Steroid:</label>
-        <input list="bodySteroidOptions" id="bodySteroidInput" required>
+        <input list="bodySteroidOptions" id="bodySteroidInput">
         <datalist id="bodySteroidOptions">
           <optgroup label="Mild">
             <option value="Dermacort®">Dermacort® - Hydrocortisone 0.1%</option>
@@ -640,6 +639,9 @@ function openDialog() {
             <option value="Clobetasol with neomycin and nystatin">(Antibacterial, Antifungal) Clobetasol with neomycin and nystatin - Clobetasol propionate 0.05% - Neomycin, Nystatin</option>
           </optgroup>
         </datalist>
+
+        <label for="weeklyAmount">Weekly Amount:</label>
+        <input type="number" id="weeklyAmount" required>
       </div>
 
       <!-- Generate PDF Section -->
@@ -659,6 +661,8 @@ function openDialog() {
       <button type="button" onclick="closeDialog()">Cancel</button>
     </div>
   </form>`;
+
+
 
   document.body.appendChild(dialog);
 
