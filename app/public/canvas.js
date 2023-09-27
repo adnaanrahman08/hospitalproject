@@ -412,6 +412,9 @@ function generatePDFPrescription() {
   const weeklyAmount = document.getElementById('weeklyAmount').value;
   const trunkValue = trunkTotalSpan.textContent;
   const faceValue = faceTotalSpan.textContent;
+  const dailyAmount = document.getElementById('daily').value;
+  const alternateAmount = document.getElementById('alternate').value;
+  const weekendAmount = document.getElementById('weekend').value;
 
 
   fetch('prescription.html')
@@ -430,7 +433,9 @@ function generatePDFPrescription() {
         .replace(/{bodyMoisturizer}/g, bodyMoisturiser)
         .replace(/{faceSteroidInput}/g, faceSteroidInput)
         .replace(/{bodySteroidInput}/g, bodySteroidInput)
-        .replace(/{weeklyAmount}/g, weeklyAmount)
+        .replace(/{dailyAmount}/g, dailyAmount)
+        .replace(/{alternateAmount}/g, alternateAmount)
+        .replace(/{weekendAmount}/g, weekendAmount)
 
       const generateFileName = () => `${name}-${dateValue}-Prescription.pdf`;
 
