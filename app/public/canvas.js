@@ -379,7 +379,7 @@ function generatePDF() {
       const generateFileName = () => `${name}-${dateValue}-Skin-Treatment-Plan.pdf`;
 
       const options = {
-        margin: 20,
+        margin: 17,
         filename: generateFileName(),
       };
 
