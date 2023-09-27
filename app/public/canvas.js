@@ -644,9 +644,6 @@ function openDialog() {
             <option value="Clobetasol with neomycin and nystatin">(Antibacterial, Antifungal) Clobetasol with neomycin and nystatin - Clobetasol propionate 0.05% - Neomycin, Nystatin</option>
           </optgroup>
         </datalist>
-
-        <label for="weeklyAmount">Weekly Amount:</label>
-        <input type="number" id="weeklyAmount" required>
       </div>
 
       <!-- Generate PDF Section -->
