@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dermatology Skin Treatment Plan</title>
+
+    <link rel="stylesheet" href="treatmentplanstyle.css">
+</head>
+
+<body>
+    <div class="report-header">
+        <img src="./models/tallaght-hospital-logo.png" alt="Hospital Logo">
+        <h1>Dermatology Skin Treatment Plan</h1>
+        <h2 class="">Date: {dateValue}</h2>
+    </div>
+
+    <table id="patient-details">
+        <tr>
+            <td><strong>Patient Name:</strong></td>
+            <td>{name}</td>
+        </tr>
+        <tr>
+            <td><strong>Date of Birth:</strong></td>
+            <td>{dateOfBirth}</td>
+        </tr>
+        <tr>
+            <td><strong>Hospital Number:</strong></td>
+            <td>{hospitalNumber}</td>
+        </tr>
+        <tr>
+            <td><strong>Date:</strong></td>
+            <td>{dateValue}</td>
+        </tr>
+        <tr>
+            <td><strong>Consultant Name:</strong></td>
+            <td>Dr. {doctorName}</td>
+        </tr>
+    </table>
+
+    <h2 class="diagnosis">Your Diagnosis: {diagnosis}</h2>
+
+    <h2 class="washing-bathing">Washing/Bathing</h2>
+    <table id="washing-bathing-steps">
+        <tr>
+            <td>1.</td>
+            <td>Avoid using soaps/detergents to wash your skin as this can cause drying of the skin and contribute to
+                more skin irritation. Use a soap substitute instead.</td>
+        </tr>
+        <tr>
+            <td>2.</td>
+            <td>Wash your skin with soap substitute. Apply this in a downward direction in the direction of hair growth
+                in a smooth downward motion when you get into your shower or bath. Leave it on your skin for a few
+                minutes and then rinse it off.</td>
+        </tr>
+        <tr>
+            <td>3.</td>
+            <td>Keep your washing/bathing temperature to a warm/medium heat and avoid hot showers/baths to prevent skin
+                dehydration.</td>
+        </tr>
+        <tr>
+            <td>4.</td>
+            <td>Showers/baths should last no longer than 10 minutes.</td>
+        </tr>
+        <tr>
+            <td>5.</td>
+            <td>After your bathe, pat your skin dry with a towel. Avoid rubbing the skin dry as friction can aggravate
+                your skin.</td>
+        </tr>
+        <tr>
+            <td>6.</td>
+            <td>Then apply your moisturiser.</td>
+        </tr>
+    </table>
+
+    <h3>Your soap substitute is: {soaps}</h3>
+
+
+    <h2 class="moisturising">Moisturise</h2>
+    <table id="moisturising-steps">
+        <tr>
+            <td>1</td>
+            <td>Moisturise your skin liberally with your moisturiser of choice as often as you can.</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>You will require 500g of moisturiser per week to optimally moisturise your skin.</td>
+        </tr>
+        <tr>
+            <td colspan="2"><strong>Tips:</strong>
+                <ul>
+                    <li>Apply gently and smoothly in the direction of hair growth in a smooth downward motion. Do not
+                        rub up and down. This avoids your moisturiser becoming trapped under the hair follicles to help
+                        prevent infection (folliculitis/pus spot)</li>
+                </ul>
+        </tr>
+    </table>
+
+    <div id="moisturiser-section">
+        <h2>Your moisturiser is:</h2>
+        <table id="moisturiser-table">
+            <tr>
+                <th></th>
+                <th>Body</th>
+            </tr>
+            <tr>
+                <td>Product</td>
+                <td>{bodyMoisturiser}</td>
+            </tr>
+        </table>
+    </div>
+
+    <h2 class="topicalsteroids">Topical Steroids/Anti-inflammatory treatment</h2>
+    <table id="moisturising-steps">
+        <tr>
+            <td>1</td>
+            <td>Allow your moisturiser to soak in for 15-30 minutes before applying topical steroid/anti-inflammatory
+                creams/ointments.</td>
+        </tr>
+        <tr>
+            <td>2</td>
+            <td>When you use topical steroids on the skin, use a weaker steroid on areas of the body where the skin is
+                slightly thinner (face, neck, creases) and a stronger steroid on areas of the body where the skin is
+                thicker (on the body).</td>
+        </tr>
+        <tr>
+            <td>3</td>
+            <td>Similar to your moisturiser, don't rub in cream/ointment (smooth it on and apply in the direction of
+                hair growth).</td>
+        </tr>
+        <tr>
+            <td>4</td>
+            <td>Use your topical steroid/anti inflammatory cream/ointment regularly until the skin improves (typically
+                1-2 weeks) and then start to decrease how often you apply this treatment.</td>
+        </tr>
+        <tr>
+            <td>5</td>
+            <td>I suggest you do the following:<br><strong>Face & Neck:</strong> {faceSteroid} one application
+                twice daily for 1-2 weeks; then every other day for 1-2 weeks; then twice weekly for a further 1-2
+                weeks<br><strong>Body:</strong> {bodySteroid} one application once daily 1-2 weeks; then every other day
+                for 1-2 weeks; then twice weekly for a further 1-2 weeks</td>
+        </tr>
+
+    </table>
+
+    <div id="moisturiser-section">
+        <h2>Your topical steroid/anti-inflammatory treatment is:</h2>
+        <table id="moisturiser-table">
+            <tr>
+                <th></th>
+                <th>Face/Neck</th>
+                <th>Body</th>
+            </tr>
+            <tr>
+                <td>Product</td>
+                <td>{faceSteroidInput}</td>
+                <td>{bodySteroidInput}</td>
+            </tr>
+        </table>
+    </div>
+
+
+</body>
+
+</html>
